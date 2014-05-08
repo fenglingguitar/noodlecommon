@@ -1,15 +1,15 @@
-package org.fengling.noodlecommon.dbrwseparate.msloadbalancer;
+package org.fengling.noodlecommon.dbrwseparate.loadbalancer;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.sql.DataSource;
 
-public class MSDataSourceModel {
+public class DataSourceModel {
 	
 	private DataSource dataSource;
 	private String dataSourceType;
 
-	private AtomicInteger failureCount = new AtomicInteger(0);// 失败的次数默认为0
-	private AtomicInteger riseCount = new AtomicInteger(0);// 连续成功次数默认为0//只是在死链表里起作用
+	private AtomicInteger failureCount = new AtomicInteger(0);
+	private AtomicInteger riseCount = new AtomicInteger(0);
 
 	public DataSource getDataSource() {
 		return dataSource;

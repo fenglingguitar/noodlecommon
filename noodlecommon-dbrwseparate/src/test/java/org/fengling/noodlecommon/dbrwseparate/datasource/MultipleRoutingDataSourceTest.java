@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 @ContextConfiguration(locations = {
 		"classpath:org/fengling/noodlecommon/dbrwseparate/datasource/noodlecommon-datasource.xml"
 })
-
 public class MultipleRoutingDataSourceTest extends AbstractJUnit4SpringContextTests {
 	
 	@Autowired

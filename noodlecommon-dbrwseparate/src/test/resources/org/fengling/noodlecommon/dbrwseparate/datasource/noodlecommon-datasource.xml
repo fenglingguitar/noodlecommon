@@ -28,7 +28,7 @@
 	    <property name="acquireRetryDelay" value="1000"/>
 	    <property name="testConnectionOnCheckin" value="true"/>
 	    <property name="idleConnectionTestPeriod" value="18000"/>
-	    <property name="checkoutTimeout" value="10000"/>
+	    <property name="checkoutTimeout" value="3000"/>
 	</bean>
 	
 	<bean id="readDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -47,7 +47,7 @@
 	    <property name="acquireRetryDelay" value="1000"/>
 	    <property name="testConnectionOnCheckin" value="true"/>
 	    <property name="idleConnectionTestPeriod" value="18000"/>
-	    <property name="checkoutTimeout" value="10000"/>
+	    <property name="checkoutTimeout" value="3000"/>
 	</bean>
 
 	<bean id="dataSource" class="org.fengling.noodlecommon.dbrwseparate.datasource.MultipleRoutingDataSource">

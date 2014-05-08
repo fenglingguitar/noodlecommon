@@ -1,4 +1,4 @@
-package org.fengling.noodlecommon.dbrwseparate.datasource;
+package org.fengling.noodlecommon.dbrwseparate.loadbalancer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,7 @@ public class DataSourceCheckAlive {
 		
 	private final static Log logger = LogFactory.getLog(DataSourceCheckAlive.class); 
 
-	public static DataSourceCheckResult CheckAliveDataSource(DataSource dataSource,String detectingSql){
+	public static boolean CheckAliveDataSource(DataSource dataSource, String detectingSql){
 		
 		boolean result = false;
 		Connection conn = null;
@@ -21,24 +21,25 @@ public class DataSourceCheckAlive {
 		
 		try {
 			conn = dataSource.getConnection();
-
 			if (detectingSql == null || detectingSql.equalsIgnoreCase("")) {
 				rs = conn.getMetaData().getTables(null, null, "PROBABLYNOT", new String[] { "TABLE" });
 			} else {
 				pstmt = conn.prepareStatement(detectingSql);
 				pstmt.execute();
 			}
-
 			result = true;
-			
 		} catch (SQLException e) {
-			logger.error("database connection error=" + e.getSQLState(), e);
+			if (logger.isErrorEnabled()) {
+				logger.error("CheckAliveDataSource -> Database connection error, SQLState: " + e.getSQLState() + ", Exception: " + e);
+			}
 		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					logger.error("database rs close error" + e.getSQLState(), e);
+					if (logger.isErrorEnabled()) {
+						logger.error("CheckAliveDataSource -> Database rs close error, SQLState: " + e.getSQLState() + ", Exception: " + e);
+					}
 				}
 			}
 
@@ -46,7 +47,9 @@ public class DataSourceCheckAlive {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
-					logger.error("database preparedStatement close error" + e.getSQLState(), e);
+					if (logger.isErrorEnabled()) {
+						logger.error("CheckAliveDataSource -> preparedStatement close error, SQLState: " + e.getSQLState() + ", Exception: " + e);
+					}
 				}
 			}
 
@@ -54,11 +57,13 @@ public class DataSourceCheckAlive {
 				try {
 					conn.close();
 				} catch (SQLException e) {
-					logger.error("database connection close error" + e.getSQLState(), e);
+					if (logger.isErrorEnabled()) {
+						logger.error("CheckAliveDataSource -> connection close error, SQLState: " + e.getSQLState() + ", Exception: " + e);
+					}
 				}
 			}
 		}
 
-		return new DataSourceCheckResult(result, "");
+		return result;
 	}
 }
