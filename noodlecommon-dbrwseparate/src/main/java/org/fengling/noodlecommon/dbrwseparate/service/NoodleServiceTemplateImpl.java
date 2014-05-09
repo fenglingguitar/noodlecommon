@@ -2,7 +2,7 @@ package org.fengling.noodlecommon.dbrwseparate.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceContextHolder;
+import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceSwitch;
 import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
 import org.fengling.noodlecommon.dbrwseparate.loadbalancer.DataSourceModel;
 import org.fengling.noodlecommon.dbrwseparate.loadbalancer.LoadBalancerManager;
@@ -31,7 +31,7 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
         T result = null;
         
         try {
-        	DataSourceContextHolder.setDataSourceType(DataSourceType.MASTER);
+        	DataSourceSwitch.setDataSourceType(DataSourceType.MASTER);
 
         	if (noodleServiceCallbackExtend != null) {
         		if (!noodleServiceCallbackExtend.beforeExecuteActionCheck()) {
@@ -101,7 +101,7 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
             	throw serviceResult.getFailException();
             }
         } finally {
-        	DataSourceContextHolder.clearDataSourceType();
+        	DataSourceSwitch.clearDataSourceType();
         }
 
         return result;
@@ -129,7 +129,7 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
         ServiceResult serviceResult = new ServiceResult();
         
         try {
-        	DataSourceContextHolder.setDataSourceType(mSDataSourceModel.getDataSourceType());
+        	DataSourceSwitch.setDataSourceType(mSDataSourceModel.getDataSourceType());
             
         	if (noodleServiceCallbackExtend != null) {
         		if (!noodleServiceCallbackExtend.beforeExecuteActionCheck()) {
@@ -159,7 +159,7 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
             	throw serviceResult.getFailException();
             }
         } finally{
-        	 DataSourceContextHolder.clearDataSourceType();
+        	 DataSourceSwitch.clearDataSourceType();
         }
         
         return result;

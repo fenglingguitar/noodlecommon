@@ -1,6 +1,6 @@
  package org.fengling.noodlecommon.dbrwseparate.datasource;
 
-public class DataSourceContextHolder {
+public class DataSourceSwitch {
 	
 	private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();  
 	  
