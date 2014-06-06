@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.fengling.noodlecommon.mvc</groupId>
+    <artifactId>noodlecommon-mvc-unit</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  
+  <groupId>org.fengling.noodlecommon.mvc</groupId>
+  <artifactId>noodlecommon-mvc</artifactId>
+  <version>1.0.0</version>
+  <name>noodlecommon-mvc</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+  
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    
+    <!-- mvc -->
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>servlet-api</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-webmvc</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-web</artifactId>
+	</dependency>
+	
+	<dependency>
+    	<groupId>net.sf.flexjson</groupId>
+    	<artifactId>flexjson</artifactId>
+   	</dependency>
+    
+  </dependencies>
+  
+</project>

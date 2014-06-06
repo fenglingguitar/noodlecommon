@@ -30,7 +30,7 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 		
 		int result = this.noodleServiceTemplate.execute(new NoodleServiceCallback<Integer>() {
 			public Integer executeAction() throws NoodleServiceException, Exception {
-				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("insert into test (name) values (?)");
+				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("insert into dbrwseparate_test (name) values (?)");
 				preparedStatement.setString(1, "你好");
 				return preparedStatement.executeUpdate();
 			}
@@ -40,7 +40,7 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 		result = this.noodleServiceTemplate.execute(new NoodleServiceCallbackExtend<Integer>() {
 			public Integer executeAction() throws NoodleServiceException, Exception {
 				System.out.println("NoodleServiceCallbackExtend -> executeAction...");
-				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("insert into test (name) values (?)");
+				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("insert into dbrwseparate_test (name) values (?)");
 				preparedStatement.setString(1, "你好");
 				return preparedStatement.executeUpdate();
 			}
@@ -84,7 +84,7 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 	public void testExecuteWithoutTransaction() throws Exception {
 		List<TestModel> testModelList = this.noodleServiceTemplate.executeWithoutTransaction(new NoodleServiceCallback<List<TestModel>>() {
 			public List<TestModel> executeAction() throws NoodleServiceException, Exception {
-				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("select * from test");
+				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("select * from dbrwseparate_test");
 				ResultSet resultSet = preparedStatement.executeQuery();
 				List<TestModel> testModelList = new ArrayList<TestModel>();
 				while (resultSet.next()) {
@@ -103,7 +103,7 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 		
 		testModelList = this.noodleServiceTemplate.executeWithoutTransaction(new NoodleServiceCallbackExtend<List<TestModel>>() {
 			public List<TestModel> executeAction() throws NoodleServiceException, Exception {
-				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("select * from test");
+				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("select * from dbrwseparate_test");
 				ResultSet resultSet = preparedStatement.executeQuery();
 				List<TestModel> testModelList = new ArrayList<TestModel>();
 				while (resultSet.next()) {

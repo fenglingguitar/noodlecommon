@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamic-hibernate>
+	<query name="test-query-page">
+	<![CDATA[
+		SELECT 
+				name
+		FROM 	DYNAMICSQL_TEST
+		WHERE 	1=1
+		 		#if($name)
+					AND name LIKE :name
+				#end
+		ORDER BY name
+	]]>
+	</query>
+	
+	<query name="test-query-list">
+	<![CDATA[
+		SELECT 
+				name
+		FROM 	DYNAMICSQL_TEST
+		WHERE 	1=1
+		 		#if($name)
+					AND name = :name
+				#end
+		ORDER BY name 
+	]]>
+	</query>
+
+</dynamic-hibernate>
