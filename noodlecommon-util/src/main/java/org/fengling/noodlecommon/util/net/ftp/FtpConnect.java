@@ -99,9 +99,10 @@ public class FtpConnect {
 						String paths[] = ftpInfo.getFtpPath().split("/");
 						for (String path : paths) {
 							if (!path.equals(".") && !path.equals("")) {								
-								if (!ftp.makeDirectory(path)) {
+								/*if (!ftp.makeDirectory(path)) {
 									throw new FtpException("Make directory false, FtpInfo: " + ftpInfo);
-								}
+								}*/
+								ftp.mkd(path);
 								if (!ftp.changeWorkingDirectory(path)) {
 									throw new FtpException("Change working directory false, FtpInfo: " + ftpInfo);
 								}								

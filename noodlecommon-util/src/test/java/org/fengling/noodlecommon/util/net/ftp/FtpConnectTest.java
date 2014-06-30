@@ -36,9 +36,12 @@ public class FtpConnectTest {
 		System.out.println("Upload test1.txt success");
 		
 		FtpInfo ftpInfoUpImage = new FtpInfo();
+		ftpInfoUpImage.setFtpUrl("192.168.207.49");
+		ftpInfoUpImage.setFtpUser("ftpuser");
+		ftpInfoUpImage.setFtpPasswd("ftpuser");
 		ftpInfoUpImage.setLocalPath("D:");
 		ftpInfoUpImage.setLocalFileName("Chrysanthemum.jpg");
-		ftpInfoUpImage.setFtpPath("/test2/test2/");
+		ftpInfoUpImage.setFtpPath("test2/test2/");
 		ftpInfoUpImage.setFtpFileName("Chrysanthemum1.jpg");
 		FtpConnect.ftpUpload(ftpInfoUpImage);
 		System.out.println("Upload Chrysanthemum1.jpg success");
