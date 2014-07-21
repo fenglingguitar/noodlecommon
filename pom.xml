@@ -21,6 +21,7 @@
     <module>noodlecommon-util</module>
     <module>noodlecommon-dynamicsql</module>
     <module>noodlecommon-mvc-unit</module>
+    <module>noodlecommon-distributedlock</module>
   </modules>
   
   <dependencyManagement>
