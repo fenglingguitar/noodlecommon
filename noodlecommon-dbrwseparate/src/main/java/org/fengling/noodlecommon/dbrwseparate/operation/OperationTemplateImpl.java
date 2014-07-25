@@ -1,4 +1,4 @@
-package org.fengling.noodlecommon.dbrwseparate.service;
+package org.fengling.noodlecommon.dbrwseparate.operation;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,22 +11,22 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
-public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
+public class OperationTemplateImpl implements OperationTemplate {
 
-    private final static Log logger = LogFactory.getLog(NoodleServiceTemplateImpl.class);
+    private final static Log logger = LogFactory.getLog(OperationTemplateImpl.class);
 
     private TransactionTemplate transactionTemplate;
     
     private LoadBalancerManager loadBalancerManager;
 
     @Override
-    public <T> T execute(final NoodleServiceCallback<T> action) throws NoodleServiceException, Exception {
+    public <T> T execute(final OperationCallback<T> action) throws OperationException, Exception {
         
-        NoodleServiceCallbackExtend<T> noodleServiceCallbackExtendTemp = null;
-        if (action instanceof NoodleServiceCallbackExtend) {
-        	noodleServiceCallbackExtendTemp = (NoodleServiceCallbackExtend<T>) action;
+        OperationCallbackExtend<T> noodleServiceCallbackExtendTemp = null;
+        if (action instanceof OperationCallbackExtend) {
+        	noodleServiceCallbackExtendTemp = (OperationCallbackExtend<T>) action;
         }
-        final NoodleServiceCallbackExtend<T> noodleServiceCallbackExtend = noodleServiceCallbackExtendTemp;
+        final OperationCallbackExtend<T> noodleServiceCallbackExtend = noodleServiceCallbackExtendTemp;
 
         T result = null;
         
@@ -38,7 +38,7 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
         			if (logger.isErrorEnabled()) {
         				logger.equals("execute -> Before execute action check fail");
         			}
-        			throw new NoodleServiceException("Before execute action check fail");
+        			throw new OperationException("Before execute action check fail");
         		}
         		noodleServiceCallbackExtend.beforeExecuteAction();
         	}
@@ -58,7 +58,7 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
                     				logger.equals("execute -> Before execute action check in transaction fail");
                     			}
                     			serviceResult.setSuccess(false);
-                    			serviceResult.setFailException(new NoodleServiceException("Before execute action check in transaction fail"));
+                    			serviceResult.setFailException(new OperationException("Before execute action check in transaction fail"));
                     			return result;          
                     		}
                     		noodleServiceCallbackExtend.beforeExecuteActionInTransaction();
@@ -108,35 +108,35 @@ public class NoodleServiceTemplateImpl implements NoodleServiceTemplate {
     }
     
     @Override
-    public <T> T executeWithoutTransaction(final NoodleServiceCallback<T> action) throws NoodleServiceException, Exception {
+    public <T> T executeWithoutTransaction(final OperationCallback<T> action) throws OperationException, Exception {
 
-        DataSourceModel mSDataSourceModel = loadBalancerManager.getAliveDataSource();
-		if (mSDataSourceModel == null) {
+        DataSourceModel dataSourceModel = loadBalancerManager.getAliveDataSource();
+		if (dataSourceModel == null) {
 			if (logger.isErrorEnabled()) {
 				logger.equals("executeWithoutTransaction -> None of the available datasource");
 			}
-			throw new NoodleServiceException("None of the available datasource");
+			throw new OperationException("None of the available datasource");
         }
 		
-		NoodleServiceCallbackExtend<T> noodleServiceCallbackExtendTemp = null;
-        if (action instanceof NoodleServiceCallbackExtend) {
-        	noodleServiceCallbackExtendTemp = (NoodleServiceCallbackExtend<T>) action;
+		OperationCallbackExtend<T> noodleServiceCallbackExtendTemp = null;
+        if (action instanceof OperationCallbackExtend) {
+        	noodleServiceCallbackExtendTemp = (OperationCallbackExtend<T>) action;
         }
-        final NoodleServiceCallbackExtend<T> noodleServiceCallbackExtend = noodleServiceCallbackExtendTemp;
+        final OperationCallbackExtend<T> noodleServiceCallbackExtend = noodleServiceCallbackExtendTemp;
 
         T result = null;
         
         ServiceResult serviceResult = new ServiceResult();
         
         try {
-        	DataSourceSwitch.setDataSourceType(mSDataSourceModel.getDataSourceType());
+        	DataSourceSwitch.setDataSourceType(dataSourceModel.getDataSourceType());
             
         	if (noodleServiceCallbackExtend != null) {
         		if (!noodleServiceCallbackExtend.beforeExecuteActionCheck()) {
         			if (logger.isErrorEnabled()) {
         				logger.equals("executeWithoutTransaction -> Before execute action check fail");
         			}
-        			throw new NoodleServiceException("Before execute action check fail");
+        			throw new OperationException("Before execute action check fail");
         		}
         		noodleServiceCallbackExtend.beforeExecuteAction();
         	}

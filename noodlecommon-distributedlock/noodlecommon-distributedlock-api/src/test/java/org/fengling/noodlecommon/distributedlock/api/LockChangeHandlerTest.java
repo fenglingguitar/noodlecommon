@@ -24,6 +24,16 @@ public class LockChangeHandlerTest implements LockChangeHandler {
 		logger.info("Lock: " + lockName + " -> LockChangeHandler -> onMessageReleaseLock");
 	}
 
+	@Override
+	public void onMessageStart() {
+		logger.info("Lock: " + lockName + " -> LockChangeHandler -> onMessageStart");
+	}
+
+	@Override
+	public void onMessageStop() {
+		logger.info("Lock: " + lockName + " -> LockChangeHandler -> onMessageStop");
+	}
+
 	public void setLockName(String lockName) {
 		this.lockName = lockName;
 	}

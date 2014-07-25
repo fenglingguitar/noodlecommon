@@ -42,18 +42,19 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 		executorService.execute(new Runnable() {
 			@Override
 			public void run() {
+				doStart();
 				while (true) {
 					if (!doKeepAlive()) {
 						status.set(false);
 						while(!doGetAlive()) {
 							startSleep(sleepTimeGetAlive);
 							if (stopSign) {
-								stopDo();
+								doStop();
 								return;
 							}
 						}
 						if (stopSign) {
-							stopDo();
+							doStop();
 							return;
 						}
 					} 
@@ -61,7 +62,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 					notifyAllForLocker();
 					startSleep(sleepTimeKeepAlive);
 					if (stopSign) {
-						stopDo();
+						doStop();
 						return;
 					}
 				}
@@ -110,7 +111,6 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 	
 	@Override
 	public void releaseLocker() {
-		status.set(false);
 		doReleaseAlive();
 	}
 	
@@ -172,6 +172,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 		}
 		return false;
 	}
+	
 	private boolean doKeepAlive() {
 		timeSync(true);
 		if (keepAlive()) {
@@ -182,11 +183,23 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 		}
 		return false;
 	}
+	
 	private boolean doReleaseAlive() {
+		status.set(false);
+		boolean result = releaseAlive();
 		if (lockChangeHandler != null) {
 			lockChangeHandler.onMessageReleaseLock();	
 		}
-		return releaseAlive();
+		return result;
+	}
+	
+	private void doStart() {
+		lockChangeHandler.onMessageStart();
+	}
+
+	private void doStop() {
+		lockChangeHandler.onMessageStop();
+		stopDo();
 	}
 	
 	protected abstract void init() throws Exception;

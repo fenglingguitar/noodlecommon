@@ -7,7 +7,7 @@ import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceSwitch;
 import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
 import org.fengling.noodlecommon.dbrwseparate.loadbalancer.DataSourceModel;
 import org.fengling.noodlecommon.dbrwseparate.loadbalancer.LoadBalancerManager;
-import org.fengling.noodlecommon.dbrwseparate.service.NoodleServiceException;
+import org.fengling.noodlecommon.dbrwseparate.operation.OperationException;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.ThrowsAdvice;
@@ -36,7 +36,7 @@ public class DataSourceAdvice implements MethodBeforeAdvice, AfterReturningAdvic
 		} else {
 			DataSourceModel dataSourceModel = loadBalancerManager.getAliveDataSource();
 			if (dataSourceModel == null) {
-				throw new NoodleServiceException("None of the available datasource");
+				throw new OperationException("None of the available datasource");
 	        }
 			DataSourceSwitch.setDataSourceType(dataSourceModel.getDataSourceType());
 		}
@@ -50,16 +50,8 @@ public class DataSourceAdvice implements MethodBeforeAdvice, AfterReturningAdvic
 		DataSourceSwitch.clearDataSourceType();
 	}
 
-	public LoadBalancerManager getLoadBalancerManager() {
-		return loadBalancerManager;
-	}
-
 	public void setLoadBalancerManager(LoadBalancerManager loadBalancerManager) {
 		this.loadBalancerManager = loadBalancerManager;
-	}
-
-	public List<String> getMasterMethodPrefixList() {
-		return masterMethodPrefixList;
 	}
 
 	public void setMasterMethodPrefixList(List<String> masterMethodPrefixList) {

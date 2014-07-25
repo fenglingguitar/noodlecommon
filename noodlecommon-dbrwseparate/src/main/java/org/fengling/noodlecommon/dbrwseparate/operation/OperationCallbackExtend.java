@@ -1,6 +1,6 @@
-package org.fengling.noodlecommon.dbrwseparate.service;
+package org.fengling.noodlecommon.dbrwseparate.operation;
 
-public interface NoodleServiceCallbackExtend<T> extends NoodleServiceCallback<T> {
+public interface OperationCallbackExtend<T> extends OperationCallback<T> {
 
 	public boolean beforeExecuteActionCheck();
 	public void beforeExecuteAction();

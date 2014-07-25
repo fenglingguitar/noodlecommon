@@ -1,4 +1,4 @@
-package org.fengling.noodlecommon.dbrwseparate.service;
+package org.fengling.noodlecommon.dbrwseparate.operation;
 
 import static org.junit.Assert.*;
 
@@ -9,18 +9,22 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.fengling.noodlecommon.dbrwseparate.operation.OperationCallback;
+import org.fengling.noodlecommon.dbrwseparate.operation.OperationCallbackExtend;
+import org.fengling.noodlecommon.dbrwseparate.operation.OperationException;
+import org.fengling.noodlecommon.dbrwseparate.operation.OperationTemplate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 @ContextConfiguration(locations = {
-		"classpath:org/fengling/noodlecommon/dbrwseparate/service/noodlecommon-service.xml"
+		"classpath:org/fengling/noodlecommon/dbrwseparate/operation/noodlecommon-operation.xml"
 })
-public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests {
+public class OperationTemplateTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
-	NoodleServiceTemplate noodleServiceTemplate;
+	OperationTemplate operationTemplate;
 	
 	@Autowired
 	DataSource dataSource;
@@ -28,8 +32,8 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 	@Test
 	public void testExecute() throws Exception {
 		
-		int result = this.noodleServiceTemplate.execute(new NoodleServiceCallback<Integer>() {
-			public Integer executeAction() throws NoodleServiceException, Exception {
+		int result = this.operationTemplate.execute(new OperationCallback<Integer>() {
+			public Integer executeAction() throws OperationException, Exception {
 				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("insert into dbrwseparate_test (name) values (?)");
 				preparedStatement.setString(1, "你好");
 				return preparedStatement.executeUpdate();
@@ -37,8 +41,8 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 		});
 		assertTrue(result > 0);
 		
-		result = this.noodleServiceTemplate.execute(new NoodleServiceCallbackExtend<Integer>() {
-			public Integer executeAction() throws NoodleServiceException, Exception {
+		result = this.operationTemplate.execute(new OperationCallbackExtend<Integer>() {
+			public Integer executeAction() throws OperationException, Exception {
 				System.out.println("NoodleServiceCallbackExtend -> executeAction...");
 				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("insert into dbrwseparate_test (name) values (?)");
 				preparedStatement.setString(1, "你好");
@@ -82,8 +86,8 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 
 	@Test
 	public void testExecuteWithoutTransaction() throws Exception {
-		List<TestModel> testModelList = this.noodleServiceTemplate.executeWithoutTransaction(new NoodleServiceCallback<List<TestModel>>() {
-			public List<TestModel> executeAction() throws NoodleServiceException, Exception {
+		List<TestModel> testModelList = this.operationTemplate.executeWithoutTransaction(new OperationCallback<List<TestModel>>() {
+			public List<TestModel> executeAction() throws OperationException, Exception {
 				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("select * from dbrwseparate_test");
 				ResultSet resultSet = preparedStatement.executeQuery();
 				List<TestModel> testModelList = new ArrayList<TestModel>();
@@ -101,8 +105,8 @@ public class NoodleServiceTemplateTest extends AbstractJUnit4SpringContextTests 
 			System.out.println(testModel);
 		}
 		
-		testModelList = this.noodleServiceTemplate.executeWithoutTransaction(new NoodleServiceCallbackExtend<List<TestModel>>() {
-			public List<TestModel> executeAction() throws NoodleServiceException, Exception {
+		testModelList = this.operationTemplate.executeWithoutTransaction(new OperationCallbackExtend<List<TestModel>>() {
+			public List<TestModel> executeAction() throws OperationException, Exception {
 				PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement("select * from dbrwseparate_test");
 				ResultSet resultSet = preparedStatement.executeQuery();
 				List<TestModel> testModelList = new ArrayList<TestModel>();
