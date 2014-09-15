@@ -11,40 +11,56 @@ public class FtpConnectTest {
 	public void testFtpDownload() throws FtpException {
 		
 		FtpInfo ftpInfoDownText = new FtpInfo();
-		ftpInfoDownText.setLocalPath("D:");
+		ftpInfoDownText.setFtpIp("127.0.0.1");
+		ftpInfoDownText.setFtpPort(21);
+		ftpInfoDownText.setFtpUser("ftpuser");
+		ftpInfoDownText.setFtpPasswd("ftpuser");
+		ftpInfoDownText.setLocalPath("D:\\Program Files\\QuickEasyFTPServer\\ftpuser-local");
 		ftpInfoDownText.setLocalFileName("test.txt");
+		ftpInfoDownText.setFtpPath("/");
 		ftpInfoDownText.setFtpFileName("test.txt");
 		FtpConnect.ftpDownload(ftpInfoDownText);
 		System.out.println("Download test.txt success");
 		
 		FtpInfo ftpInfoDownImage = new FtpInfo();
-		ftpInfoDownImage.setLocalPath("D:");
-		ftpInfoDownImage.setLocalFileName("Chrysanthemum.jpg");
-		ftpInfoDownImage.setFtpFileName("Chrysanthemum.jpg");
+		ftpInfoDownImage.setFtpIp("127.0.0.1");
+		ftpInfoDownImage.setFtpPort(21);
+		ftpInfoDownImage.setFtpUser("ftpuser");
+		ftpInfoDownImage.setFtpPasswd("ftpuser");
+		ftpInfoDownImage.setLocalPath("D:\\Program Files\\QuickEasyFTPServer\\ftpuser-local");
+		ftpInfoDownImage.setLocalFileName("test1.jpg");
+		ftpInfoDownImage.setFtpPath("/");
+		ftpInfoDownImage.setFtpFileName("test1.jpg");
 		FtpConnect.ftpDownload(ftpInfoDownImage);
-		System.out.println("Download Chrysanthemum.jpg success");
+		System.out.println("Download test1.jpg success");
 	}
 
 	@Test
 	public void testFtpUpload() throws FtpException {
 		
 		FtpInfo ftpInfoUpText = new FtpInfo();
-		ftpInfoUpText.setLocalPath("D:");
+		ftpInfoUpText.setFtpIp("127.0.0.1");
+		ftpInfoUpText.setFtpPort(21);
+		ftpInfoUpText.setFtpUser("ftpuser");
+		ftpInfoUpText.setFtpPasswd("ftpuser");
+		ftpInfoUpText.setLocalPath("D:\\Program Files\\QuickEasyFTPServer\\ftpuser-local");
 		ftpInfoUpText.setLocalFileName("test.txt");
-		ftpInfoUpText.setFtpFileName("test1.txt");
+		ftpInfoUpText.setFtpPath("/");
+		ftpInfoUpText.setFtpFileName("test.txt");
 		FtpConnect.ftpUpload(ftpInfoUpText);
-		System.out.println("Upload test1.txt success");
+		System.out.println("Upload test.txt success");
 		
 		FtpInfo ftpInfoUpImage = new FtpInfo();
-		ftpInfoUpImage.setFtpUrl("192.168.207.49");
+		ftpInfoUpImage.setFtpIp("127.0.0.1");
+		ftpInfoUpImage.setFtpPort(21);
 		ftpInfoUpImage.setFtpUser("ftpuser");
 		ftpInfoUpImage.setFtpPasswd("ftpuser");
-		ftpInfoUpImage.setLocalPath("D:");
-		ftpInfoUpImage.setLocalFileName("Chrysanthemum.jpg");
-		ftpInfoUpImage.setFtpPath("test2/test2/");
-		ftpInfoUpImage.setFtpFileName("Chrysanthemum1.jpg");
+		ftpInfoUpImage.setLocalPath("D:\\Program Files\\QuickEasyFTPServer\\ftpuser-local");
+		ftpInfoUpImage.setLocalFileName("test2.jpg");
+		ftpInfoUpImage.setFtpPath("/");
+		ftpInfoUpImage.setFtpFileName("test2.jpg");
 		FtpConnect.ftpUpload(ftpInfoUpImage);
-		System.out.println("Upload Chrysanthemum1.jpg success");
+		System.out.println("Upload test2.jpg success");
 	}
 
 }

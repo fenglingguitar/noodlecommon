@@ -12,7 +12,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 public class FtpConnect {
 
-	public static void ftpDownload(final FtpInfo ftpInfo) throws FtpException {
+public static void ftpDownload(final FtpInfo ftpInfo) throws FtpException {
     	
 		doFtpSession(ftpInfo, new FtpTemplate() {
 
@@ -83,7 +83,7 @@ public class FtpConnect {
     	ftp.setControlEncoding(ftpInfo.getEncoding());
     	
 		try {
-			ftp.connect(ftpInfo.getFtpUrl(), ftpInfo.getFtpPort());
+			ftp.connect(ftpInfo.getFtpIp(), ftpInfo.getFtpPort());
 			try {
 				ftp.login(ftpInfo.getFtpUser(), ftpInfo.getFtpPasswd());
 				
@@ -99,9 +99,6 @@ public class FtpConnect {
 						String paths[] = ftpInfo.getFtpPath().split("/");
 						for (String path : paths) {
 							if (!path.equals(".") && !path.equals("")) {								
-								/*if (!ftp.makeDirectory(path)) {
-									throw new FtpException("Make directory false, FtpInfo: " + ftpInfo);
-								}*/
 								ftp.mkd(path);
 								if (!ftp.changeWorkingDirectory(path)) {
 									throw new FtpException("Change working directory false, FtpInfo: " + ftpInfo);
@@ -137,7 +134,7 @@ public class FtpConnect {
 	
 	public static class FtpInfo {
 		
-		private String ftpUrl = "127.0.0.1";
+		private String ftpIp = "127.0.0.1";
 	    private int ftpPort = 21;
 	    private String ftpUser = "test";
 	    private String ftpPasswd = "test";
@@ -149,11 +146,11 @@ public class FtpConnect {
 	    private String encoding = "UTF-8";
 	    private boolean isCreateDir = true;
 	    
-		public String getFtpUrl() {
-			return ftpUrl;
+		public String getFtpIp() {
+			return ftpIp;
 		}
-		public void setFtpUrl(String ftpUrl) {
-			this.ftpUrl = ftpUrl;
+		public void setFtpIp(String ftpIp) {
+			this.ftpIp = ftpIp;
 		}
 		
 		public int getFtpPort() {
@@ -234,8 +231,8 @@ public class FtpConnect {
 		
 		public String toString() {
 			return (new StringBuilder())
-					.append("[ftpUrl:")
-					.append(ftpUrl)
+					.append("[ftpIp:")
+					.append(ftpIp)
 					.append(", ftpPort:")
 					.append(ftpPort)
 					.append(", ftpUser:")
