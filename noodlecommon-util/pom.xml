@@ -32,6 +32,18 @@
 		<artifactId>commons-net</artifactId>
 	</dependency>
 			
+	<!-- fastjson -->
+	<dependency>
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+	</dependency>
+	
+	<!-- httpcomponents -->
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+	</dependency>
+			
   </dependencies>
   
 </project>
