@@ -32,7 +32,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 		sqlKeepAlive = "UPDATE " + tableName + " SET SET_ID = ?, OVERTIME = ? WHERE SET_ID = ? AND ID = ?";
 		sqlReleaseAlive = "UPDATE " + tableName + " SET SET_ID = ?, OVERTIME = ? WHERE SET_ID = ? AND ID = ?";
 		
-		String sqlInsert = "INSERT INTO " + tableName + " SELECT 1 AS ID, 0 AS OVERTIME, 0 AS SET_ID FROM DUAL WHERE (SELECT COUNT(*) FROM " + tableName + " WHERE ID=" + rowId + ")=0";
+		String sqlInsert = "INSERT INTO " + tableName + " SELECT " + rowId + " AS ID, 0 AS OVERTIME, 0 AS SET_ID FROM DUAL WHERE (SELECT COUNT(*) FROM " + tableName + " WHERE ID=" + rowId + ")=0";
 		
 		try {
 			jdbcTemplate.update(sqlInsert);
