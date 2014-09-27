@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceSwitch;
 import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
-import org.fengling.noodlecommon.dbrwseparate.loadbalancer.DataSourceModel;
 import org.fengling.noodlecommon.dbrwseparate.loadbalancer.LoadBalancerManager;
 import org.fengling.noodlecommon.dbrwseparate.operation.OperationException;
 import org.springframework.aop.AfterReturningAdvice;
@@ -34,11 +33,11 @@ public class DataSourceAdvice implements MethodBeforeAdvice, AfterReturningAdvic
 		if (isMaster) {
 			DataSourceSwitch.setDataSourceType(DataSourceType.MASTER);
 		} else {
-			DataSourceModel dataSourceModel = loadBalancerManager.getAliveDataSource();
-			if (dataSourceModel == null) {
+			DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
+			if (dataSourceType == null) {
 				throw new OperationException("None of the available datasource");
 	        }
-			DataSourceSwitch.setDataSourceType(dataSourceModel.getDataSourceType());
+			DataSourceSwitch.setDataSourceType(dataSourceType);
 		}
 	}
 

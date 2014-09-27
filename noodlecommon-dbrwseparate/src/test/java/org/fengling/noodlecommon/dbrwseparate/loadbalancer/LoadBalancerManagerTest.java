@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceSwitch;
+import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,23 +25,28 @@ public class LoadBalancerManagerTest extends AbstractJUnit4SpringContextTests {
 	@Autowired
 	LoadBalancerManager loadBalancerManager;
 	
+	@Autowired
+	DataSource dataSource;
+	
 	@Test
-	public void test() throws Exception {
+	public void testGetAliveDataSource() throws Exception {
 
 		int totalCount = 20;
 		int masterCount = 0;
 		
 		for (int i=1; i<=totalCount; i++) {
 			System.out.println("Test " + i);
-			DataSourceModel dataSourceModel = loadBalancerManager.getAliveDataSource();
-			assertNotNull(dataSourceModel);
-			if (dataSourceModel.getDataSourceType().equals("master")) {
+			DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
+			assertNotNull(dataSourceType);
+			if (dataSourceType == DataSourceType.MASTER) {
 				masterCount++;
 			}
-			System.out.println("DataSource Type: " + dataSourceModel.getDataSourceType());
+			System.out.println("DataSource Type: " + dataSourceType.typeName());
+			
+			DataSourceSwitch.setDataSourceType(dataSourceType);
 			Connection Connection = null;
 			try {
-				Connection = dataSourceModel.getDataSource().getConnection();
+				Connection = dataSource.getConnection();
 			} catch (SQLException e) {
 			}
 			assertNotNull(Connection);
@@ -45,13 +54,17 @@ public class LoadBalancerManagerTest extends AbstractJUnit4SpringContextTests {
 		}
 		
 		System.out.println("Master Rate: " + (Double.valueOf(masterCount) / Double.valueOf(totalCount) * 100));
+	}
+	
+	@Test
+	public void testGetOtherAliveDataSource() throws Exception {
 		
-		DataSourceModel dataSourceModel = loadBalancerManager.getAliveDataSource();
-		assertNotNull(dataSourceModel);
-		List<DataSourceModel> dataSourceModelList = new ArrayList<DataSourceModel>();
-		dataSourceModelList.add(dataSourceModel);
-		DataSourceModel otherDataSourceModel = loadBalancerManager.getOtherAliveDataSource(dataSourceModelList);
-		assertNotNull(otherDataSourceModel);
-		assertNotSame(dataSourceModel, otherDataSourceModel);
+		DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
+		assertNotNull(dataSourceType);
+		List<DataSourceType> dataSourceTypeList = new ArrayList<DataSourceType>();
+		dataSourceTypeList.add(dataSourceType);
+		DataSourceType otherDataSourceType = loadBalancerManager.getOtherAliveDataSource(dataSourceTypeList);
+		assertNotNull(otherDataSourceType);
+		assertNotSame(dataSourceType, otherDataSourceType);
 	}
 }

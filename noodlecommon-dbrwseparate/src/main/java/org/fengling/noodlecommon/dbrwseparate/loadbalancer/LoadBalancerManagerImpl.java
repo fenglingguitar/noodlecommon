@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,18 +13,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.sql.DataSource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
 
 public class LoadBalancerManagerImpl implements LoadBalancerManager {
 	
 	private final Log logger = LogFactory.getLog(LoadBalancerManagerImpl.class);
 		
-	private CopyOnWriteArrayList<DataSourceModel> dataSourcesList = new CopyOnWriteArrayList<DataSourceModel>();
+	private CopyOnWriteArrayList<DataSourceModel> aliveSourcesList = new CopyOnWriteArrayList<DataSourceModel>();
 	private CopyOnWriteArrayList<DataSourceModel> deadSourcesList = new CopyOnWriteArrayList<DataSourceModel>();
 
 	private CopyOnWriteArrayList<DataSourceModel> dataSourcesSelectList = new CopyOnWriteArrayList<DataSourceModel>();
-
+	private Map<String, DataSourceModel> dataSourcesMap = new ConcurrentHashMap<String, DataSourceModel>();
 	private Map<String, Integer> weightMap = new ConcurrentHashMap<String, Integer>();
 	
 	private int totalFailureCount = 3;
@@ -48,7 +49,8 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 			DataSourceModel dataSourceModel = new DataSourceModel();
 			dataSourceModel.setDataSource(entry.getValue());
 			dataSourceModel.setDataSourceType(entry.getKey());
-			dataSourcesList.add(dataSourceModel);
+			aliveSourcesList.add(dataSourceModel);
+			dataSourcesMap.put(entry.getKey(), dataSourceModel);
 			addDataSourcesSelectList(dataSourceModel);
 		}
 		
@@ -64,20 +66,20 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 	}
 	
 	@Override
-	public DataSourceModel getAliveDataSource() {
-		return getAliveDataSourceFromList(dataSourcesSelectList);
+	public DataSourceType getAliveDataSource() {
+		return DataSourceType.checkType(getAliveDataSourceFromList(dataSourcesSelectList).getDataSourceType());
 	}
 	
 	@Override
-	public DataSourceModel getOtherAliveDataSource(List<DataSourceModel> DataSourceModelList) {
+	public DataSourceType getOtherAliveDataSource(List<DataSourceType> dataSourceTypeList) {
 		
-		List<Object> otherDataSourcesSelectList = new LinkedList<Object>();
-		Collections.addAll(otherDataSourcesSelectList, dataSourcesSelectList.toArray());
-		for (DataSourceModel dataSourceModelIt : DataSourceModelList) {
-			while(otherDataSourcesSelectList.remove(dataSourceModelIt));
+		List<DataSourceModel> otherDataSourcesSelectList = new LinkedList<DataSourceModel>();
+		otherDataSourcesSelectList.addAll(dataSourcesSelectList);
+		for (DataSourceType dataSourceTypeIt : dataSourceTypeList) {
+			while(otherDataSourcesSelectList.remove(dataSourcesMap.get(dataSourceTypeIt.typeName())));
 		}
 		
-		return getAliveDataSourceFromList(otherDataSourcesSelectList);
+		return DataSourceType.checkType(getAliveDataSourceFromList(otherDataSourcesSelectList).getDataSourceType());
 	}
 	
 	private DataSourceModel getAliveDataSourceFromList(List<?> dataSourcesList) {
@@ -140,13 +142,13 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 			
 			while (true) {
 				
-				for (DataSourceModel dataSourceModel : dataSourcesList) {
+				for (DataSourceModel dataSourceModel : aliveSourcesList) {
 					boolean status = DataSourceCheckAlive.CheckAliveDataSource(dataSourceModel.getDataSource(), detectingSql);
 					AtomicInteger failureCount = dataSourceModel.getFailureCount();
 					if (!status) {
 						if (failureCount.incrementAndGet() > totalFailureCount) {
 							removeDataSourcesSelectList(dataSourceModel);
-							dataSourcesList.remove(dataSourceModel);
+							aliveSourcesList.remove(dataSourceModel);
 							failureCount.set(0);
 							deadSourcesList.add(dataSourceModel);
 							if (logger.isErrorEnabled()) {
@@ -182,7 +184,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 						if (riseCount.incrementAndGet() >= totalRiseCount) {
 							deadSourcesList.remove(dataSourceModel);
 							riseCount.set(0);
-							dataSourcesList.add(dataSourceModel);
+							aliveSourcesList.add(dataSourceModel);
 							addDataSourcesSelectList(dataSourceModel);
 							if (logger.isInfoEnabled()) {
 								logger.info("HeartBeatAliveTasksScan -> run -> DataSource alive and remove deadSourcesMap, DataSource: " + dataSourceModel.getDataSourceType());								

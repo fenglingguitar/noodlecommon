@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceSwitch;
 import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
-import org.fengling.noodlecommon.dbrwseparate.loadbalancer.DataSourceModel;
 import org.fengling.noodlecommon.dbrwseparate.loadbalancer.LoadBalancerManager;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
@@ -110,8 +109,8 @@ public class OperationTemplateImpl implements OperationTemplate {
     @Override
     public <T> T executeWithoutTransaction(final OperationCallback<T> action) throws OperationException, Exception {
 
-        DataSourceModel dataSourceModel = loadBalancerManager.getAliveDataSource();
-		if (dataSourceModel == null) {
+    	DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
+		if (dataSourceType == null) {
 			if (logger.isErrorEnabled()) {
 				logger.equals("executeWithoutTransaction -> None of the available datasource");
 			}
@@ -129,7 +128,7 @@ public class OperationTemplateImpl implements OperationTemplate {
         ServiceResult serviceResult = new ServiceResult();
         
         try {
-        	DataSourceSwitch.setDataSourceType(dataSourceModel.getDataSourceType());
+        	DataSourceSwitch.setDataSourceType(dataSourceType);
             
         	if (noodleServiceCallbackExtend != null) {
         		if (!noodleServiceCallbackExtend.beforeExecuteActionCheck()) {
