@@ -8,4 +8,5 @@ public interface LoadBalancerManager {
 	
 	public DataSourceType getAliveDataSource();
 	public DataSourceType getOtherAliveDataSource(List<DataSourceType> DataSourceTypeList);
+	boolean checkIsAliveDataSource(DataSourceType dataSourceType);
 }

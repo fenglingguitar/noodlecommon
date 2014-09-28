@@ -2,6 +2,7 @@ package org.fengling.noodlecommon.dbrwseparate.loadbalancer;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -66,5 +67,12 @@ public class LoadBalancerManagerTest extends AbstractJUnit4SpringContextTests {
 		DataSourceType otherDataSourceType = loadBalancerManager.getOtherAliveDataSource(dataSourceTypeList);
 		assertNotNull(otherDataSourceType);
 		assertNotSame(dataSourceType, otherDataSourceType);
+	}
+	
+	@Test
+	public void testCheckIsAliveDataSource() throws Exception {
+		DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
+		assertNotNull(dataSourceType);
+		assertTrue(loadBalancerManager.checkIsAliveDataSource(dataSourceType));
 	}
 }

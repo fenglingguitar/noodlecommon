@@ -32,7 +32,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 	private int totalFailureCount = 3;
 	private int totalRiseCount = 2;
 	private long interTime = 2000;
-	private String detectingSql = null;
+	private String detectingSql = "SELECT CURRENT_TIMESTAMP FROM DUAL";
 	
 	private Map<String, DataSource> initDataSourceMap;
 	private Map<String, Integer> initWeightMap;
@@ -80,6 +80,16 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 		}
 		
 		return DataSourceType.checkType(getAliveDataSourceFromList(otherDataSourcesSelectList).getDataSourceType());
+	}
+	
+	@Override
+	public boolean checkIsAliveDataSource(DataSourceType dataSourceType) {
+		for (DataSourceModel dataSourceModel : aliveSourcesList) {
+			if (dataSourceModel.getDataSourceType().equals(dataSourceType.typeName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private DataSourceModel getAliveDataSourceFromList(List<?> dataSourcesList) {
