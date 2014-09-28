@@ -14,7 +14,7 @@
 	
     <bean id="writeDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/noodlecommon_dev?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.234.128:3306/noodlecommon_dev?useUnicode=true&amp;characterEncoding=UTF-8" />
 		<property name="user" value="noodlecommon" />
 		<property name="password" value="noodlecommon" />
 		
@@ -33,7 +33,7 @@
 	
 	<bean id="readDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/noodlecommon_dev?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.234.129:3306/noodlecommon_dev?useUnicode=true&amp;characterEncoding=UTF-8" />
 		<property name="user" value="noodlecommon" />
 		<property name="password" value="noodlecommon" />
 		

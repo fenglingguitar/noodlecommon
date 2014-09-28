@@ -18,7 +18,7 @@
 		init-method="start">
 		<property name="initDataSourceMap">
 			<map>
-				<entry key="master" value-ref="readDataSource" />
+				<entry key="master" value-ref="writeDataSource" />
 				<entry key="slave_1" value-ref="readDataSource" />
 			</map>
 		</property>

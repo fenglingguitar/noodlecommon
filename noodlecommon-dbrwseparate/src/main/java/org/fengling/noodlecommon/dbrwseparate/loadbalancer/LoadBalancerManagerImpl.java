@@ -162,7 +162,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 							failureCount.set(0);
 							deadSourcesList.add(dataSourceModel);
 							if (logger.isErrorEnabled()) {
-								logger.error("HeartBeatAliveTasksScan -> run -> DataSource dead and remove dataSourcesMap, DataSource: " + dataSourceModel.getDataSourceType());								
+								logger.error("HeartBeatAliveTasksScan -> run -> DataSource dead and remove aliveSourcesList, DataSource: " + dataSourceModel.getDataSourceType());								
 							}
 						} 
 					} else {
@@ -197,7 +197,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 							aliveSourcesList.add(dataSourceModel);
 							addDataSourcesSelectList(dataSourceModel);
 							if (logger.isInfoEnabled()) {
-								logger.info("HeartBeatAliveTasksScan -> run -> DataSource alive and remove deadSourcesMap, DataSource: " + dataSourceModel.getDataSourceType());								
+								logger.info("HeartBeatAliveTasksScan -> run -> DataSource alive and remove deadSourcesList, DataSource: " + dataSourceModel.getDataSourceType());								
 							}
 						}
 					} else {

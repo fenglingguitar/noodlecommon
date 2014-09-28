@@ -23,10 +23,21 @@ public class FailoverMethodInterceptorTest extends AbstractJUnit4SpringContextTe
 	@Test
 	public void testRepeat() throws Exception {
 		
-		for (int i=0; i<20; i++) {			
-			testService.queryData();
-			testService.insertData("好吧");
-			Thread.sleep(3000);
+		for (int i=0; i<20; i++) {	
+			try {
+				testService.queryData();
+			} catch (Exception e) {
+				System.out.println("queryData -> Exception: " + e);
+			}
+			try {
+				testService.insertData("好吧");				
+			} catch (Exception e) {
+				System.out.println("insertData -> Exception: " + e);
+			}
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 }
