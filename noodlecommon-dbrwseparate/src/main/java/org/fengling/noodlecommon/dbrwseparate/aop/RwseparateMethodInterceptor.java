@@ -1,0 +1,58 @@
+package org.fengling.noodlecommon.dbrwseparate.aop;
+
+import java.util.List;
+
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceSwitch;
+import org.fengling.noodlecommon.dbrwseparate.datasource.DataSourceType;
+import org.fengling.noodlecommon.dbrwseparate.loadbalancer.LoadBalancerManager;
+
+public class RwseparateMethodInterceptor implements MethodInterceptor {
+
+	private final Log logger = LogFactory.getLog(RwseparateMethodInterceptor.class);
+	
+	private LoadBalancerManager loadBalancerManager;
+	
+	private List<String> masterMethodPrefixList;
+	
+	@Override
+	public Object invoke(MethodInvocation invocation) throws Throwable {
+		
+		boolean isMaster = false;
+		
+		if (masterMethodPrefixList != null) {
+			for (String prefix : masterMethodPrefixList) {
+				if (invocation.getMethod().getName().startsWith(prefix)) {
+					isMaster = true;
+					break;
+				}
+			}
+		}
+		
+		if (isMaster) {
+			DataSourceSwitch.setDataSourceType(DataSourceType.MASTER);
+		} else {
+			DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
+			if (dataSourceType == null) {
+				if (logger.isErrorEnabled()) {
+					logger.error("getAliveDataSource -> loadBalancerManager.getAliveDataSource return null -> None of the available datasource");
+				}
+				throw new Exception("None of the available datasource");
+	        }
+			DataSourceSwitch.setDataSourceType(dataSourceType);
+		}
+		
+		return invocation.proceed();
+	}
+	
+	public void setLoadBalancerManager(LoadBalancerManager loadBalancerManager) {
+		this.loadBalancerManager = loadBalancerManager;
+	}
+
+	public void setMasterMethodPrefixList(List<String> masterMethodPrefixList) {
+		this.masterMethodPrefixList = masterMethodPrefixList;
+	}
+}

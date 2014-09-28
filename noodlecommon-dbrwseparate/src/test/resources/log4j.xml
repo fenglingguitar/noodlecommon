@@ -5,42 +5,6 @@
   - Log4j配置文件。
 -->
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-
-	<!-- ===================================================================== -->
-	<!-- Appenders                                                             -->
-	<!-- ===================================================================== -->
-	
-	<!-- Notify Server Standard-->
-	<appender name="NOTIFYSERVER-STANDARD-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/log/notifyserver-standard.log"/>
-		<param name="append" value="true"/>
-		<param name="encoding" value="GBK"/>
-		<param name="threshold" value="info"/>
-    	<param name="DatePattern" value="'.'yyyyMMdd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n"/>
-		</layout>
-	</appender>
-	<appender name="NOTIFYSERVER-DEBUG-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/log/notifyserver-debug.log"/>
-		<param name="append" value="true"/>
-		<param name="encoding" value="GBK"/>
-		<param name="threshold" value="debug"/>
-    	<param name="DatePattern" value="'.'yyyyMMdd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n"/>
-		</layout>
-	</appender>
-	<appender name="NOTIFYSERVER-ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/log/notifyserver-error.log"/>
-		<param name="append" value="true"/>
-		<param name="encoding" value="GBK"/>
-		<param name="threshold" value="error"/>
-    	<param name="DatePattern" value="'.'yyyyMMdd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n"/>
-		</layout>
-	</appender>
 	
 	<!-- [公共Appender] 控制台STDOUT -->
 	<appender name="STDOUT-APPENDER" class="org.apache.log4j.ConsoleAppender">
@@ -64,7 +28,7 @@
 	<!-- ===================================================================== -->
 	
 	<!-- Notify Server Standard-->
-	<logger name="com.tuan.notifyserver" additivity="false">
+	<logger name="org.fengling.noodlecommon" additivity="false">
 		<level value="DEBUG"/>
 		<appender-ref ref="STDOUT-APPENDER"/>
 	</logger>	
@@ -85,7 +49,7 @@
 	<!-- ===================================================================== -->
 	
 	<root>
-		<level value="DEBUG"/>
+		<level value="INFO"/>
 		<appender-ref ref="STDOUT-APPENDER"/>
 	</root>
 	
