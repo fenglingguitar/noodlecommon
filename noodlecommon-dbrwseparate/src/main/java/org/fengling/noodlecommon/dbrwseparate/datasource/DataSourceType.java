@@ -18,16 +18,15 @@ public enum DataSourceType {
 	}
 	
 	public static DataSourceType checkType(String typeName) {
-		switch(typeName) {
-		case "master":
+		if(typeName.equals("master")) {
 			return DataSourceType.MASTER;
-		case "slave_1":
+		} else if (typeName.equals("slave_1")) {
 			return DataSourceType.SALVE_1;
-		case "slave_2":
+		} else if (typeName.equals("slave_2")) {
 			return DataSourceType.SALVE_2;
-		case "slave_3":
+		} else if (typeName.equals("slave_3")) {
 			return DataSourceType.SALVE_3;
-		default:
+		} else {
 			return null;
 		}
 	}
