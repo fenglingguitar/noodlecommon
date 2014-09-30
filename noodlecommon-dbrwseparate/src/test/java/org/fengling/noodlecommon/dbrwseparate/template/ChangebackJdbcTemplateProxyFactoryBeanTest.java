@@ -4,22 +4,22 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 @ContextConfiguration(locations = {
-		"classpath:org/fengling/noodlecommon/dbrwseparate/template/noodlecommon-template.xml"
+		"classpath:org/fengling/noodlecommon/dbrwseparate/template/noodlecommon-jdbctemplate-changeback.xml"
 })
-public class FailoverJdbcTemplateTest extends AbstractJUnit4SpringContextTests {
+public class ChangebackJdbcTemplateProxyFactoryBeanTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	JdbcOperations changebackJdbcTemplate;
 	
 	@Test
 	public void testUpdate() {
 		
-		assertTrue(jdbcTemplate.update("update dbrwseparate_test set name=? where id=?", new Object[] {
+		assertTrue(changebackJdbcTemplate.update("update dbrwseparate_test set name=? where id=?", new Object[] {
 				"我说",
 				1
 		}) == 1);
