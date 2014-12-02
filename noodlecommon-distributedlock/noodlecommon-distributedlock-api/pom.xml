@@ -11,7 +11,7 @@
   
   <groupId>org.fengling.noodlecommon.distributedlock.api</groupId>
   <artifactId>noodlecommon-distributedlock-api</artifactId>
-  <version>1.0.0</version>
+  <version>${noodlecommon.distributedlock.api.version}</version>
   <name>noodlecommon-distributedlock-api</name>
   <url>http://maven.apache.org</url>
   

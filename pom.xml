@@ -12,6 +12,12 @@
   <properties>
   	<noodlecommon.version>1.0.0</noodlecommon.version>
   	<noodlecommon.dbrwseparate.version>1.0.0</noodlecommon.dbrwseparate.version>
+  	<noodlecommon.distributedlock.api.version>1.0.0</noodlecommon.distributedlock.api.version>
+  	<noodlecommon.distributedlock.db.version>1.0.0</noodlecommon.distributedlock.db.version>
+  	<noodlecommon.dynamicsql.version>1.0.0</noodlecommon.dynamicsql.version>
+  	<noodlecommon.mvc.version>1.0.0</noodlecommon.mvc.version>
+  	<noodlecommon.mvc.demo.web.version>1.0.0</noodlecommon.mvc.demo.web.version>
+  	<noodlecommon.util.version>1.0.0</noodlecommon.util.version>
   	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

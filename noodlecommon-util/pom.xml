@@ -11,7 +11,7 @@
   
   <groupId>org.fengling.noodlecommon.util</groupId>
   <artifactId>noodlecommon-util</artifactId>
-  <version>1.0.0</version>
+  <version>${noodlecommon.util.version}</version>
   <name>noodlecommon-util</name>
   <url>http://maven.apache.org</url>
   

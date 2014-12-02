@@ -11,7 +11,7 @@
   
   <groupId>org.fengling.noodlecommon.dynamicsql</groupId>
   <artifactId>noodlecommon-dynamicsql</artifactId>
-  <version>1.0.0</version>
+  <version>${noodlecommon.dynamicsql.version}</version>
   <name>noodlecommon-dynamicsql</name>
   <url>http://maven.apache.org</url>
   
