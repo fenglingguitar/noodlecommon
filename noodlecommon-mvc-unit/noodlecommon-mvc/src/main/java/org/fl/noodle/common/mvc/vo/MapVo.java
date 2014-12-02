@@ -2,23 +2,22 @@ package org.fl.noodle.common.mvc.vo;
 
 import java.util.Map;
 
-public class MapVo {
+public class MapVo<K,V> {
 	
-	@SuppressWarnings("rawtypes")
-	private Map map;
+	private Map<K,V> map;
 
-	@SuppressWarnings("rawtypes")
-	public MapVo(Map map) {
+	public MapVo() {
+	}
+	
+	public MapVo(Map<K,V> map) {
 		this.map = map;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public void setMap(Map map) {
+	public void setMap(Map<K,V> map) {
 		this.map = map;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public Map getMap() {
+	public Map<K,V> getMap() {
 		return map;
 	}
 }

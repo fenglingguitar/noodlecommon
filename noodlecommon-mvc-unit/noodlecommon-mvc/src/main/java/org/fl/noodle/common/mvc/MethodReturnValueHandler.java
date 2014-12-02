@@ -1,6 +1,5 @@
 package org.fl.noodle.common.mvc;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,28 +16,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import com.alibaba.fastjson.JSON;
 
-
-
-import flexjson.JSONSerializer;
-import flexjson.transformer.DateTransformer;
-
-
-public class MethodReturnValueHandler extends AbstractMessageSendProcessor 
-		implements HandlerMethodReturnValueHandler {
+public class MethodReturnValueHandler extends AbstractMessageSendProcessor implements HandlerMethodReturnValueHandler {
 	
-	protected final Log logger = LogFactory.getLog(getClass());
-	
-	private JSONSerializer serializer = new JSONSerializer();
-	
-	protected MethodReturnValueHandler() {
-		super(null);
-		serializer.transform(new DateTransformer("yyyy-MM-dd HH:mm:ss.SSS"), Date.class);
-	}
+	protected final Log logger = LogFactory.getLog(MethodReturnValueHandler.class);
 	
 	protected MethodReturnValueHandler(List<HttpMessageConverter<?>> messageConverters) {
 		super(messageConverters);
-		serializer.transform(new DateTransformer("yyyy-MM-dd HH:mm:ss.SSS"), Date.class);
 	}
 		
 	public boolean supportsReturnType(MethodParameter returnType) {
@@ -62,29 +47,16 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor
 					map.put("total", pageVo.getTotalPageCount());
 					map.put("records", pageVo.getTotalCount());
 					map.put("rows", pageVo.getData());
-					String json = serializer.deepSerialize(map);
-					mavContainer.setRequestHandled(true);
-					writeWithMessageConverters(json, webRequest);
+					sendMessage(mavContainer, webRequest, map);
 				} else if (returnValue instanceof MapVo) {
 					Map map = ((MapVo)returnValue).getMap();
-					String json = serializer.deepSerialize(map);
-					mavContainer.setRequestHandled(true);
-					writeWithMessageConverters(json, webRequest);
-				} else if (returnValue instanceof List) {
-					List dataList = (List)returnValue;
-					String json = serializer.deepSerialize(dataList);
-					mavContainer.setRequestHandled(true);
-					writeWithMessageConverters(json, webRequest);
+					sendMessage(mavContainer, webRequest, map);
 				} else if (returnValue instanceof VoidVo) {
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("result", "true");
-					String json = serializer.deepSerialize(map);
-					mavContainer.setRequestHandled(true);
-					writeWithMessageConverters(json, webRequest);
+					sendMessage(mavContainer, webRequest, map);
 				} else {
-					String json = serializer.deepSerialize(returnValue);
-					mavContainer.setRequestHandled(true);
-					writeWithMessageConverters(json, webRequest);
+					sendMessage(mavContainer, webRequest, returnValue);
 				}
 			} else {
 				sendNull(mavContainer, webRequest);
@@ -94,7 +66,19 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor
 		}
 	}
 	
+	private void sendMessage(ModelAndViewContainer mavContainer, NativeWebRequest webRequest, Object object) throws Exception {
+		String json = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS");
+		if (logger.isDebugEnabled()) {
+			logger.debug("handleReturnValue -> output json -> " + json);
+		}	
+		mavContainer.setRequestHandled(true);
+		writeWithMessageConverters(json, webRequest);
+	}
+	
 	private void sendNull(ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
+		if (logger.isDebugEnabled()) {
+			logger.debug("handleReturnValue -> output json -> null");
+		}	
 		mavContainer.setRequestHandled(true);
 		writeWithMessageConverters("", webRequest);
 	}

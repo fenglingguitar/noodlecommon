@@ -16,13 +16,9 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 
-
-import flexjson.JSONSerializer;
-
-
-public class ExceptionResolver extends AbstractMessageSendProcessor
-		implements HandlerExceptionResolver {
+public class ExceptionResolver extends AbstractMessageSendProcessor implements HandlerExceptionResolver {
 
 	protected final Log logger = LogFactory.getLog(ExceptionResolver.class);
 	
@@ -47,8 +43,7 @@ public class ExceptionResolver extends AbstractMessageSendProcessor
 				map.put("promptMessage", ((JsonException)ex).getPromptMessage());
 				map.put("errorMessage", ex.getMessage());
 				
-				JSONSerializer serializer = new JSONSerializer();
-				String json = serializer.deepSerialize(map);
+				String json = JSON.toJSONStringWithDateFormat(map, "yyyy-MM-dd HH:mm:ss.SSS");
 				
 				writeWithMessageConverters(json, webRequest);
 				return new ModelAndView();

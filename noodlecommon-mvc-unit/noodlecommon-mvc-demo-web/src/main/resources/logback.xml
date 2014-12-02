@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>  
+
+	<appender name="STANDARD-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">    
+		<file>logFile.log</file>    
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>      
+			<onMismatch>DENY</onMismatch>    
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+	      <level>INFO</level>
+	    </filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">      
+			<fileNamePattern>logFile.log.%d{yyyyMMdd}</fileNamePattern>        
+			<maxHistory>30</maxHistory>    
+		</rollingPolicy>    
+		<encoder charset="UTF-8">      
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern> 
+		</encoder>  
+	</appender>
+
+	<appender name="STDOUT-APPENDER" class="ch.qos.logback.core.ConsoleAppender">    
+		<encoder charset="UTF-8">      
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{15} - %msg%n</pattern>    
+		</encoder>  
+		<target>System.out</target>  
+	</appender>  
+	<appender name="STDERR-APPENDER" class="ch.qos.logback.core.ConsoleAppender">    
+		<encoder charset="UTF-8">      
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{15} - %msg%n</pattern>    
+		</encoder>  
+		<target>System.err</target>  
+	</appender>
+	
+	<logger name="org.fl.noodle.common" level="DEBUG" additivity="false">    
+		<appender-ref ref="STDOUT-APPENDER" /> 
+	</logger>
+	
+	<root level="INFO">    
+		<appender-ref ref="STDOUT-APPENDER" />  
+	</root>
+	
+</configuration>

@@ -39,11 +39,22 @@
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-web</artifactId>
 	</dependency>
-	
+   	
+   	<!-- log -->
 	<dependency>
-    	<groupId>net.sf.flexjson</groupId>
-    	<artifactId>flexjson</artifactId>
-   	</dependency>
+		<groupId>commons-logging</groupId>
+		<artifactId>commons-logging</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+	</dependency>
+   	
+   	<!-- fastjson -->
+	<dependency>
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+	</dependency>
     
   </dependencies>
   
