@@ -142,4 +142,26 @@ public class DemoVo implements java.io.Serializable {
 	public void setDateTest(Date dateTest) {
 		this.dateTest = dateTest;
 	}
+	
+	public String toString() {
+		return (new StringBuilder())
+				.append("id:").append(id).append(",")
+				.append("byteTest:").append(byteTest).append(",")
+				.append("byteClassTest:").append(byteClassTest).append(",")
+				.append("intTest:").append(intTest).append(",")
+				.append("intClassTest:").append(intClassTest).append(",")
+				.append("longTest:").append(longTest).append(",")
+				.append("longClassTest:").append(longClassTest).append(",")
+				.append("floatTest:").append(floatTest).append(",")
+				.append("floatClassTest:").append(floatClassTest).append(",")
+				.append("doubleTest:").append(doubleTest).append(",")
+				.append("doubleClassTest:").append(doubleClassTest).append(",")
+				.append("charTest:").append(charTest).append(",")
+				.append("booleanTest:").append(booleanTest).append(",")
+				.append("booleanClassTest:").append(booleanClassTest).append(",")
+				.append("stringTest:").append(stringTest).append(",")
+				.append("byteArrayTest:").append(byteArrayTest).append(",")
+				.append("dateTest:").append((new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(dateTest))
+				.toString();
+	}
 }

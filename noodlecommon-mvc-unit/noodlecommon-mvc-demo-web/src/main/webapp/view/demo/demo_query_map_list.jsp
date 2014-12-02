@@ -17,19 +17,19 @@
     	
 	    function callback(trnId, data) {
 			
-			if (trnId == 'QUERY_LIST') {
-				for(var i=0; i<=data.length; i++) {					
-					jQuery("#list").jqGrid('addRowData', i+1, data[i]);
+			if (trnId == 'QUERY_MAP_LIST') {
+				for(var i=0; i<=data['input'].length; i++) {					
+					jQuery("#list1").jqGrid('addRowData', i+1, data['input'][i]);
+				}
+				for(var i=0; i<=data['output'].length; i++) {					
+					jQuery("#list2").jqGrid('addRowData', i+1, data['output'][i]);
 				}
 			} 
 		}
     
 		function init() {
 			
-			$('#list').jqGrid({
-		   		url: '<%=request.getContextPath()%>/demo/querypage',
-				datatype: 'local',
-				mtype: 'post',
+			$('#list1').jqGrid({
 			   	colNames: [
 					'ID',
 					'字节',
@@ -69,9 +69,6 @@
 					{name:'dateTest', index:'dateTest', width:200, align:'center', formatter:'date', formatoptions:{srcformat:'Y-m-d H:i:s.sss', newformat:'Y-m-d H:i:s'}},
 
 			   	],
-			   	rowNum: 10,
-			   	rowList: [10,20,30,40,50,100],
-			   	pager: '#pager',
 			   	sortname: 'id',
 			    viewrecords: true,
 			    autowidth: true,
@@ -86,8 +83,63 @@
 			    caption: '查询结果'
 			});
 				
+			$('#list2').jqGrid({
+			   	colNames: [
+					'ID',
+					'字节',
+					'字节类',
+					'整型',
+					'整型类',
+					'长整型',
+					'长整类类',
+					'浮点型',
+					'浮点型类',
+					'双精度',
+					'双精度类',
+					'字符型',
+					'布尔型',
+					'布尔型类',
+					'字符串',
+					'字节数组',
+					'日期'
+					],
+			   	colModel: [
+					{name:'id', index:'id', width:120, align:'center'},
+					{name:'byteTest', index:'byteTest', width:120, align:'center'},
+					{name:'byteClassTest', index:'byteClassTest', width:120, align:'center'},
+					{name:'intTest', index:'intTest', width:120, align:'center'},
+					{name:'intClassTest', index:'intClassTest', width:120, align:'center'},
+					{name:'longTest', index:'longTest', width:180, align:'center'},
+					{name:'longClassTest', index:'longClassTest', width:180, align:'center'},
+					{name:'floatTest', index:'floatTest', width:120, align:'center'},
+					{name:'floatClassTest', index:'floatClassTest', width:120, align:'center'},
+					{name:'doubleTest', index:'doubleTest', width:180, align:'center'},
+					{name:'doubleClassTest', index:'doubleClassTest', width:180, align:'center'},
+					{name:'charTest', index:'charTest', width:80, align:'center'},
+					{name:'booleanTest', index:'booleanTest', width:80, align:'center'},
+					{name:'booleanClassTest', index:'booleanClassTest', width:80, align:'center'},
+					{name:'stringTest', index:'stringTest', width:200, align:'center'},
+					{name:'byteArrayTest', index:'byteArrayTest', width:200, align:'center'},
+					{name:'dateTest', index:'dateTest', width:200, align:'center', formatter:'date', formatoptions:{srcformat:'Y-m-d H:i:s.sss', newformat:'Y-m-d H:i:s'}},
+
+			   	],
+			   	sortname: 'id',
+			    viewrecords: true,
+			    autowidth: true,
+			    shrinkToFit: false,
+			    height: 248,
+			    sortorder: 'desc',
+			    multiselect: true,
+			    jsonReader: {
+					repeatitems : false
+				},
+				ondblClickRow: false,
+			    caption: '查询结果'
+			});
+			
 			$(window).resize(function(){ 
-				$("#list").setGridWidth($(window).width() - 14);
+				$("#list1").setGridWidth($(window).width() - 14);
+				$("#list2").setGridWidth($(window).width() - 14);
 			});
 			
 			query();
@@ -122,8 +174,8 @@
 			jsonSet.put('input', vo);
 			
 			transaction({
-				id: 'QUERY_LIST',
-				url: '<%=request.getContextPath()%>/demo/querylist',
+				id: 'QUERY_MAP_LIST',
+				url: '<%=request.getContextPath()%>/demo/querymaplist',
 				jsonSet: jsonSet
 			});
 		}
@@ -131,8 +183,11 @@
   </head>
 
   <body onload="init();" onkeydown="onEnterDown(query);" >
-	<div id="list_div" style="width:auto;">
-		<table id="list"></table>
+	<div id="list_div_1" style="width:auto;margin-bottom:10px;">
+		<table id="list1"></table>
+	</div>
+	<div id="list_div_2" style="width:auto;">
+		<table id="list2"></table>
 	</div>
   </body>
 </html>

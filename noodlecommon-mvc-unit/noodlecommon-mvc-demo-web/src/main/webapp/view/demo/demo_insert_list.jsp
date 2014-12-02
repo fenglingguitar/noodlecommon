@@ -17,7 +17,7 @@
     	
 	    function callback(trnId, data) {
 			
-			if (trnId == 'INSERT_ARRAY') {
+			if (trnId == 'INSERT_LIST') {
 				if (data.result == 'false') {
 					alert('失败');
 				} else {
@@ -38,7 +38,7 @@
 				
 				var vo = new Object();
 				
-				vo['id'] = '1';
+				vo['id'] = i+1;
 				vo['byteTest'] = 127;
 				vo['byteClassTest'] = 127;
 				vo['intTest'] = 2147483647;
@@ -66,7 +66,7 @@
 			jsonSet.put('input', inputArray);
 			
 			transaction({
-				id: 'INSERT_ARRAY',
+				id: 'INSERT_LIST',
 				url: '<%=request.getContextPath()%>/demo/insertlist',
 				jsonSet: jsonSet
 			});

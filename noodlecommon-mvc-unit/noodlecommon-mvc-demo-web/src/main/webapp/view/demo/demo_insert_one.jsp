@@ -17,7 +17,7 @@
     	
 	    function callback(trnId, data) {
 			
-			if (trnId == 'INSERT_ARRAY') {
+			if (trnId == 'INSERT_ONE') {
 				if (data.result == 'false') {
 					alert('失败');
 				} else {
@@ -32,42 +32,35 @@
 		
 		function query() {
 			
-			var inputArray = [];
+			var vo = new Object();
 			
-			for (var i=0; i<23; i++) {
-				
-				var vo = new Object();
-				
-				vo['id'] = i+1;
-				vo['byteTest'] = 127;
-				vo['byteClassTest'] = 127;
-				vo['intTest'] = 2147483647;
-				vo['intClassTest'] = 2147483647;
-				vo['longTest'] = 223372036854775807;
-				vo['longClassTest'] = 223372036854775807;
-				vo['floatTest'] = 1.11111;
-				vo['floatClassTest'] = 1.11111;
-				vo['doubleTest'] = 1.11111;
-				vo['doubleClassTest'] = 1.11111;
-				vo['charTest'] = 'A';
-				vo['booleanTest'] = true;
-				vo['booleanClassTest'] = true;
-				vo['stringTest'] = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-				//vo['byteArrayTest'] = new Array(65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65);
-				vo['byteArrayTest'] = [65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65]
-				//vo['dateTest'] = '2014-12-02 16:49:18';
-				//vo['dateTest'] = '2014-12-02 16:49:18.222';
-				vo['dateTest'] = new Date().Format("yyyy-MM-dd HH:mm:ss.SSS");
-				
-				inputArray.push(vo);
-			}
+			vo['id'] = '1';
+			vo['byteTest'] = 127;
+			vo['byteClassTest'] = 127;
+			vo['intTest'] = 2147483647;
+			vo['intClassTest'] = 2147483647;
+			vo['longTest'] = 223372036854775807;
+			vo['longClassTest'] = 223372036854775807;
+			vo['floatTest'] = 1.11111;
+			vo['floatClassTest'] = 1.11111;
+			vo['doubleTest'] = 1.11111;
+			vo['doubleClassTest'] = 1.11111;
+			vo['charTest'] = 'A';
+			vo['booleanTest'] = true;
+			vo['booleanClassTest'] = true;
+			vo['stringTest'] = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+			//vo['byteArrayTest'] = new Array(65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65);
+			vo['byteArrayTest'] = [65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65]
+			//vo['dateTest'] = '2014-12-02 16:49:18';
+			//vo['dateTest'] = '2014-12-02 16:49:18.222';
+			vo['dateTest'] = new Date().Format("yyyy-MM-dd HH:mm:ss.SSS");
 			
 			var jsonSet = new JsonSet();
-			jsonSet.put('input', inputArray);
+			jsonSet.put('input', vo);
 			
 			transaction({
-				id: 'INSERT_ARRAY',
-				url: '<%=request.getContextPath()%>/demo/insertarray',
+				id: 'INSERT_ONE',
+				url: '<%=request.getContextPath()%>/demo/insertone',
 				jsonSet: jsonSet
 			});
 		}

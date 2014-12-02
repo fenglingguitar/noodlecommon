@@ -17,19 +17,14 @@
     	
 	    function callback(trnId, data) {
 			
-			if (trnId == 'QUERY_LIST') {
-				for(var i=0; i<=data.length; i++) {					
-					jQuery("#list").jqGrid('addRowData', i+1, data[i]);
-				}
+			if (trnId == 'QUERY_ONE') {
+				jQuery("#list").jqGrid('addRowData', 1, data);
 			} 
 		}
     
 		function init() {
 			
 			$('#list').jqGrid({
-		   		url: '<%=request.getContextPath()%>/demo/querypage',
-				datatype: 'local',
-				mtype: 'post',
 			   	colNames: [
 					'ID',
 					'字节',
@@ -69,9 +64,6 @@
 					{name:'dateTest', index:'dateTest', width:200, align:'center', formatter:'date', formatoptions:{srcformat:'Y-m-d H:i:s.sss', newformat:'Y-m-d H:i:s'}},
 
 			   	],
-			   	rowNum: 10,
-			   	rowList: [10,20,30,40,50,100],
-			   	pager: '#pager',
 			   	sortname: 'id',
 			    viewrecords: true,
 			    autowidth: true,
@@ -122,8 +114,8 @@
 			jsonSet.put('input', vo);
 			
 			transaction({
-				id: 'QUERY_LIST',
-				url: '<%=request.getContextPath()%>/demo/querylist',
+				id: 'QUERY_ONE',
+				url: '<%=request.getContextPath()%>/demo/queryone',
 				jsonSet: jsonSet
 			});
 		}
@@ -131,7 +123,7 @@
   </head>
 
   <body onload="init();" onkeydown="onEnterDown(query);" >
-	<div id="list_div" style="width:auto;">
+	<div id="list_div_1" style="width:auto;">
 		<table id="list"></table>
 	</div>
   </body>

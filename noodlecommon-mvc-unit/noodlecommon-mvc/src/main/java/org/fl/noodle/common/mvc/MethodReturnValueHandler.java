@@ -17,6 +17,7 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class MethodReturnValueHandler extends AbstractMessageSendProcessor implements HandlerMethodReturnValueHandler {
 	
@@ -67,7 +68,7 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 	}
 	
 	private void sendMessage(ModelAndViewContainer mavContainer, NativeWebRequest webRequest, Object object) throws Exception {
-		String json = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS");
+		String json = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS", SerializerFeature.WriteClassName);
 		if (logger.isDebugEnabled()) {
 			logger.debug("handleReturnValue -> output json -> " + json);
 		}	
