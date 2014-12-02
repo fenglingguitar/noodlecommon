@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>org.fengling.noodlecommon.mvc</groupId>
+    <groupId>org.fl.noodle.common.mvc</groupId>
     <artifactId>noodlecommon-mvc-unit</artifactId>
     <version>1.0.0</version>
   </parent>
   
-  <groupId>org.fengling.noodlecommon.mvc</groupId>
+  <groupId>org.fl.noodle.common.mvc</groupId>
   <artifactId>noodlecommon-mvc-demo-web</artifactId>
-  <version>${noodlecommon.mvc.demo.web.version}</version>
+  <version>${noodle.common.mvc.demo.web.version}</version>
   <packaging>war</packaging>
   <name>noodlecommon-mvc-demo-web Maven Webapp</name>
   <url>http://maven.apache.org</url>
@@ -19,9 +19,9 @@
   <dependencies>
   
   	<dependency>
-  		<groupId>org.fengling.noodlecommon.mvc</groupId>
+  		<groupId>org.fl.noodle.common.mvc</groupId>
 	  	<artifactId>noodlecommon-mvc</artifactId>
-	  	<version>${noodlecommon.mvc.version}</version>
+	  	<version>${noodle.common.mvc.version}</version>
 	</dependency>
   
     <dependency>

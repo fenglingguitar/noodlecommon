@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>org.fengling.noodlecommon.distributedlock</groupId>
+    <groupId>org.fl.noodle.common.distributedlock</groupId>
     <artifactId>noodlecommon-distributedlock</artifactId>
     <version>1.0.0</version>
   </parent>
   
-  <groupId>org.fengling.noodlecommon.distributedlock.db</groupId>
+  <groupId>org.fl.noodle.common.distributedlock.db</groupId>
   <artifactId>noodlecommon-distributedlock-db</artifactId>
-  <version>${noodlecommon.distributedlock.db.version}</version>
+  <version>${noodle.common.distributedlock.db.version}</version>
   <name>noodlecommon-distributedlock-db</name>
   <url>http://maven.apache.org</url>
   
@@ -22,9 +22,9 @@
   <dependencies>
   
   	<dependency>
-  		<groupId>org.fengling.noodlecommon.distributedlock.api</groupId>
+  		<groupId>org.fl.noodle.common.distributedlock.api</groupId>
   		<artifactId>noodlecommon-distributedlock-api</artifactId>
-		<version>${noodlecommon.distributedlock.api.version}</version>
+		<version>${noodle.common.distributedlock.api.version}</version>
 	</dependency>
   
     <dependency>

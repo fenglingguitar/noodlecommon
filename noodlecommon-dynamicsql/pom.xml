@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>org.fengling.noodlecommon</groupId>
+    <groupId>org.fl.noodle.common</groupId>
     <artifactId>noodlecommon</artifactId>
     <version>1.0.0</version>
   </parent>
   
-  <groupId>org.fengling.noodlecommon.dynamicsql</groupId>
+  <groupId>org.fl.noodle.common.dynamicsql</groupId>
   <artifactId>noodlecommon-dynamicsql</artifactId>
-  <version>${noodlecommon.dynamicsql.version}</version>
+  <version>${noodle.common.dynamicsql.version}</version>
   <name>noodlecommon-dynamicsql</name>
   <url>http://maven.apache.org</url>
   

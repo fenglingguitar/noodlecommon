@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.fengling.noodlecommon</groupId>
+  <groupId>org.fl.noodle.common</groupId>
   <artifactId>noodlecommon</artifactId>
   <version>1.0.0</version>
   <packaging>pom</packaging>
@@ -10,24 +10,24 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-  	<noodlecommon.version>1.0.0</noodlecommon.version>
-  	<noodlecommon.dbrwseparate.version>1.0.0</noodlecommon.dbrwseparate.version>
-  	<noodlecommon.distributedlock.api.version>1.0.0</noodlecommon.distributedlock.api.version>
-  	<noodlecommon.distributedlock.db.version>1.0.0</noodlecommon.distributedlock.db.version>
-  	<noodlecommon.dynamicsql.version>1.0.0</noodlecommon.dynamicsql.version>
-  	<noodlecommon.mvc.version>1.0.0</noodlecommon.mvc.version>
-  	<noodlecommon.mvc.demo.web.version>1.0.0</noodlecommon.mvc.demo.web.version>
-  	<noodlecommon.util.version>1.0.0</noodlecommon.util.version>
+  	<noodle.common.version>1.0.0</noodle.common.version>
+  	<noodle.common.dbseparate.version>1.0.0</noodle.common.dbseparate.version>
+  	<noodle.common.distributedlock.api.version>1.0.0</noodle.common.distributedlock.api.version>
+  	<noodle.common.distributedlock.db.version>1.0.0</noodle.common.distributedlock.db.version>
+  	<noodle.common.dynamicsql.version>1.0.0</noodle.common.dynamicsql.version>
+  	<noodle.common.mvc.version>1.0.0</noodle.common.mvc.version>
+  	<noodle.common.mvc.demo.web.version>1.0.0</noodle.common.mvc.demo.web.version>
+  	<noodle.common.util.version>1.0.0</noodle.common.util.version>
   	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 	
   <modules>
-    <module>noodlecommon-dbrwseparate</module>
-    <module>noodlecommon-util</module>
+    <module>noodlecommon-dbseparate</module>
+    <module>noodlecommon-distributedlock</module>
     <module>noodlecommon-dynamicsql</module>
     <module>noodlecommon-mvc-unit</module>
-    <module>noodlecommon-distributedlock</module>
+    <module>noodlecommon-util</module>
   </modules>
   
   <dependencyManagement>
