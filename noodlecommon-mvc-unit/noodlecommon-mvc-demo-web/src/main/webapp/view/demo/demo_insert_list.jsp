@@ -59,6 +59,8 @@
 				//vo['dateTest'] = '2014-12-02 16:49:18.222';
 				vo['dateTest'] = new Date().Format("yyyy-MM-dd HH:mm:ss.SSS");
 				
+				vo['@type'] = 'org.fl.noodle.common.demo.vo.DemoVo';
+				
 				inputArray.push(vo);
 			}
 			

@@ -31,27 +31,27 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		RequestParam requestParam = parameter.getParameterAnnotation(RequestParam.class);
 		
-		if (requestParam.type().equals("json")) {
-			String json = request.getParameter(requestParam.name());
-			if (json != null && !json.isEmpty()) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("resolveArgument -> input json -> " + json);
-				}				
-				return JSON.parseObject(json, parameter.getParameterType());
-			} else {
-				if (logger.isDebugEnabled()) {
-					logger.debug("resolveArgument -> input json -> null");
-				}
-				Class<?> parameterType = parameter.getParameterType();
-				if (parameterType.getConstructors().length > 0) {
-					return parameterType.newInstance();
-				} else {
-					String className = parameterType.getCanonicalName();
-					Class<?> T = Class.forName(className.substring(0, className.length()-2));
-					return (Object[]) Array.newInstance(T, (int)0);
-				}
+		String input = request.getParameter(requestParam.name());
+		if (input != null && !input.isEmpty()) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("resolveArgument -> input string -> " + input);
+			}	
+			if (requestParam.type().equals("json")) {				
+				return JSON.parseObject(input, parameter.getParameterType());
+			} 
+		} else {
+			if (logger.isDebugEnabled()) {
+				logger.debug("resolveArgument -> input string -> null");
 			}
-		} 
+			Class<?> parameterType = parameter.getParameterType();
+			if (parameterType.getConstructors().length > 0) {
+				return parameterType.newInstance();
+			} else {
+				String className = parameterType.getCanonicalName();
+				Class<?> T = Class.forName(className.substring(0, className.length()-2));
+				return (Object[]) Array.newInstance(T, (int)0);
+			}
+		}
 		
 		return null;
 	}

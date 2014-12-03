@@ -40,45 +40,58 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 		
 		if (returnValue != null) {
 			ResponseBody responseBody = returnType.getMethodAnnotation(ResponseBody.class);
-			if (responseBody.type().equals("json")) {
-				if (returnValue instanceof PageVo) {
-					PageVo pageVo = (PageVo)returnValue;
-					Map map = new HashMap();
-					map.put("page", pageVo.getCurrentPageNo());
-					map.put("total", pageVo.getTotalPageCount());
-					map.put("records", pageVo.getTotalCount());
-					map.put("rows", pageVo.getData());
-					sendMessage(mavContainer, webRequest, map);
-				} else if (returnValue instanceof MapVo) {
-					Map map = ((MapVo)returnValue).getMap();
-					sendMessage(mavContainer, webRequest, map);
-				} else if (returnValue instanceof VoidVo) {
-					Map<String, String> map = new HashMap<String, String>();
-					map.put("result", "true");
-					sendMessage(mavContainer, webRequest, map);
-				} else {
-					sendMessage(mavContainer, webRequest, returnValue);
-				}
+			if (returnValue instanceof PageVo) {
+				PageVo pageVo = (PageVo)returnValue;
+				Map map = new HashMap();
+				map.put("page", pageVo.getCurrentPageNo());
+				map.put("total", pageVo.getTotalPageCount());
+				map.put("records", pageVo.getTotalCount());
+				map.put("rows", pageVo.getData());
+				sendMessage(mavContainer, webRequest, serialize(responseBody.type(), map));
+			} else if (returnValue instanceof MapVo) {
+				Map map = ((MapVo)returnValue).getMap();
+				sendMessage(mavContainer, webRequest, serialize(responseBody.type(), map));
+			} else if (returnValue instanceof VoidVo) {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("result", "true");
+				sendMessage(mavContainer, webRequest, serialize(responseBody.type(), map));
 			} else {
-				sendNull(mavContainer, webRequest);
+				sendMessage(mavContainer, webRequest, serialize(responseBody.type(), returnValue));
 			}
 		} else {
 			sendNull(mavContainer, webRequest);
 		}
 	}
 	
-	private void sendMessage(ModelAndViewContainer mavContainer, NativeWebRequest webRequest, Object object) throws Exception {
-		String json = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS", SerializerFeature.WriteClassName);
+	private String serialize(String type, Object object) {
+		
+		String serializeString = "";
+		
+		if (type.equals("json")) {			
+			serializeString = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS");
+		} else if (type.equals("json-java")) {			
+			serializeString = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS", SerializerFeature.WriteClassName);
+		} else {
+			if (logger.isErrorEnabled()) {
+				logger.debug("handleReturnValue -> serialize string -> exception: No this serialize type");
+			}
+		}
+		
 		if (logger.isDebugEnabled()) {
-			logger.debug("handleReturnValue -> output json -> " + json);
-		}	
+			logger.debug("handleReturnValue -> output serialize string -> " + serializeString);
+		}
+
+		return serializeString;
+	}
+	
+	private void sendMessage(ModelAndViewContainer mavContainer, NativeWebRequest webRequest, String serializeString) throws Exception {
 		mavContainer.setRequestHandled(true);
-		writeWithMessageConverters(json, webRequest);
+		writeWithMessageConverters(serializeString, webRequest);
 	}
 	
 	private void sendNull(ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
 		if (logger.isDebugEnabled()) {
-			logger.debug("handleReturnValue -> output json -> null");
+			logger.debug("handleReturnValue -> output serialize string -> null");
 		}	
 		mavContainer.setRequestHandled(true);
 		writeWithMessageConverters("", webRequest);

@@ -23,6 +23,13 @@
 	  	<artifactId>noodlecommon-mvc</artifactId>
 	  	<version>${noodle.common.mvc.version}</version>
 	</dependency>
+	
+	<dependency>
+  		<groupId>org.fl.noodle.common.util</groupId>
+	  	<artifactId>noodlecommon-util</artifactId>
+	  	<version>${noodle.common.util.version}</version>
+	  	<scope>test</scope>
+	</dependency>
   
     <dependency>
       <groupId>junit</groupId>

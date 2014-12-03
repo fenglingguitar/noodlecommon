@@ -8,14 +8,17 @@ public class DemoVo implements java.io.Serializable {
 
 	private long id;
 	private byte byteTest;
+	//transient private Byte byteClassTest;
 	private Byte byteClassTest;
 	private int intTest;
 	private Integer intClassTest;
 	private long longTest;
 	private Long longClassTest;
 	private float floatTest;
+	//transient private Float floatClassTest;
 	private Float floatClassTest;
 	private double doubleTest;
+	//transient private Double doubleClassTest;
 	private Double doubleClassTest;
 	private char charTest;
 	private boolean booleanTest;
@@ -161,7 +164,7 @@ public class DemoVo implements java.io.Serializable {
 				.append("booleanClassTest:").append(booleanClassTest).append(",")
 				.append("stringTest:").append(stringTest).append(",")
 				.append("byteArrayTest:").append(byteArrayTest).append(",")
-				.append("dateTest:").append((new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(dateTest))
+				.append("dateTest:").append(dateTest != null ? (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(dateTest) : null)
 				.toString();
 	}
 }
