@@ -53,6 +53,11 @@
 	    <groupId>org.logback-extensions</groupId>
 	    <artifactId>logback-ext-spring</artifactId>
 	</dependency>
+	
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+	</dependency>
     
   </dependencies>
   
