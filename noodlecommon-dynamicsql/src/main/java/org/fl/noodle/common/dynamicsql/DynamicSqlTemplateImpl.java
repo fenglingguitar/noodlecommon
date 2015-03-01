@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
-import org.fl.noodle.common.dynamicsql.pojo.Page;
+import org.fl.noodle.common.mvc.vo.PageVo;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -307,7 +307,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
     }
 	
 	@Override
-	public <T> Page<T> queryPage(String sqlName, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception {
+	public <T> PageVo<T> queryPage(String sqlName, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception {
 		return queryPageBySql(sqlName, params, pageIndex, pageSize, clazz);
 	}
 	
@@ -316,7 +316,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 		return queryPageBySql(sqlName, params, 0, 0, clazz).getData();
 	}
 
-	public <T> Page<T> queryPageBySql(String sqlName, Map<String, Object> params, final int pageIndex, int pageSize, final Class<T> clazz) throws Exception {
+	public <T> PageVo<T> queryPageBySql(String sqlName, Map<String, Object> params, final int pageIndex, int pageSize, final Class<T> clazz) throws Exception {
 		
 		final Context context = generateVelocityContext(params);
 		StringWriter writer = new StringWriter();
@@ -367,11 +367,11 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 		});
 		
 		long start = pageIndex > 0 && pageSize > 0 ? (pageIndex - 1) * pageSize : 0;
-		return new Page<T>(start, total, pageSize, list);
+		return new PageVo<T>(start, total, pageSize, list);
 	}
 	
 	@Override
-	public <T> Page<T> queryPageSql(String strSql, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception {
+	public <T> PageVo<T> queryPageSql(String strSql, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception {
 		return queryPageByStrSql(strSql, params, pageIndex, pageSize, clazz);
 	}
 
@@ -380,7 +380,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 		return queryPageByStrSql(strSql, params, 0, 0, clazz).getData();
 	}
 	
-	public <T> Page<T> queryPageByStrSql(final String strSql, final Map<String, Object> params, final int pageIndex, int pageSize, final Class<T> clazz) throws Exception {
+	public <T> PageVo<T> queryPageByStrSql(final String strSql, final Map<String, Object> params, final int pageIndex, int pageSize, final Class<T> clazz) throws Exception {
 		
 		final Context context = generateVelocityContext(params);
 		StringWriter writer = new StringWriter();
@@ -427,7 +427,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 		});
 		
 		long start = pageIndex > 0 && pageSizeFinal > 0 ? (pageIndex - 1) * pageSizeFinal : 0;
-		return new Page<T>(start, total, pageSizeFinal, list);
+		return new PageVo<T>(start, total, pageSizeFinal, list);
 	}
 	
 	@Override

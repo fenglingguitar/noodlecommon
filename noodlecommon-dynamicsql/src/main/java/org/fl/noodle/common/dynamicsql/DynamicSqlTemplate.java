@@ -3,14 +3,14 @@ package org.fl.noodle.common.dynamicsql;
 import java.util.List;
 import java.util.Map;
 
-import org.fl.noodle.common.dynamicsql.pojo.Page;
+import org.fl.noodle.common.mvc.vo.PageVo;
 
 public interface DynamicSqlTemplate {
 	
 	/*
 	 * 分页查询
 	 */
-	public <T> Page<T> queryPage(String sqlName, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception;
+	public <T> PageVo<T> queryPage(String sqlName, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception;
 	
 	/*
 	 * LIST查询
@@ -20,7 +20,7 @@ public interface DynamicSqlTemplate {
 	/*
 	 * 分页查询, 用字符串SQL
 	 */
-	public <T> Page<T> queryPageSql(String strSql, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception;
+	public <T> PageVo<T> queryPageSql(String strSql, Map<String, Object> params, int pageIndex, int pageSize, Class<T> clazz) throws Exception;
 	
 	/*
 	 * LIST查询, 用字符串SQL

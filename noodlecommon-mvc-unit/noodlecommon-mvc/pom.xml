@@ -21,6 +21,12 @@
   
   <dependencies>
   
+	<dependency>
+  		<groupId>org.fl.noodle.common.mvc.vo</groupId>
+	  	<artifactId>noodlecommon-mvc-vo</artifactId>
+	  	<version>${noodle.common.mvc.vo.version}</version>
+	</dependency>
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

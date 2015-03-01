@@ -16,6 +16,7 @@
   	<noodle.common.distributedlock.db.version>1.0.0</noodle.common.distributedlock.db.version>
   	<noodle.common.dynamicsql.version>1.0.0</noodle.common.dynamicsql.version>
   	<noodle.common.mvc.version>1.0.0</noodle.common.mvc.version>
+  	<noodle.common.mvc.vo.version>1.0.0</noodle.common.mvc.vo.version>
   	<noodle.common.mvc.demo.web.version>1.0.0</noodle.common.mvc.demo.web.version>
   	<noodle.common.util.version>1.0.0</noodle.common.util.version>
   	

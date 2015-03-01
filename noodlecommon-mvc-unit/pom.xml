@@ -22,6 +22,7 @@
   <modules>
     <module>noodlecommon-mvc</module>
     <module>noodlecommon-mvc-demo-web</module>
+    <module>noodlecommon-mvc-vo</module>
   </modules>
   
 </project>
