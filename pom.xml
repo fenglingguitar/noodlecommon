@@ -31,6 +31,7 @@
     <module>noodlecommon-mvc-unit</module>
     <module>noodlecommon-net</module>
     <module>noodlecommon-util</module>
+    <module>noodlecommon-monitor-unit</module>
   </modules>
   
   <dependencyManagement>
