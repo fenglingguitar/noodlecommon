@@ -1,4 +1,4 @@
-package org.fl.noodle.common.util.net.http.apache;
+package org.fl.noodle.common.net.http.apache;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.fl.noodle.common.util.net.http.AbstractHttpConnect;
+import org.fl.noodle.common.net.http.AbstractHttpConnect;
 
 
 public class HttpConnectApache extends AbstractHttpConnect {

@@ -1,8 +1,8 @@
-package org.fl.noodle.common.util.net.ftp;
+package org.fl.noodle.common.net.ftp;
 
-import org.fl.noodle.common.util.net.ftp.FtpConnect;
-import org.fl.noodle.common.util.net.ftp.FtpConnect.FtpException;
-import org.fl.noodle.common.util.net.ftp.FtpConnect.FtpInfo;
+import org.fl.noodle.common.net.ftp.FtpConnect;
+import org.fl.noodle.common.net.ftp.FtpConnect.FtpException;
+import org.fl.noodle.common.net.ftp.FtpConnect.FtpInfo;
 import org.junit.Test;
 
 public class FtpConnectTest {

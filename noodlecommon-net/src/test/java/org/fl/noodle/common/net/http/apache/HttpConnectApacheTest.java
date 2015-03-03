@@ -1,7 +1,7 @@
-package org.fl.noodle.common.util.net.http.apache;
+package org.fl.noodle.common.net.http.apache;
 
-import org.fl.noodle.common.util.net.http.HttpConnect;
-import org.fl.noodle.common.util.net.http.apache.HttpConnectApache;
+import org.fl.noodle.common.net.http.apache.HttpConnectApache;
+import org.fl.noodle.common.net.http.HttpConnect;
 import org.junit.Test;
 
 public class HttpConnectApacheTest {

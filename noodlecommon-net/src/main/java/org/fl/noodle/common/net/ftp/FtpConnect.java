@@ -1,4 +1,4 @@
-package org.fl.noodle.common.util.net.ftp;
+package org.fl.noodle.common.net.ftp;
 
 import java.io.File;
 import java.io.FileInputStream;

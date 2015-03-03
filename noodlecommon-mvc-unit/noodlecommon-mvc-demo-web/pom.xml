@@ -30,6 +30,13 @@
 	  	<version>${noodle.common.util.version}</version>
 	  	<scope>test</scope>
 	</dependency>
+	
+	<dependency>
+  		<groupId>org.fl.noodle.common.net</groupId>
+	  	<artifactId>noodlecommon-net</artifactId>
+	  	<version>${noodle.common.net.version}</version>
+	  	<scope>test</scope>
+	</dependency>
   
     <dependency>
       <groupId>junit</groupId>

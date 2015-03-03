@@ -1,4 +1,4 @@
-package org.fl.noodle.common.util.net.http.jdk;
+package org.fl.noodle.common.net.http.jdk;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.fl.noodle.common.util.net.http.AbstractHttpConnect;
+import org.fl.noodle.common.net.http.AbstractHttpConnect;
 
 
 public class HttpConnectJdk extends AbstractHttpConnect {

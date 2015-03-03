@@ -1,7 +1,7 @@
-package org.fl.noodle.common.util.net.http.jdk;
+package org.fl.noodle.common.net.http.jdk;
 
-import org.fl.noodle.common.util.net.http.HttpConnect;
-import org.fl.noodle.common.util.net.http.jdk.HttpConnectJdk;
+import org.fl.noodle.common.net.http.jdk.HttpConnectJdk;
+import org.fl.noodle.common.net.http.HttpConnect;
 import org.junit.Test;
 
 public class HttpConnectJdkTest {

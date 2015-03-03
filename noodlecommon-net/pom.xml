@@ -9,10 +9,10 @@
     <version>1.0.0</version>
   </parent>
   
-  <groupId>org.fl.noodle.common.util</groupId>
-  <artifactId>noodlecommon-util</artifactId>
-  <version>${noodle.common.util.version}</version>
-  <name>noodlecommon-util</name>
+  <groupId>org.fl.noodle.common.net</groupId>
+  <artifactId>noodlecommon-net</artifactId>
+  <version>${noodle.common.net.version}</version>
+  <name>noodlecommon-net</name>
   <url>http://maven.apache.org</url>
   
   <properties>
@@ -21,17 +21,31 @@
   
   <dependencies>
   
+  	<dependency>
+  		<groupId>org.fl.noodle.common.util</groupId>
+	  	<artifactId>noodlecommon-util</artifactId>
+	  	<version>${noodle.common.util.version}</version>
+	  	<scope>test</scope>
+	</dependency>
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
-			
-	<!-- fastjson -->
+    
+    <!-- ftp -->
 	<dependency>
-		<groupId>com.alibaba</groupId>
-		<artifactId>fastjson</artifactId>
+		<groupId>commons-net</groupId>
+		<artifactId>commons-net</artifactId>
 	</dependency>
-			
+    
+	<!-- httpcomponents -->
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+	</dependency>
+    
   </dependencies>
   
 </project>

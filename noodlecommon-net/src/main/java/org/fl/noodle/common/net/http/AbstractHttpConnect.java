@@ -1,4 +1,4 @@
-package org.fl.noodle.common.util.net.http;
+package org.fl.noodle.common.net.http;
 
 import org.fl.noodle.common.util.json.JsonTranslator;
 
