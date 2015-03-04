@@ -21,6 +21,11 @@ public class ExecutorThreadFactory implements ThreadFactory {
 		this.name = name;
 	}
 
+	public ExecutorThreadFactory(String name, boolean daemon) {
+		this.name = name;
+		this.daemon = daemon;
+	}
+	
 	public Thread newThread(Runnable runnable) {
 		Thread thread = new Thread(runnable);
 		thread.setName(name + "-" + index.incrementAndGet());

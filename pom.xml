@@ -19,6 +19,10 @@
   	<noodle.common.mvc.vo.version>1.0.0</noodle.common.mvc.vo.version>
   	<noodle.common.mvc.demo.web.version>1.0.0</noodle.common.mvc.demo.web.version>
   	<noodle.common.net.version>1.0.0</noodle.common.net.version>
+	<noodle.common.connect.version>1.0.0</noodle.common.connect.version>
+	<noodle.common.connect.expand.version>1.0.0</noodle.common.connect.expand.version>
+  	<noodle.common.monitor.version>1.0.0</noodle.common.monitor.version>
+  	<noodle.common.monitor.performance.version>1.0.0</noodle.common.monitor.performance.version>
   	<noodle.common.util.version>1.0.0</noodle.common.util.version>
   	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,6 +36,7 @@
     <module>noodlecommon-net</module>
     <module>noodlecommon-util</module>
     <module>noodlecommon-monitor-unit</module>
+    <module>noodlecommon-connect-unit</module>
   </modules>
   
   <dependencyManagement>
@@ -200,6 +205,13 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.3.5</version>
+		</dependency>
+		
+		<!-- Jedis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 	    
 	  </dependencies>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.fl.noodle.common.connect</groupId>
+    <artifactId>noodlecommon-connect-unit</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  
+  <groupId>org.fl.noodle.common.connect</groupId>
+  <artifactId>noodlecommon-connect-api</artifactId>
+  <version>${noodle.common.connect.version}</version>
+  <name>noodlecommon-connect-api</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+  
+  	<dependency>
+      <groupId>org.fl.noodle.common.connect.expand</groupId>
+  	  <artifactId>noodlecommon-connect-expand-api</artifactId>
+	  <version>${noodle.common.connect.expand.version}</version>
+    </dependency>
+    
+    <dependency>
+  		<groupId>org.fl.noodle.common.util</groupId>
+	  	<artifactId>noodlecommon-util</artifactId>
+	  	<version>${noodle.common.util.version}</version>
+	</dependency>
+    
+    <!-- log -->
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>ch.qos.logback</groupId>
+		<artifactId>logback-classic</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.logback-extensions</groupId>
+		<artifactId>logback-ext-spring</artifactId>
+	</dependency>
+    
+  </dependencies>
+  
+</project>
