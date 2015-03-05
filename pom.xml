@@ -23,6 +23,7 @@
 	<noodle.common.connect.expand.version>1.0.0</noodle.common.connect.expand.version>
   	<noodle.common.monitor.version>1.0.0</noodle.common.monitor.version>
   	<noodle.common.monitor.performance.version>1.0.0</noodle.common.monitor.performance.version>
+	<noodle.common.test.version>1.0.0</noodle.common.test.version>
   	<noodle.common.util.version>1.0.0</noodle.common.util.version>
   	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,6 +38,7 @@
     <module>noodlecommon-util</module>
     <module>noodlecommon-monitor-unit</module>
     <module>noodlecommon-connect-unit</module>
+    <module>noodlecommon-test</module>
   </modules>
   
   <dependencyManagement>
@@ -212,6 +214,13 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>2.0.0</version>
+		</dependency>
+		
+		<!-- jetty -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>8.1.11.v20130520</version>
 		</dependency>
 	    
 	  </dependencies>
