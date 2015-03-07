@@ -19,6 +19,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.fl.noodle.common.net.http.AbstractHttpConnect;
+import org.fl.noodle.common.util.json.JsonTranslator;
 
 
 public class HttpConnectApache extends AbstractHttpConnect {
@@ -27,15 +28,29 @@ public class HttpConnectApache extends AbstractHttpConnect {
 		super(url, connectTimeout, readTimeout);
 	}
 	
-	public String requestTo(Method requestMethod, String requestParamName, String jsonStr) throws Exception {
-		
-		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+	public HttpConnectApache(String url, int connectTimeout, int readTimeout, String encoding) {
+		super(url, connectTimeout, readTimeout, encoding);
+	}
+	
+	@Override
+	public void connect() throws Exception {
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(readTimeout).build();
+		HttpGet httpGet = new HttpGet(url);
+		httpGet.setConfig(requestConfig);
+	}
+	
+	@Override
+	public void close() {
+	}
+	
+	public <T> T requestTo(Method requestMethod, String requestParamName, Object requestParamObject, Class<T> responseClazz) throws Exception {
 		
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(readTimeout).build();
 
 		HttpUriRequest httpUriRequest = null;
 		if (requestMethod == Method.GET) {
-			String requestUrl = new StringBuilder().append(url).append("?").append(requestParamName).append("=").append(URLEncoder.encode(jsonStr, "utf-8")).toString();
+			StringBuilder stringBuilder = new StringBuilder().append(url).append("?").append(requestParamName).append("=").append(URLEncoder.encode(JsonTranslator.toString(requestParamObject), encoding));
+			String requestUrl = stringBuilder.toString();
 			HttpGet httpGet = new HttpGet(requestUrl);
 			httpGet.setConfig(requestConfig);
 			httpUriRequest = httpGet;
@@ -43,10 +58,67 @@ public class HttpConnectApache extends AbstractHttpConnect {
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.setConfig(requestConfig);
 			List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>(1); 
-			nameValuePairList.add(new BasicNameValuePair(requestParamName, jsonStr));
-			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairList, "UTF-8"));
+			nameValuePairList.add(new BasicNameValuePair(requestParamName, JsonTranslator.toString(requestParamObject)));
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairList, encoding));
 			httpUriRequest = httpPost;
 		}
+		
+		return JsonTranslator.fromString(requestExecute(httpUriRequest), responseClazz);
+	}
+	
+	public <T> T requestTo(Method requestMethod, String[] requestParamNames, Object[] requestParamObjects, Class<T> responseClazz) throws Exception {
+		
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(readTimeout).build();
+
+		HttpUriRequest httpUriRequest = null;
+		if (requestMethod == Method.GET) {
+			StringBuilder stringBuilder = new StringBuilder().append(url).append("?");
+			for (int i=0; i<requestParamNames.length; i++) {
+				stringBuilder.append(requestParamNames[i]).append("=").append(URLEncoder.encode(JsonTranslator.toString(requestParamObjects[i]), encoding));
+				if(i != requestParamNames.length - 1) stringBuilder.append("&");
+			}
+			String requestUrl = stringBuilder.toString();
+			HttpGet httpGet = new HttpGet(requestUrl);
+			httpGet.setConfig(requestConfig);
+			httpUriRequest = httpGet;
+		} else {
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setConfig(requestConfig);
+			List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>(1); 
+			for (int i=0; i<requestParamNames.length; i++) {
+				nameValuePairList.add(new BasicNameValuePair(requestParamNames[i], JsonTranslator.toString(requestParamObjects[i])));
+			}
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairList, encoding));
+			httpUriRequest = httpPost;
+		}
+		
+		return JsonTranslator.fromString(requestExecute(httpUriRequest), responseClazz);
+	}
+	
+	public String requestTo(Method requestMethod, String requestParamName, String requestParamString) throws Exception {
+		
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(readTimeout).build();
+
+		HttpUriRequest httpUriRequest = null;
+		if (requestMethod == Method.GET) {
+			String requestUrl = new StringBuilder().append(url).append("?").append(requestParamName).append("=").append(requestParamString).toString();
+			HttpGet httpGet = new HttpGet(requestUrl);
+			httpGet.setConfig(requestConfig);
+			httpUriRequest = httpGet;
+		} else {
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setConfig(requestConfig);
+			List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>(1); 
+			nameValuePairList.add(new BasicNameValuePair(requestParamName, requestParamString));
+			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairList, encoding));
+			httpUriRequest = httpPost;
+		}
+		return requestExecute(httpUriRequest);
+	}
+	
+	private String requestExecute(HttpUriRequest httpUriRequest) throws Exception {
+		
+		CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
 		
 		try {
 			CloseableHttpResponse closeableHttpResponse = closeableHttpClient.execute(httpUriRequest);

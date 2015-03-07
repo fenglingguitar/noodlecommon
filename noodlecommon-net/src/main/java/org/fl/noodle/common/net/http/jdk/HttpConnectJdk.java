@@ -8,7 +8,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import org.fl.noodle.common.net.http.AbstractHttpConnect;
-
+import org.fl.noodle.common.util.json.JsonTranslator;
 
 public class HttpConnectJdk extends AbstractHttpConnect {
 
@@ -16,9 +16,57 @@ public class HttpConnectJdk extends AbstractHttpConnect {
 		super(url, connectTimeout, readTimeout);
 	}
 	
-	public String requestTo(Method requestMethod, String requestParamName, String jsonStr) throws Exception {
+	public HttpConnectJdk(String url, int connectTimeout, int readTimeout, String encoding) {
+		super(url, connectTimeout, readTimeout, encoding);
+	}
+	
+	@Override
+	public void connect() throws Exception {
+		URL httpUrl = new URL(this.url);
+		HttpURLConnection httpURLConnection = (HttpURLConnection) httpUrl.openConnection();
+		httpURLConnection.setDoOutput(true);
+		httpURLConnection.setDoInput(true);
+		httpURLConnection.setRequestMethod("POST");
+		httpURLConnection.setUseCaches(false);  
+		httpURLConnection.setConnectTimeout(connectTimeout);
+		httpURLConnection.setReadTimeout(readTimeout);             
+		httpURLConnection.setRequestProperty("Accept-Charset", encoding);
+		httpURLConnection.setRequestProperty("Connection", "close");
+		httpURLConnection.setRequestProperty("Keep-Alive", "close");
+		httpURLConnection.connect();
+	}
+	
+	@Override
+	public void close() {
+	}
+	
+	public <T> T requestTo(Method requestMethod, String requestParamName, Object requestParamObject, Class<T> responseClazz) throws Exception {
 		
-		String requestStr = new StringBuilder().append(requestParamName).append("=").append(URLEncoder.encode(jsonStr, "utf-8")).toString();
+		StringBuilder stringBuilder = new StringBuilder().append(requestParamName).append("=").append(URLEncoder.encode(JsonTranslator.toString(requestParamObject), encoding));
+
+		return JsonTranslator.fromString(requestExecute(requestMethod, stringBuilder.toString()), responseClazz);
+	}
+	
+	public <T> T requestTo(Method requestMethod, String[] requestParamNames, Object[] requestParamObjects, Class<T> responseClazz) throws Exception {
+				
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		for (int i=0; i<requestParamNames.length; i++) {
+			stringBuilder.append(requestParamNames[i]).append("=").append(URLEncoder.encode(JsonTranslator.toString(requestParamObjects[i]), encoding));
+			if(i != requestParamNames.length - 1) stringBuilder.append("&");
+		}
+
+		return JsonTranslator.fromString(requestExecute(requestMethod, stringBuilder.toString()), responseClazz);
+	}
+	
+	public String requestTo(Method requestMethod, String requestParamName, String requestParamString) throws Exception {
+		
+		StringBuilder stringBuilder = new StringBuilder().append(requestParamName).append("=").append(requestParamString);
+		
+		return requestExecute(requestMethod, stringBuilder.toString());
+	}
+	
+	private String requestExecute(Method requestMethod, String request) throws Exception {
 		
 		URL httpUrl = new URL(url);
 		HttpURLConnection httpURLConnection = (HttpURLConnection) httpUrl.openConnection();
@@ -28,13 +76,13 @@ public class HttpConnectJdk extends AbstractHttpConnect {
 		httpURLConnection.setUseCaches(false);  
 		httpURLConnection.setConnectTimeout(connectTimeout);
 		httpURLConnection.setReadTimeout(readTimeout);             
-		httpURLConnection.setRequestProperty("Accept-Charset", "UTF-8");
+		httpURLConnection.setRequestProperty("Accept-Charset", encoding);
 		httpURLConnection.setRequestProperty("Connection", "keepalive");
 		httpURLConnection.setRequestProperty("Keep-Alive", "30");
 		httpURLConnection.connect();
 		
 		PrintWriter printWriter = new PrintWriter(httpURLConnection.getOutputStream());
-		printWriter.print(requestStr);
+		printWriter.print(request);
 		printWriter.flush();
 		printWriter.close();
         

@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RequestParam {
+public @interface NoodleRequestParam {
 	
 	public static final String TYPE	= "json";
 	public static final String NAME	= "input";

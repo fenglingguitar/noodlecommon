@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.fl.noodle.common.mvc.annotation.ResponseBody;
+import org.fl.noodle.common.mvc.annotation.NoodleResponseBody;
 import org.fl.noodle.common.mvc.vo.MapVo;
 import org.fl.noodle.common.mvc.vo.PageVo;
 import org.fl.noodle.common.mvc.vo.VoidVo;
@@ -28,7 +28,7 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 	}
 		
 	public boolean supportsReturnType(MethodParameter returnType) {
-		return returnType.getMethod().getAnnotation(ResponseBody.class) != null;
+		return returnType.getMethod().getAnnotation(NoodleResponseBody.class) != null;
 		
 	}
 	
@@ -39,7 +39,7 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 								  NativeWebRequest webRequest) throws Exception {
 		
 		if (returnValue != null) {
-			ResponseBody responseBody = returnType.getMethodAnnotation(ResponseBody.class);
+			NoodleResponseBody responseBody = returnType.getMethodAnnotation(NoodleResponseBody.class);
 			if (returnValue instanceof PageVo) {
 				PageVo pageVo = (PageVo)returnValue;
 				Map map = new HashMap();

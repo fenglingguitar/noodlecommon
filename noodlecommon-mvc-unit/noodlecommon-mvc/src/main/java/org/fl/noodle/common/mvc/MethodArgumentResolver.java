@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.fl.noodle.common.mvc.annotation.RequestParam;
+import org.fl.noodle.common.mvc.annotation.NoodleRequestParam;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -20,7 +20,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 	protected final Log logger = LogFactory.getLog(MethodArgumentResolver.class);
 
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.getParameterAnnotation(RequestParam.class) != null;
+		return parameter.getParameterAnnotation(NoodleRequestParam.class) != null;
 	}
 
 	public Object resolveArgument(MethodParameter parameter,
@@ -29,7 +29,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 								  WebDataBinderFactory binderFactory) throws Exception {
 				
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-		RequestParam requestParam = parameter.getParameterAnnotation(RequestParam.class);
+		NoodleRequestParam requestParam = parameter.getParameterAnnotation(NoodleRequestParam.class);
 		
 		String input = request.getParameter(requestParam.name());
 		if (input != null && !input.isEmpty()) {

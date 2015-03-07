@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ResponseBody {
+public @interface NoodleResponseBody {
 	
 	public static final String TYPE	= "json";
 	public static final String NAME	= "output";
