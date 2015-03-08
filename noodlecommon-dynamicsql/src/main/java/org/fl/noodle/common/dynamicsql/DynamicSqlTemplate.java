@@ -44,33 +44,33 @@ public interface DynamicSqlTemplate {
 	 * 以主键为条件更新
 	 * vo中为非NULL的域，更新为vo中的值；vo中为NULL的域更新为NULL值（只更新数组fieldNameArray中的域）
 	 */
-	public <T> void updateInclude(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception;
+	public <T> int updateInclude(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception;
 	
 	/*
 	 * 普通更新
 	 * 以主键为条件更新
 	 * vo中为非NULL的域，更新为vo中的值；vo中为NULL的域更新为NULL值（除了数组fieldNameArray中的域）
 	 */
-	public <T> void updateExcept(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception;
+	public <T> int updateExcept(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception;
 
 	/*
 	 * 非NULL更新
 	 * 以主键为条件更新
 	 * vo中为非NULL的域，更新为vo中的值；vo中为NULL的域不更新
 	 */
-	public <T> void updateNonull(Object vo, Class<T> clazz) throws Exception;
+	public <T> int updateNonull(Object vo, Class<T> clazz) throws Exception;
 		
 	/*
 	 * 非NULL非ID更新
 	 * 以数组fieldNameArray指明的域为条件更新
 	 * vo中为非NULL的域，更新为vo中的值；vo中为NULL的域不更新
 	 */
-	public <T> void updateNonullNoById(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception;
+	public <T> int updateNonullNoById(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception;
 	
 	/*
 	 * SQL更新
 	 */
-	public void updateSql(String sqlName, Map<String, Object> params) throws Exception;
+	public int updateSql(String sqlName, Map<String, Object> params) throws Exception;
 	
 	/*
 	 * 普通删除

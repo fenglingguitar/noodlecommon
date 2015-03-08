@@ -448,26 +448,26 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 	}
 	
 	@Override
-	public <T> void updateExcept(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception {
-		updateByCreateSql(vo, clazz, false, fieldNameArray, null, null);
+	public <T> int updateExcept(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception {
+		return updateByCreateSql(vo, clazz, false, fieldNameArray, null, null);
 	}
 	
 	@Override
-	public <T> void updateInclude(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception {
-		updateByCreateSql(vo, clazz, false, null, null, fieldNameArray);
+	public <T> int updateInclude(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception {
+		return updateByCreateSql(vo, clazz, false, null, null, fieldNameArray);
 	}
 	
 	@Override
-	public <T> void updateNonull(Object vo, Class<T> clazz) throws Exception {
-		updateByCreateSql(vo, clazz, true, null, null, null);
+	public <T> int updateNonull(Object vo, Class<T> clazz) throws Exception {
+		return updateByCreateSql(vo, clazz, true, null, null, null);
 	}
 	
 	@Override
-	public <T> void updateNonullNoById(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception {
-		updateByCreateSql(vo, clazz, true, null, fieldNameArray, null);
+	public <T> int updateNonullNoById(Object vo, Class<T> clazz, String[] fieldNameArray) throws Exception {
+		return updateByCreateSql(vo, clazz, true, null, fieldNameArray, null);
 	}
 	
-	public <T> void updateByCreateSql(Object vo, Class<T> clazz, boolean isNonull, String[] exceptFieldNameArray, String[] selectFieldNameArray, String[] includeFieldNameArray) throws Exception {
+	public <T> int updateByCreateSql(Object vo, Class<T> clazz, boolean isNonull, String[] exceptFieldNameArray, String[] selectFieldNameArray, String[] includeFieldNameArray) throws Exception {
 		
 		HashSet<String> exceptFieldNameSet = new HashSet<String>();
 		if (exceptFieldNameArray != null) {
@@ -601,13 +601,17 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 			}
 		}
 		
+		if (sqlSetBuilder.length() <= 5) {
+			return 0;
+		}
+		
 		sqlBuilder.append(sqlSetBuilder.substring(0, sqlSetBuilder.length() - 2).toString());
 		sqlBuilder.append(sqlWhereBuilder.toString());
 		
 		final Context context = generateVelocityContext(paramMap);
         final String sql = sqlBuilder.toString();
         
-        hibernateTemplate.execute(new HibernateCallback<Integer>() {
+        return hibernateTemplate.execute(new HibernateCallback<Integer>() {
 			public Integer doInHibernate(Session session)
 					throws HibernateException, SQLException {
 				Query query = session.createSQLQuery(sql);
@@ -619,7 +623,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 	}
 	
 	@Override
-	public void updateSql(String sqlName, Map<String, Object> params) throws Exception {
+	public int updateSql(String sqlName, Map<String, Object> params) throws Exception {
 		
 		final Context context = generateVelocityContext(params);
 		StringWriter writer = new StringWriter();
@@ -632,7 +636,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
         Velocity.evaluate(context, writer, "Hibernate", sqlOriginal);
         final String sql = writer.toString();
         
-        hibernateTemplate.execute(new HibernateCallback<Integer>() {
+        return hibernateTemplate.execute(new HibernateCallback<Integer>() {
 			public Integer doInHibernate(Session session) throws HibernateException, SQLException {
 				Query query = session.createSQLQuery(sql);
 				String[] namedParams = query.getNamedParameters();
