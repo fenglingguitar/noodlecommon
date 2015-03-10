@@ -10,10 +10,17 @@
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
 			http://activemq.apache.org/schema/core	http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd"
-	default-autowire="byType">
+	default-autowire="byName">
 	
-	<import resource="classpath:org/fl/noodle/common/monitor/performance/net/callcenter-monitor-performance-net-client.xml" />
+	<import resource="classpath:org/fl/noodle/common/monitor/performance/schedule/executer/noodlecommon-monitor-performance-schedule-executer.xml" />
 	
-	<bean id="performanceMonitor" class="org.fl.noodle.common.monitor.performance.schedule.executer.PerformanceExecuter" />
+	<bean id="performanceExecuterSchedule" class="org.fl.noodle.common.monitor.schedule.ExecuterSchedule"
+		init-method="start" destroy-method="destroy" >
+		<property name="executerList">
+			<list>
+				<ref bean="performanceMonitor" />
+			</list>
+		</property>
+	</bean>
 	
 </beans>

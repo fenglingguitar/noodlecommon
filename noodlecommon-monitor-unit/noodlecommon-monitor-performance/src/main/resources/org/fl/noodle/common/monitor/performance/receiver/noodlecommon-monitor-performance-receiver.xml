@@ -12,15 +12,10 @@
 			http://activemq.apache.org/schema/core	http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd"
 	default-autowire="byName">
 	
-	<import resource="classpath:org/fl/noodle/common/monitor/performance/schedule/executer/callcenter-monitor-performance-clean-schedule-executer.xml" />
+	<import resource="classpath:org/fl/noodle/common/monitor/performance/net/noodlecommon-monitor-performance-net-server.xml" />
+	<import resource="classpath:org/fl/noodle/common/monitor/performance/persistence/redis/noodlecommon-monitor-performance-persistence-redis.xml" />
 	
-	<bean id="performanceCleanExecuterSchedule" class="org.fl.noodle.common.monitor.schedule.ExecuterSchedule"
-		init-method="start" destroy-method="destroy" >
-		<property name="executerList">
-			<list>
-				<ref bean="performanceCleanExecuter" />
-			</list>
-		</property>
-	</bean>
+	<bean id="performanceReceiver" class="org.fl.noodle.common.monitor.performance.receiver.PerformanceReceiver" 
+		init-method="start" destroy-method="destroy" />
 	
 </beans>

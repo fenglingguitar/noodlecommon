@@ -10,10 +10,10 @@
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
 			http://activemq.apache.org/schema/core	http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd"
-	default-autowire="byName">
+	default-autowire="byType">
 	
-	<import resource="classpath:org/fl/noodle/common/monitor/performance/persistence/redis/callcenter-monitor-performance-persistence-redis.xml" />
+	<import resource="classpath:org/fl/noodle/common/monitor/performance/net/noodlecommon-monitor-performance-net-client.xml" />
 	
-	<bean id="performanceCleanExecuter" class="org.fl.noodle.common.monitor.performance.schedule.executer.PerformanceCleanExecuter" />
+	<bean id="performanceMonitor" class="org.fl.noodle.common.monitor.performance.schedule.executer.PerformanceExecuter" />
 	
 </beans>
