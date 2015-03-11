@@ -5,32 +5,32 @@ import java.util.Map;
 
 public class ThreadLocalStorage {
 
-	private static final ThreadLocal<Map<String, Map<String, Map<String, Map<Long, Object>>>>> mapThreadLocal = 
-									new ThreadLocal<Map<String, Map<String, Map<String, Map<Long, Object>>>>>();
+	private static final ThreadLocal<Map<String, Map<String, Map<String, Map<String, Object>>>>> mapThreadLocal = 
+									new ThreadLocal<Map<String, Map<String, Map<String, Map<String, Object>>>>>();
 	
-	public static <T> T get(String themeName, String monitorType, String moduleType, long moduleId, Class<T> clazz) throws Exception {
+	public static <T> T get(String themeName, String monitorType, String moduleType, String moduleId, Class<T> clazz) throws Exception {
 		
-		Map<String, Map<String, Map<String, Map<Long, Object>>>> threadMap = mapThreadLocal.get();
+		Map<String, Map<String, Map<String, Map<String, Object>>>> threadMap = mapThreadLocal.get();
 		if (threadMap == null) {
-			threadMap = new HashMap<String, Map<String, Map<String, Map<Long, Object>>>>();
+			threadMap = new HashMap<String, Map<String, Map<String, Map<String, Object>>>>();
 			mapThreadLocal.set(threadMap);
 		}
 		
-		Map<String, Map<String, Map<Long, Object>>> themeNameMap = threadMap.get(themeName);
+		Map<String, Map<String, Map<String, Object>>> themeNameMap = threadMap.get(themeName);
 		if (themeNameMap == null) {
-			themeNameMap = new HashMap<String, Map<String, Map<Long, Object>>>();
+			themeNameMap = new HashMap<String, Map<String, Map<String, Object>>>();
 			threadMap.put(themeName, themeNameMap);
 		}
 		
-		Map<String, Map<Long, Object>> monitorTypeMap = themeNameMap.get(monitorType);
+		Map<String, Map<String, Object>> monitorTypeMap = themeNameMap.get(monitorType);
 		if (monitorTypeMap == null) {
-			monitorTypeMap = new HashMap<String, Map<Long, Object>>();
+			monitorTypeMap = new HashMap<String, Map<String, Object>>();
 			themeNameMap.put(monitorType, monitorTypeMap);
 		}
 		
-		Map<Long, Object> moduleTypeMap = monitorTypeMap.get(moduleType);
+		Map<String, Object> moduleTypeMap = monitorTypeMap.get(moduleType);
 		if (moduleTypeMap == null) {
-			moduleTypeMap = new HashMap<Long, Object>();
+			moduleTypeMap = new HashMap<String, Object>();
 			monitorTypeMap.put(moduleType, moduleTypeMap);
 		}
 		

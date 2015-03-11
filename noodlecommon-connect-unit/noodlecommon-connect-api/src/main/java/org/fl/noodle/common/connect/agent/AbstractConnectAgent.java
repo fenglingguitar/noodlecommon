@@ -180,7 +180,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		
 		long threshold = 200;
 		
-		if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.before(connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId);
+		if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.before(connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId));
 
 		if (connectPerformanceInfo != null) {
 			
@@ -189,7 +189,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 			if (connectPerformanceInfo.getIsDowngrade() == ConnectPerformanceInfo.IsDowngrade.YES) {
 				if (connectPerformanceInfo.getDowngradeType() == ConnectPerformanceInfo.DowngradeType.AVGTIME) {
 					if (connectPerformanceNode.getAvgTime() > connectPerformanceInfo.getAvgTimeLimitThreshold()) {
-						if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId, threshold, false);
+						if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 						if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.T_EXCEPTION) {
 							throw new ConnectDowngradeException("connect downgrade for the net http connect agent"); 
 						} else if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.R_NULL) {
@@ -198,7 +198,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 					}						
 				} else if (connectPerformanceInfo.getDowngradeType() == ConnectPerformanceInfo.DowngradeType.OVERTIME) {
 					if (connectPerformanceNode.getOvertimeCount() > connectPerformanceInfo.getOvertimeLimitThreshold()) {
-						if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId, threshold, false);
+						if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 						if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.T_EXCEPTION) {
 							throw new ConnectDowngradeException("connect downgrade for the net http connect agent"); 
 						} else if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.R_NULL) {
@@ -213,7 +213,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 			long start = System.currentTimeMillis();
 			
 			Object Object = method.invoke(this, args);
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId, threshold, true);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, true);
 
 			long costTime = System.currentTimeMillis() - start;			
 			connectPerformanceNode.addTotalTime(costTime);
@@ -229,13 +229,13 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 			if (logger.isErrorEnabled()) {
 				logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
 			}
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId, threshold, false);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 			throw e;
 		} catch (IllegalArgumentException e) {
 			if (logger.isErrorEnabled()) {
 				logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
 			}
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId, threshold, false);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 			throw e;
 		} catch (InvocationTargetException e) {
 			if (logger.isErrorEnabled()) {
@@ -252,7 +252,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 				}
 			} 
 			
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), connectId, threshold, false);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 			throw e.getTargetException();
 		}
 	}

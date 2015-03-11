@@ -12,9 +12,9 @@ public class MemoryStorageTest {
 
 	@Test
 	public final void testGet() throws Exception {
-		TestVo testVo = MemoryStorage.get("themeName", "monitorType", "moduleType", 1, TestVo.class);
+		TestVo testVo = MemoryStorage.get("themeName", "monitorType", "moduleType", "1", TestVo.class);
 		testVo.testStr = "Hello";
-		testVo = MemoryStorage.get("themeName", "monitorType", "moduleType", 1, TestVo.class);
+		testVo = MemoryStorage.get("themeName", "monitorType", "moduleType", "1", TestVo.class);
 		assertNotNull(testVo);
 		System.out.println(testVo.testStr);
 	}

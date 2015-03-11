@@ -29,7 +29,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 	private long noteTimeout = 180000;
 	
 	@Override
-	public void before(String themeName, String monitorType, String moduleType, long moduleId) {
+	public void before(String themeName, String monitorType, String moduleType, String moduleId) {
 		
 		ThreadPerformanceInfo threadPerformanceInfo = null;
 		
@@ -47,7 +47,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 	}
 
 	@Override
-	public void after(String moduleName, String themeName, String monitorType, String moduleType, long moduleId, long threshold, boolean result) {
+	public void after(String moduleName, String themeName, String monitorType, String moduleType, String moduleId, long threshold, boolean result) {
 		
 		long elapseTime = 0;
 		
@@ -135,7 +135,10 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 				
 				if (clientModuleRegister != null) {					
 					keyVo.setSelfModuleType(ModuleType.CLIENT.getCode());
-					keyVo.setSelfModuleId(clientModuleRegister.getModuleId(note.getModuleName()));
+					keyVo.setSelfModuleId(String.valueOf(clientModuleRegister.getModuleId(note.getModuleName())));
+				} else {
+					keyVo.setSelfModuleType("DEFAULT");
+					keyVo.setSelfModuleId("0");
 				}
 				
 				try {

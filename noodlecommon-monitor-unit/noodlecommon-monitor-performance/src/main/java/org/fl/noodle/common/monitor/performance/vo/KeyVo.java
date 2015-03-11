@@ -5,9 +5,9 @@ public class KeyVo {
 	private String themeName;
 	private String monitorType;
 	private String selfModuleType;
-	private long selfModuleId;
+	private String selfModuleId;
 	private String moduleType;
-	private long moduleId;
+	private String moduleId;
 		
 	public String getThemeName() {
 		return themeName;
@@ -30,10 +30,10 @@ public class KeyVo {
 		this.selfModuleType = selfModuleType;
 	}
 	
-	public long getSelfModuleId() {
+	public String getSelfModuleId() {
 		return selfModuleId;
 	}
-	public void setSelfModuleId(long selfModuleId) {
+	public void setSelfModuleId(String selfModuleId) {
 		this.selfModuleId = selfModuleId;
 	}
 	
@@ -44,10 +44,10 @@ public class KeyVo {
 		this.moduleType = moduleType;
 	}
 	
-	public long getModuleId() {
+	public String getModuleId() {
 		return moduleId;
 	}
-	public void setModuleId(long moduleId) {
+	public void setModuleId(String moduleId) {
 		this.moduleId = moduleId;
 	}
 	

@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.fl.noodle.common.monitor.performance.persistence.PerformancePersistence;
 
 @ContextConfiguration(locations = {
-		"classpath:org/fl/noodle/common/monitor/performance/persistence/redis/callcenter-monitor-performance-persistence-redis.xml"
+		"classpath:org/fl/noodle/common/monitor/performance/persistence/redis/noodlecommon-monitor-performance-persistence-redis.xml"
 })
 
 public class RedisPerformancePersistenceTest extends AbstractJUnit4SpringContextTests {

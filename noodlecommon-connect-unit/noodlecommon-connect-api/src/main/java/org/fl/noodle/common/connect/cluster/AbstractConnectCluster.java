@@ -58,12 +58,12 @@ public abstract class AbstractConnectCluster implements ConnectCluster, Invocati
 		}
 		
 		try {
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.before(connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.DEFAULT.getCode(), 0);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.before(connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.DEFAULT.getCode(), "0");
 			Object object = doInvoke(method, args);
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.DEFAULT.getCode(), 0, threshold, true);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.DEFAULT.getCode(), "0", threshold, true);
 			return object;
 		} catch (Throwable e) {
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.DEFAULT.getCode(), 0, threshold, true);
+			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.DEFAULT.getCode(), "0", threshold, true);
 			throw e;
 		}
 	}
