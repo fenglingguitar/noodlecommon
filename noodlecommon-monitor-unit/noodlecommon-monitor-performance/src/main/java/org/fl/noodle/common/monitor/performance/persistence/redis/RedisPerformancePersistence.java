@@ -43,7 +43,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			jedis = jedisPool.getResource();
 		} catch (JedisConnectionException e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("queryList -> jedisPool.getResource -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception{}", ip, port, keyName, min, max, e.getMessage());
+				logger.error("queryList -> jedisPool.getResource -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception:{}", ip, port, keyName, min, max, e.getMessage());
 			}
 			throw e;
 		}
@@ -52,7 +52,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			valueSet = jedis.zrangeByScore(keyName, min, max);		
 		} catch (Exception e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("queryList -> jedis.zrangeByScore -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception{}", ip, port, keyName, min, max, e.getMessage());
+				logger.error("queryList -> jedis.zrangeByScore -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception:{}", ip, port, keyName, min, max, e.getMessage());
 			}
 			throw e;
 		} finally {
@@ -70,7 +70,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			}
 		} catch (Exception e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("queryList -> JsonTranslator.fromString -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception{}", ip, port, keyName, min, max, e.getMessage());
+				logger.error("queryList -> JsonTranslator.fromString -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception:{}", ip, port, keyName, min, max, e.getMessage());
 			}
 		}
 		
@@ -85,7 +85,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			member = JsonTranslator.toString(vo);
 		} catch (Exception e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("insert -> JsonTranslator.toString -> ip:{}, port:{}, keyName{}, score:{} -> Exception{}", ip, port, keyName, score, e.getMessage());
+				logger.error("insert -> JsonTranslator.toString -> ip:{}, port:{}, keyName{}, score:{} -> Exception:{}", ip, port, keyName, score, e.getMessage());
 			}
 			return;
 		}
@@ -96,7 +96,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			jedis = jedisPool.getResource();
 		} catch (JedisConnectionException e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("insert -> jedisPool.getResource -> ip:{}, port:{}, keyName{}, score:{} -> Exception{}", ip, port, keyName, score, e.getMessage());
+				logger.error("insert -> jedisPool.getResource -> ip:{}, port:{}, keyName{}, score:{} -> Exception:{}", ip, port, keyName, score, e.getMessage());
 			}
 			throw e;
 		}
@@ -105,7 +105,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			jedis.zadd(keyName, score, member);
 		} catch (Exception e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("insert -> jedis.zadd -> ip:{}, port:{}, keyName{}, score{} -> Exception{}", ip, port, keyName, score, e.getMessage());
+				logger.error("insert -> jedis.zadd -> ip:{}, port:{}, keyName{}, score{} -> Exception:{}", ip, port, keyName, score, e.getMessage());
 			}
 			throw e;
 		} finally {
@@ -122,7 +122,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			jedis = jedisPool.getResource();
 		} catch (JedisConnectionException e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("deletes -> jedisPool.getResource -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception{}", ip, port, keyName, min, max, e.getMessage());
+				logger.error("deletes -> jedisPool.getResource -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception:{}", ip, port, keyName, min, max, e.getMessage());
 			}
 			throw e;
 		}
@@ -130,7 +130,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 		try {
 			return jedis.zremrangeByScore(keyName, min, max);
 		} catch (Exception e) {
-			logger.error("deletes -> jedis.zremrangeByScore -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception{}", ip, port, keyName, min, max, e.getMessage());
+			logger.error("deletes -> jedis.zremrangeByScore -> ip:{}, port:{}, keyName{}, min:{}, max:{} -> Exception:{}", ip, port, keyName, min, max, e.getMessage());
 			throw e;
 		} finally {
 			jedisPool.returnResource(jedis);
@@ -147,7 +147,7 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 			jedis = jedisPool.getResource();
 		} catch (JedisConnectionException e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("deletes -> jedisPool.getResource -> ip:{}, port:{}, -> Exception{}", ip, port, e.getMessage());
+				logger.error("deletes -> jedisPool.getResource -> ip:{}, port:{}, -> Exception:{}", ip, port, e.getMessage());
 			}
 			throw e;
 		}
@@ -155,10 +155,10 @@ public class RedisPerformancePersistence extends JedisPoolConfig implements Perf
 		Set<String> keysSet = null;
 		
 		try {
-			keysSet = jedis.keys("*");
+			keysSet = jedis.keys("KEY-*");
 		} catch (Exception e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("deletes -> jedisPool.getResource -> ip:{}, port:{}, -> Exception{}", ip, port, e.getMessage());
+				logger.error("deletes -> jedisPool.getResource -> ip:{}, port:{}, -> Exception:{}", ip, port, e.getMessage());
 			}
 			throw e;
 		} finally {
