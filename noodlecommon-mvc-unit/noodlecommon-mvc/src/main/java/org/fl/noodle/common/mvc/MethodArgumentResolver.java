@@ -1,6 +1,8 @@
 package org.fl.noodle.common.mvc;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,7 +40,12 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 			}	
 			if (requestParam.type().equals("json")) {				
 				return JSON.parseObject(input, parameter.getParameterType());
-			} 
+			} else if (requestParam.type().equals("date")) {
+				String param = request.getParameter(parameter.getParameterName());	
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date = simpleDateFormat.parse(param);
+				return date;
+			}
 		} else {
 			if (logger.isDebugEnabled()) {
 				logger.debug("resolveArgument -> input string -> null");
