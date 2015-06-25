@@ -3,9 +3,11 @@ package org.fl.noodle.common.mvc.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PageVo<T> {
+public class PageVo<T> implements java.io.Serializable {
 
-    /**
+	private static final long serialVersionUID = -1L;
+
+	/**
      * 默认分页
      */
     public static final long DEFAULT_PAGE_SIZE = 20;
