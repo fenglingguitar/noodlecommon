@@ -25,7 +25,6 @@
   		<groupId>org.fl.noodle.common.util</groupId>
 	  	<artifactId>noodlecommon-util</artifactId>
 	  	<version>${noodle.common.util.version}</version>
-	  	<scope>test</scope>
 	</dependency>
   
     <dependency>
