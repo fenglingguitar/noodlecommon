@@ -8,7 +8,6 @@ import org.fl.noodle.common.demo.tools.DemoTools;
 import org.fl.noodle.common.demo.vo.DemoVo;
 import org.fl.noodle.common.mvc.annotation.NoodleRequestParam;
 import org.fl.noodle.common.mvc.annotation.NoodleResponseBody;
-import org.fl.noodle.common.mvc.exception.ApiException;
 import org.fl.noodle.common.mvc.vo.MapVo;
 import org.fl.noodle.common.mvc.vo.PageVo;
 import org.fl.noodle.common.mvc.vo.VoidVo;
@@ -99,13 +98,6 @@ public class DemoController {
 	public MapVo<String, List<DemoVo>> queryMapListJava(@NoodleRequestParam DemoVo vo) throws Exception {
 		logger.info("queryMapListJava -> input vo: " + vo);
 		return DemoTools.getMapList(vo);
-	}
-	
-	@RequestMapping(value = "/throwapiexception")
-	@NoodleResponseBody
-	public VoidVo throwApiException(@NoodleRequestParam DemoVo vo) throws Exception {
-		logger.info("throwException -> input vo: " + vo);
-		throw new ApiException("错误API测试", "抛出API错误");
 	}
 	
 	@RequestMapping(value = "/throwexception")

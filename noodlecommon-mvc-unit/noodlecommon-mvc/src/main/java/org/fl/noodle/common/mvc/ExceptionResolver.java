@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.fl.noodle.common.mvc.exception.ApiException;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -35,22 +34,18 @@ public class ExceptionResolver extends AbstractMessageSendProcessor implements H
 			logger.error("ResolveException -> Exception: " + ex);
 		}
 		
-		if (ex instanceof ApiException) {
-			try {
-				Map<String, String> map = new HashMap<String, String>();
-				map.put("result", "false");
-				map.put("promptMessage", ((ApiException)ex).getPromptMessage());
-				map.put("errorMessage", ex.getMessage());
-				String json = JSON.toJSONString(map);
-				writeWithMessageConverters(json, webRequest);
-				return new ModelAndView();
-			} catch (Exception e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("ResolveException -> Resolve JsonException Error, Exception: " + e);
-				}
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("result", "false");
+			map.put("errorMessage", ex.getMessage());
+			String json = JSON.toJSONString(map);
+			writeWithMessageConverters(json, webRequest);
+		} catch (Exception e) {
+			if (logger.isErrorEnabled()) {
+				logger.error("ResolveException -> Resolve JsonException Error, Exception: " + e);
 			}
 		}
 		
-		return new ModelAndView("error_500");
+		return new ModelAndView();
 	}
 }
