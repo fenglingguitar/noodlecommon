@@ -1,6 +1,8 @@
 package org.fl.noodle.common.mvc.vo;
 
-public class ResultVo {
+public class ResultVo implements java.io.Serializable {
+
+	private static final long serialVersionUID = 6280676110355209589L;
 	
 	private String result;
 	private String errorMessage;
