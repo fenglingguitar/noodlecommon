@@ -31,6 +31,8 @@ public abstract class AbstractPressTool {
 	private AtomicLong totalTimeConsumeSumCount = new AtomicLong(0);
 	
 	protected AtomicLong planExecuteNumCount = new AtomicLong(0);
+	
+	protected volatile boolean stopSign = false;
 		
 	public AbstractPressTool() {
 		init();
@@ -66,8 +68,6 @@ public abstract class AbstractPressTool {
 		
 		Object object = null;
 		
-		planExecuteNumCount.getAndIncrement();
-		
 		try {
 			
 			executeNumCount.incrementAndGet();
@@ -95,7 +95,7 @@ public abstract class AbstractPressTool {
 			
 			long start = System.currentTimeMillis();
 			
-			while (planExecuteNum == 0 || planExecuteNumCount.get() < planExecuteNum) {
+			while (planExecuteNum == 0 || !stopSign) {
 				
 				try {
     				Thread.sleep(monitorInterval);

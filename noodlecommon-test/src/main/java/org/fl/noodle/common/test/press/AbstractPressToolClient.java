@@ -43,7 +43,7 @@ public abstract class AbstractPressToolClient extends AbstractPressTool {
 				@Override
 				public void run() {
 					
-					while (planExecuteNumCount.get() < planExecuteNum) {
+					while (planExecuteNumCount.getAndIncrement() < planExecuteNum) {
 						
 						doInvoke(proxy, method, args);
 						
@@ -65,7 +65,7 @@ public abstract class AbstractPressToolClient extends AbstractPressTool {
         	try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
-				logger.error("requestInvoke -> execService.execute -> Thread.sleep -> Exception:{}", e.getMessage());
+				logger.error("requestInvoke -> execService.execute -> Thread.sleep 1 -> Exception:{}", e.getMessage());
 			}
         }
     	
@@ -74,9 +74,17 @@ public abstract class AbstractPressToolClient extends AbstractPressTool {
     	execService.shutdown();
     	
     	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			logger.error("requestInvoke -> Thread.sleep 1000 -> Exception:{}", e.getMessage());
+		}
+    	
+    	stopSign = true;
+    	
+    	try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-			logger.error("requestInvoke -> Thread.sleep -> Exception:{}", e.getMessage());
+			logger.error("requestInvoke -> Thread.sleep 3000 -> Exception:{}", e.getMessage());
 		}
     	
 		return null;
