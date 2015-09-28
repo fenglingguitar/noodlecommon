@@ -2,11 +2,11 @@ package org.fl.noodle.common.dbseparate.template;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceSwitch;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceType;
 import org.fl.noodle.common.dbseparate.loadbalancer.LoadBalancerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class ChangebackJdbcTemplateProxyFactoryBean implements
 		FactoryBean<Object>, MethodInterceptor, InitializingBean {
 
-	private final Log logger = LogFactory.getLog(ChangebackJdbcTemplateProxyFactoryBean.class);
+	private final static Logger logger = LoggerFactory.getLogger(ChangebackJdbcTemplateProxyFactoryBean.class);
 	
 	private Object serviceProxy;
 	
@@ -40,7 +40,7 @@ public class ChangebackJdbcTemplateProxyFactoryBean implements
 				return invocation.proceed();
 			} catch (Throwable e) {
 				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> master invoke -> Exception: " + e);
+					logger.error("invoke -> master invoke -> Exception:{}", e);
 				}
 				throw e;
 			}
@@ -50,7 +50,7 @@ public class ChangebackJdbcTemplateProxyFactoryBean implements
 				return invocation.proceed();
 			} catch (Throwable e) {
 				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> salve invoke -> Exception: " + e);
+					logger.error("invoke -> salve invoke -> Exception:{}", e);
 				}
 				throw e;
 			}

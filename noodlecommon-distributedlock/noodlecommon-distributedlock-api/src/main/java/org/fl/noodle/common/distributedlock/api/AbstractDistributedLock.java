@@ -4,12 +4,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractDistributedLock implements DistributedLock {
 
-	private final static Log logger = LogFactory.getLog(AbstractDistributedLock.class);
+	private final static Logger logger = LoggerFactory.getLogger(AbstractDistributedLock.class);
 	
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 	
@@ -99,7 +100,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 				wait();
 			} catch (InterruptedException e) {
 				if (logger.isErrorEnabled()) {
-					logger.error("WaitForLocker -> Wait -> " + e);
+					logger.error("WaitForLocker -> Wait -> InterruptedException:{}", e);
 				}
 			}
 		}
@@ -121,7 +122,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 					sleepObject.wait(suspendTime);
 				} catch (InterruptedException e) {
 					if (logger.isErrorEnabled()) {
-						logger.error("startSleep -> sleepObject wait -> InterruptedException: " + e);
+						logger.error("startSleep -> sleepObject wait -> InterruptedException:{}", e);
 					}
 				}
 			}
@@ -147,7 +148,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 			stopCountDownLatch.await();
 		} catch (InterruptedException e) {
 			if (logger.isErrorEnabled()) {
-				logger.error("stopWait -> stopCountDownLatch await -> InterruptedException: " + e);
+				logger.error("stopWait -> stopCountDownLatch await -> InterruptedException:{}", e);
 			}
 		}
 	}

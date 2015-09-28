@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceSwitch;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceType;
 import org.fl.noodle.common.dbseparate.loadbalancer.LoadBalancerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RwseparateMethodInterceptor implements MethodInterceptor {
 
-	private final Log logger = LogFactory.getLog(RwseparateMethodInterceptor.class);
+	private final static Logger logger = LoggerFactory.getLogger(RwseparateMethodInterceptor.class);
 	
 	private LoadBalancerManager loadBalancerManager;
 	

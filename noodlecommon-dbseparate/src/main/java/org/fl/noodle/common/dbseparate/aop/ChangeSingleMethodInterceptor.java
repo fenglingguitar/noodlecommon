@@ -2,15 +2,15 @@ package org.fl.noodle.common.dbseparate.aop;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceSwitch;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceType;
 import org.fl.noodle.common.dbseparate.loadbalancer.LoadBalancerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ChangeSingleMethodInterceptor implements MethodInterceptor {
 
-	private final Log logger = LogFactory.getLog(ChangeSingleMethodInterceptor.class);
+	private final static Logger logger = LoggerFactory.getLogger(ChangeSingleMethodInterceptor.class);
 	
 	private LoadBalancerManager loadBalancerManager;
 	
@@ -25,7 +25,7 @@ public class ChangeSingleMethodInterceptor implements MethodInterceptor {
 				return invocation.proceed();
 			} catch (Throwable e) {
 				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> " + dataSourceType + " invoke -> Exception: " + e);
+					logger.error("invoke -> " + dataSourceType + " invoke -> Exception:{}", e);
 				}
 				throw e;
 			}
@@ -36,7 +36,7 @@ public class ChangeSingleMethodInterceptor implements MethodInterceptor {
 				return invocation.proceed();
 			} catch (Throwable e) {
 				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> " + dataSourceType + " invoke -> Exception: " + e);
+					logger.error("invoke -> " + dataSourceType + " invoke -> Exception:{}", e);
 				}
 				throw e;
 			}

@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.mvc.annotation.NoodleResponseBody;
 import org.fl.noodle.common.mvc.vo.MapVo;
 import org.fl.noodle.common.mvc.vo.PageVo;
 import org.fl.noodle.common.mvc.vo.VoidVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -21,7 +21,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class MethodReturnValueHandler extends AbstractMessageSendProcessor implements HandlerMethodReturnValueHandler {
 	
-	protected final Log logger = LogFactory.getLog(MethodReturnValueHandler.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodReturnValueHandler.class);
 	
 	protected MethodReturnValueHandler(List<HttpMessageConverter<?>> messageConverters) {
 		super(messageConverters);
@@ -73,12 +73,12 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 			serializeString = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss", SerializerFeature.WriteClassName);
 		} else {
 			if (logger.isErrorEnabled()) {
-				logger.debug("handleReturnValue -> serialize string -> exception: No this serialize type");
+				logger.debug("handleReturnValue -> serialize string -> exception:No this serialize type");
 			}
 		}
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("handleReturnValue -> output serialize string -> " + serializeString);
+			logger.debug("handleReturnValue -> output serialize string -> output:{}", serializeString);
 		}
 
 		return serializeString;
@@ -91,7 +91,7 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 	
 	private void sendNull(ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
 		if (logger.isDebugEnabled()) {
-			logger.debug("handleReturnValue -> output serialize string -> null");
+			logger.debug("handleReturnValue -> output serialize string -> output:null");
 		}	
 		mavContainer.setRequestHandled(true);
 		writeWithMessageConverters("", webRequest);

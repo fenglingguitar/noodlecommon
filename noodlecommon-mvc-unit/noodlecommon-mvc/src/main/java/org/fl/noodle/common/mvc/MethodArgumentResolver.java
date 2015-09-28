@@ -6,9 +6,9 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.mvc.annotation.NoodleRequestParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSON;
 
 public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-	protected final Log logger = LogFactory.getLog(MethodArgumentResolver.class);
+	private final static Logger logger = LoggerFactory.getLogger(MethodArgumentResolver.class);
 
 	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.getParameterAnnotation(NoodleRequestParam.class) != null;
@@ -36,7 +36,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 		String input = request.getParameter(requestParam.name());
 		if (input != null && !input.isEmpty()) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("resolveArgument -> input string -> " + input);
+				logger.debug("resolveArgument -> request.getParameter -> input:{}", input);
 			}	
 			if (requestParam.type().equals("json")) {				
 				return JSON.parseObject(input, parameter.getParameterType());
@@ -48,7 +48,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 			}
 		} else {
 			if (logger.isDebugEnabled()) {
-				logger.debug("resolveArgument -> input string -> null");
+				logger.debug("resolveArgument -> request.getParameter -> input is null");
 			}
 			Class<?> parameterType = parameter.getParameterType();
 			if (parameterType.getConstructors().length > 0) {

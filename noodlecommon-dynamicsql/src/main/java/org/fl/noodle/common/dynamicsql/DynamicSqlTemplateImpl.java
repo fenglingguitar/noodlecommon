@@ -32,8 +32,6 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
@@ -42,6 +40,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.ResultTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.xml.BeansDtdResolver;
 import org.springframework.context.ResourceLoaderAware;
@@ -55,7 +55,7 @@ import org.xml.sax.XMLReader;
 
 public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingBean, ResourceLoaderAware {
 	
-	private final static Log logger = LogFactory.getLog(DynamicSqlTemplateImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(DynamicSqlTemplateImpl.class);
 	
 	private ResourceLoader				resourceLoader;
 	private List<String>                fileNameList;
@@ -919,7 +919,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 				}
 			} catch (Exception e) {
 				if (logger.isErrorEnabled()) {
-					logger.error("MyResultTransformer -> transformTuple, Class: " + clazz.getName() + " -> " + e);
+					logger.error("MyResultTransformer -> transformTuple, Class:{} -> Exception:{}", clazz.getName(), e);
 				}
 			}
 			

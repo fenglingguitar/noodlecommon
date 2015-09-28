@@ -5,15 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.distributedlock.api.AbstractDistributedLock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 
 public class DbDistributedLock extends AbstractDistributedLock {
 	
-	private final static Log logger = LogFactory.getLog(DbDistributedLock.class);
+	private final static Logger logger = LoggerFactory.getLogger(DbDistributedLock.class);
 
 	private JdbcOperations jdbcTemplate;
 	
@@ -42,7 +42,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 			jdbcTemplate.update(sqlInsert);
 		} catch (Exception e) {	
 			if (logger.isErrorEnabled()) {
-				logger.error("init -> jdbcTemplate update insert -> Exception: " + e);
+				logger.error("init -> jdbcTemplate update insert -> Exception:{}", e);
 			}
 			throw e;
 		}
@@ -63,7 +63,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 			});
 		} catch (Exception e) {	
 			if (logger.isErrorEnabled()) {
-				logger.error("getDiffTime -> jdbcTemplate query -> Exception: " + e);
+				logger.error("getDiffTime -> jdbcTemplate query -> Exception:{}", e);
 			}
 		}
 		if (diffTimeList != null && diffTimeList.size() > 0) {
@@ -88,7 +88,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 			}
 		} catch (Exception e) {	
 			if (logger.isErrorEnabled()) {
-				logger.error("getAlive -> jdbcTemplate update -> Exception: " + e);
+				logger.error("getAlive -> jdbcTemplate update -> Exception:{}", e);
 			}
 		}
 		return false;
@@ -110,7 +110,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 			}
 		} catch (Exception e) {	
 			if (logger.isErrorEnabled()) {
-				logger.error("keepAlive -> jdbcTemplate update -> Exception: " + e);
+				logger.error("keepAlive -> jdbcTemplate update -> Exception:{}", e);
 			}
 		}
 		return false;
@@ -130,7 +130,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 			}
 		} catch (Exception e) {	
 			if (logger.isErrorEnabled()) {
-				logger.error("releaseAlive -> jdbcTemplate update -> Exception: " + e);
+				logger.error("releaseAlive -> jdbcTemplate update -> Exception:{}", e);
 			}
 		}
 		return false;

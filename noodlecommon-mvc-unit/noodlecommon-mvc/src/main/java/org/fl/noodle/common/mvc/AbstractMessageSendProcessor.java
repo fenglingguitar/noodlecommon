@@ -11,8 +11,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -31,7 +31,7 @@ public abstract class AbstractMessageSendProcessor {
 
 	private static final MediaType MEDIA_TYPE_APPLICATION = new MediaType("application");
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	private final static Logger logger = LoggerFactory.getLogger(AbstractMessageSendProcessor.class);
 
 	private final List<HttpMessageConverter<?>> messageConverters;
 

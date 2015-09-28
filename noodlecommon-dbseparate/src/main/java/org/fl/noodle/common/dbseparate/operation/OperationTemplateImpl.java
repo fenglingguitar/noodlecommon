@@ -1,10 +1,10 @@
 package org.fl.noodle.common.dbseparate.operation;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceSwitch;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceType;
 import org.fl.noodle.common.dbseparate.loadbalancer.LoadBalancerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -12,7 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 public class OperationTemplateImpl implements OperationTemplate {
 
-    private final static Log logger = LogFactory.getLog(OperationTemplateImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(OperationTemplateImpl.class);
 
     private TransactionTemplate transactionTemplate;
     
@@ -35,7 +35,7 @@ public class OperationTemplateImpl implements OperationTemplate {
         	if (noodleServiceCallbackExtend != null) {
         		if (!noodleServiceCallbackExtend.beforeExecuteActionCheck()) {
         			if (logger.isErrorEnabled()) {
-        				logger.equals("execute -> Before execute action check fail");
+        				logger.error("execute -> Before execute action check fail");
         			}
         			throw new OperationException("Before execute action check fail");
         		}
@@ -54,7 +54,7 @@ public class OperationTemplateImpl implements OperationTemplate {
                     	if (noodleServiceCallbackExtend != null) {
                     		if (!noodleServiceCallbackExtend.beforeExecuteActionCheckInTransaction()) {
                     			if (logger.isErrorEnabled()) {
-                    				logger.equals("execute -> Before execute action check in transaction fail");
+                    				logger.error("execute -> Before execute action check in transaction fail");
                     			}
                     			serviceResult.setSuccess(false);
                     			serviceResult.setFailException(new OperationException("Before execute action check in transaction fail"));
@@ -67,7 +67,7 @@ public class OperationTemplateImpl implements OperationTemplate {
         					result = action.executeAction();
         				} catch (Exception e) {
         					if (logger.isErrorEnabled()) {
-                				logger.equals("execute -> Execute action exception, Exception: " + e);
+                				logger.error("execute -> Execute action exception, Exception:{}", e);
                 			}
         					serviceResult.setSuccess(false);
         					serviceResult.setFailException(e);
@@ -86,7 +86,7 @@ public class OperationTemplateImpl implements OperationTemplate {
                 });
         	} catch (TransactionException e) {
         		if (logger.isErrorEnabled()) {
-    				logger.equals("execute -> Transaction exception, Exception: " + e);
+    				logger.error("execute -> Transaction exception, Exception:{}", e);
     			}
         		serviceResult.setSuccess(false);
         		serviceResult.setFailException(e);
@@ -112,7 +112,7 @@ public class OperationTemplateImpl implements OperationTemplate {
     	DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
 		if (dataSourceType == null) {
 			if (logger.isErrorEnabled()) {
-				logger.equals("executeWithoutTransaction -> None of the available datasource");
+				logger.error("executeWithoutTransaction -> None of the available datasource");
 			}
 			throw new OperationException("None of the available datasource");
         }
@@ -133,7 +133,7 @@ public class OperationTemplateImpl implements OperationTemplate {
         	if (noodleServiceCallbackExtend != null) {
         		if (!noodleServiceCallbackExtend.beforeExecuteActionCheck()) {
         			if (logger.isErrorEnabled()) {
-        				logger.equals("executeWithoutTransaction -> Before execute action check fail");
+        				logger.error("executeWithoutTransaction -> Before execute action check fail");
         			}
         			throw new OperationException("Before execute action check fail");
         		}
@@ -144,7 +144,7 @@ public class OperationTemplateImpl implements OperationTemplate {
 				result = action.executeAction();
 			} catch (Exception e) {
 				if (logger.isErrorEnabled()) {
-    				logger.equals("executeWithoutTransaction -> Execute action exception, Exception: " + e);
+    				logger.error("executeWithoutTransaction -> Execute action exception, Exception:{}", e);
     			}
 				serviceResult.setSuccess(false);
         		serviceResult.setFailException(e);

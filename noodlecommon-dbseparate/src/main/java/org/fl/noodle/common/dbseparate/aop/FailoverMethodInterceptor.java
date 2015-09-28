@@ -2,14 +2,14 @@ package org.fl.noodle.common.dbseparate.aop;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceSwitch;
 import org.fl.noodle.common.dbseparate.datasource.DataSourceType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FailoverMethodInterceptor implements MethodInterceptor {
 
-	private final Log logger = LogFactory.getLog(FailoverMethodInterceptor.class);
+	private final static Logger logger = LoggerFactory.getLogger(FailoverMethodInterceptor.class);
 	
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -19,14 +19,14 @@ public class FailoverMethodInterceptor implements MethodInterceptor {
 			return invocation.proceed();
 		} catch (Throwable me) {
 			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> master invoke -> DataAccessException: " + me);
+				logger.error("invoke -> master invoke -> DataAccessException:{}", me);
 			}
 			try {
 				DataSourceSwitch.setDataSourceType(DataSourceType.SALVE_1);
 				return invocation.proceed();
 			} catch (Throwable se) {
 				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> salve invoke -> DataAccessException: " + se);
+					logger.error("invoke -> salve invoke -> DataAccessException:{}", se);
 				}
 				throw se;
 			}
