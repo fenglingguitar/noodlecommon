@@ -1,12 +1,17 @@
-package org.fl.noodle.common.util.tools;
+package org.fl.noodle.common.util.net;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
-public class NetUtils {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class NetAddressUtil {
+
+	private final static Logger logger = LoggerFactory.getLogger(NetAddressUtil.class);
+	
     public static final String LOCALHOST = "127.0.0.1";
 
     public static final String ANYHOST = "0.0.0.0";
@@ -28,7 +33,7 @@ public class NetUtils {
     public static InetAddress getLocalAddress() {
         if (LOCAL_ADDRESS != null)
             return LOCAL_ADDRESS;
-        LOCAL_ADDRESS = getLocalAddress0();
+        LOCAL_ADDRESS = getLocalAddressImpl();
         return LOCAL_ADDRESS;
     }
     
@@ -44,14 +49,16 @@ public class NetUtils {
         return null;
     }
     
-    private static InetAddress getLocalAddress0() {
+    private static InetAddress getLocalAddressImpl() {
         InetAddress localAddress = null;
         try {
             localAddress = InetAddress.getLocalHost();
             if (isValidAddress(localAddress)) {
+            	logger.info("getLocalAddressImpl -> InetAddress.getLocalHost get the localAddress -> localAddress:{}", localAddress);
                 return localAddress;
             }
         } catch (Throwable e) {
+        	logger.error("getLocalAddressImpl -> InetAddress.getLocalHost -> Exception:{}", e);
         }
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -65,18 +72,24 @@ public class NetUtils {
                                 try {
                                     InetAddress address = addresses.nextElement();
                                     if (isValidAddress(address)) {
+                                    	logger.info("getLocalAddressImpl -> NetworkInterface get the localAddress -> localAddress:{}", address);
                                         return address;
                                     }
                                 } catch (Throwable e) {
+                                	logger.error("getLocalAddressImpl -> addresses.nextElement -> Exception:{}", e);
                                 }
                             }
                         }
                     } catch (Throwable e) {
+                    	logger.error("getLocalAddressImpl -> interfaces.nextElement -> Exception:{}", e);
                     }
                 }
             }
         } catch (Throwable e) {
+        	logger.error("getLocalAddressImpl -> NetworkInterface.getNetworkInterfaces -> Exception:{}", e);
         }
+        
+        logger.info("getLocalAddressImpl -> all not get the localAddress -> localAddress:{}", localAddress);
         return localAddress;
     }   
 }

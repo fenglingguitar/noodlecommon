@@ -1,11 +1,11 @@
 package org.fl.noodle.common.distributedlock.db;
 
-import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import org.fl.noodle.common.distributedlock.api.AbstractDistributedLock;
+import org.fl.noodle.common.util.net.NetAddressUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -29,7 +29,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 	
 	protected void init() throws Exception {
 		
-		localIp = localIp == null ? InetAddress.getLocalHost().getHostAddress() : localIp;
+		localIp = localIp == null ? NetAddressUtil.getLocalIp() : localIp;
 		
 		sqlGetDiffTime = "SELECT CURRENT_TIMESTAMP FROM DUAL";
 		sqlGetAlive = "UPDATE " + tableName + " SET SET_ID = ?, OVERTIME = ?, IP = ? WHERE OVERTIME < ? AND ID = ?";

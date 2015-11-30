@@ -27,6 +27,12 @@
 		<version>${noodle.common.distributedlock.api.version}</version>
 	</dependency>
   
+  	<dependency>
+  		<groupId>org.fl.noodle.common.util</groupId>
+	  	<artifactId>noodlecommon-util</artifactId>
+	  	<version>${noodle.common.util.version}</version>
+	</dependency>
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
