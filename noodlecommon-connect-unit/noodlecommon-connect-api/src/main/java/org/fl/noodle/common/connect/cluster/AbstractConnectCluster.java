@@ -43,9 +43,7 @@ public abstract class AbstractConnectCluster implements ConnectCluster, Invocati
 
 		ConnectManager connectManager = connectDistinguish.getConnectManager();
 		if (connectManager == null) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> connectDistinguish.getConnectManager return null -> {}", this);
-			}
+			logger.error("invoke -> connectDistinguish.getConnectManager return null -> {}", this);
 			throw new ConnectInvokeException("no this connect manager");
 		}
 		

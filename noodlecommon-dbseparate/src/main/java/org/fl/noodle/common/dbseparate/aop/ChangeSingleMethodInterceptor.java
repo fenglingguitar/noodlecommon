@@ -24,9 +24,7 @@ public class ChangeSingleMethodInterceptor implements MethodInterceptor {
 				DataSourceSwitch.setDataSourceType(dataSourceType);
 				return invocation.proceed();
 			} catch (Throwable e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> " + dataSourceType + " invoke -> Exception:{}", e);
-				}
+				logger.error("invoke -> " + dataSourceType + " invoke -> Exception:{}", e);
 				throw e;
 			}
 		} else {
@@ -35,9 +33,7 @@ public class ChangeSingleMethodInterceptor implements MethodInterceptor {
 				DataSourceSwitch.setDataSourceType(dataSourceType);
 				return invocation.proceed();
 			} catch (Throwable e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> " + dataSourceType + " invoke -> Exception:{}", e);
-				}
+				logger.error("invoke -> " + dataSourceType + " invoke -> Exception:{}", e);
 				throw e;
 			}
 		}

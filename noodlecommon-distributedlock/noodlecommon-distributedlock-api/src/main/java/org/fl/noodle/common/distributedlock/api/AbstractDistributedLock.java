@@ -99,9 +99,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("WaitForLocker -> Wait -> InterruptedException:{}", e);
-				}
+				logger.error("WaitForLocker -> Wait -> InterruptedException:{}", e);
 			}
 		}
 	}
@@ -121,9 +119,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 				try {
 					sleepObject.wait(suspendTime);
 				} catch (InterruptedException e) {
-					if (logger.isErrorEnabled()) {
-						logger.error("startSleep -> sleepObject wait -> InterruptedException:{}", e);
-					}
+					logger.error("startSleep -> sleepObject wait -> InterruptedException:{}", e);
 				}
 			}
 		}
@@ -147,9 +143,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 		try {
 			stopCountDownLatch.await();
 		} catch (InterruptedException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("stopWait -> stopCountDownLatch await -> InterruptedException:{}", e);
-			}
+			logger.error("stopWait -> stopCountDownLatch await -> InterruptedException:{}", e);
 		}
 	}
 	

@@ -29,16 +29,12 @@ public class ExceptionResolver extends AbstractMessageSendProcessor implements H
 		
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
 		
-		if (logger.isErrorEnabled()) {
-			logger.error("ResolveException -> Exception:{}", ex);
-		}
+		logger.error("ResolveException -> Exception:{}", ex);
 		
 		try {
 			writeWithMessageConverters(JSON.toJSONString(new ResultVo("false", ex.getMessage())), webRequest);
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("ResolveException -> Resolve JsonException Error, Exception:{}", e);
-			}
+			logger.error("ResolveException -> Resolve JsonException Error, Exception:{}", e);
 		}
 		
 		return new ModelAndView();

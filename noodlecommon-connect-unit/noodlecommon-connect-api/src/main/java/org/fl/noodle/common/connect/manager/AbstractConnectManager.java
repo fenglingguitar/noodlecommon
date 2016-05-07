@@ -88,9 +88,7 @@ public abstract class AbstractConnectManager implements ConnectManager {
 		try {
 			wait(suspendTime);
 		} catch (InterruptedException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("suspendUpdateConnectAgent -> wait -> Exception:{}", e.getMessage());
-			}
+			logger.error("suspendUpdateConnectAgent -> wait -> Exception:{}", e.getMessage());
 		}
 	}
 	

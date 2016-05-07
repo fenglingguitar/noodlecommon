@@ -41,9 +41,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 		try {
 			jdbcTemplate.update(sqlInsert);
 		} catch (Exception e) {	
-			if (logger.isErrorEnabled()) {
-				logger.error("init -> jdbcTemplate update insert -> Exception:{}", e);
-			}
+			logger.error("init -> jdbcTemplate update insert -> Exception:{}", e);
 			throw e;
 		}
 	}
@@ -62,9 +60,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 				}
 			});
 		} catch (Exception e) {	
-			if (logger.isErrorEnabled()) {
-				logger.error("getDiffTime -> jdbcTemplate query -> Exception:{}", e);
-			}
+			logger.error("getDiffTime -> jdbcTemplate query -> Exception:{}", e);
 		}
 		if (diffTimeList != null && diffTimeList.size() > 0) {
 			diffTime = System.currentTimeMillis() - diffTimeList.get(0);
@@ -87,9 +83,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 				return true;
 			}
 		} catch (Exception e) {	
-			if (logger.isErrorEnabled()) {
-				logger.error("getAlive -> jdbcTemplate update -> Exception:{}", e);
-			}
+			logger.error("getAlive -> jdbcTemplate update -> Exception:{}", e);
 		}
 		return false;
 	}
@@ -109,9 +103,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 				return true;
 			}
 		} catch (Exception e) {	
-			if (logger.isErrorEnabled()) {
-				logger.error("keepAlive -> jdbcTemplate update -> Exception:{}", e);
-			}
+			logger.error("keepAlive -> jdbcTemplate update -> Exception:{}", e);
 		}
 		return false;
 	}
@@ -129,9 +121,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 				return true;
 			}
 		} catch (Exception e) {	
-			if (logger.isErrorEnabled()) {
-				logger.error("releaseAlive -> jdbcTemplate update -> Exception:{}", e);
-			}
+			logger.error("releaseAlive -> jdbcTemplate update -> Exception:{}", e);
 		}
 		return false;
 	}

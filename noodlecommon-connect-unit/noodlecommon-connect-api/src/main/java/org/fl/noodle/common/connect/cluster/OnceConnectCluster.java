@@ -53,19 +53,13 @@ public class OnceConnectCluster extends AbstractConnectCluster {
 			try {
 				return method.invoke(connectAgent.getProxy(), args);
 			} catch (IllegalAccessException e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
-				}
+				logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
 				throw e;
 			} catch (IllegalArgumentException e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
-				}
+				logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
 				throw e;
 			} catch (InvocationTargetException e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("doInvoke -> method.invoke -> Exception:{}", e.getTargetException().getMessage());
-				}
+				logger.error("doInvoke -> method.invoke -> Exception:{}", e.getTargetException().getMessage());
 				throw e.getTargetException();
 			}
 		} else {

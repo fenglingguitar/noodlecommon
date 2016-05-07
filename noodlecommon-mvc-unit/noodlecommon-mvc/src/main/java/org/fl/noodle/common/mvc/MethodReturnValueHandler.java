@@ -77,9 +77,7 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 			}
 		}
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("handleReturnValue -> output serialize string -> output:{}", serializeString);
-		}
+		logger.debug("handleReturnValue -> output serialize string -> output:{}", serializeString);
 
 		return serializeString;
 	}
@@ -90,9 +88,7 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 	}
 	
 	private void sendNull(ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
-		if (logger.isDebugEnabled()) {
-			logger.debug("handleReturnValue -> output serialize string -> output:null");
-		}	
+		logger.debug("handleReturnValue -> output serialize string -> output:null");	
 		mavContainer.setRequestHandled(true);
 		writeWithMessageConverters("", webRequest);
 	}

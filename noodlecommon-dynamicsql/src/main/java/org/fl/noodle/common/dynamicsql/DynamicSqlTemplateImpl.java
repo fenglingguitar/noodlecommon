@@ -918,9 +918,7 @@ public class DynamicSqlTemplateImpl implements DynamicSqlTemplate, InitializingB
 					field.set(object, backObject);
 				}
 			} catch (Exception e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("MyResultTransformer -> transformTuple, Class:{} -> Exception:{}", clazz.getName(), e);
-				}
+				logger.error("MyResultTransformer -> transformTuple, Class:{} -> Exception:{}", clazz.getName(), e);
 			}
 			
 			return object;

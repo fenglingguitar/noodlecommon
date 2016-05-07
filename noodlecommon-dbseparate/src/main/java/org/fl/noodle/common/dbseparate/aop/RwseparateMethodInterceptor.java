@@ -37,9 +37,7 @@ public class RwseparateMethodInterceptor implements MethodInterceptor {
 		} else {
 			DataSourceType dataSourceType = loadBalancerManager.getAliveDataSource();
 			if (dataSourceType == null) {
-				if (logger.isErrorEnabled()) {
-					logger.error("getAliveDataSource -> loadBalancerManager.getAliveDataSource return null -> None of the available datasource");
-				}
+				logger.error("getAliveDataSource -> loadBalancerManager.getAliveDataSource return null -> None of the available datasource");
 				throw new Exception("None of the available datasource");
 	        }
 			DataSourceSwitch.setDataSourceType(dataSourceType);

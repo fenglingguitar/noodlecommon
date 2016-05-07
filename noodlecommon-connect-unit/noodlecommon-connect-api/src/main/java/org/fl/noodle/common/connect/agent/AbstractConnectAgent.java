@@ -83,18 +83,14 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		try {
 			connectActual();
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("connect -> connectActual -> {} -> Exception:{}", this, e.getMessage());
-			}
+			logger.error("connect -> connectActual -> {} -> Exception:{}", this, e.getMessage());
 			connectStatus.set(false);
 			throw e;
 		}
 		connectStatus.set(true);
 		invalidCount.set(0);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("connect -> connect is ok -> {}, connectStatus:{}, invalidLimitNum:{}, invalidCount:{}", this, connectStatus.get(), invalidLimitNum, invalidCount.get());
-		}
+		logger.debug("connect -> connect is ok -> {}, connectStatus:{}, invalidLimitNum:{}, invalidCount:{}", this, connectStatus.get(), invalidLimitNum, invalidCount.get());
 	}
 	
 	@Override
@@ -103,18 +99,14 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		try {
 			reconnectActual();
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("connect -> reconnectActual -> {} -> Exception:{}", this, e.getMessage());
-			}
+			logger.error("connect -> reconnectActual -> {} -> Exception:{}", this, e.getMessage());
 			connectStatus.set(false);
 			throw e;
 		}
 		connectStatus.set(true);
 		invalidCount.set(0);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("reconnect -> reconnect is ok -> {}, connectStatus:{}, invalidLimitNum:{}, invalidCount:{}", this, connectStatus.get(), invalidLimitNum, invalidCount.get());
-		}
+		logger.debug("reconnect -> reconnect is ok -> {}, connectStatus:{}, invalidLimitNum:{}, invalidCount:{}", this, connectStatus.get(), invalidLimitNum, invalidCount.get());
 	}
 	
 	@Override
@@ -123,9 +115,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		connectStatus.set(false);
 		closeActual();
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("close -> close is ok -> {}, connectStatus:{}, invalidLimitNum:{}, invalidCount:{}", this, connectStatus.get(), invalidLimitNum, invalidCount.get());
-		}
+		logger.debug("close -> close is ok -> {}, connectStatus:{}, invalidLimitNum:{}, invalidCount:{}", this, connectStatus.get(), invalidLimitNum, invalidCount.get());
 	}
 	
 	protected abstract void connectActual() throws Exception;
@@ -160,17 +150,13 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
 		if (connectStatus.get() == false) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> connect status is false -> {}", this);
-			}
+			logger.error("invoke -> connect status is false -> {}", this);
 			throw new ConnectUnableException("connect disable for the net http connect agent");
 		}
 		
 		ConnectManager connectManager = connectDistinguish.getConnectManager();
 		if (connectManager == null) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> connectDistinguish.getConnectManager return null -> {}", this);
-			}
+			logger.error("invoke -> connectDistinguish.getConnectManager return null -> {}", this);
 			throw new ConnectInvokeException("no this connect manager");
 		}
 		
@@ -226,29 +212,21 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 			
 			return Object;
 		} catch (IllegalAccessException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
-			}
+			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
 			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 			throw e;
 		} catch (IllegalArgumentException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
-			}
+			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
 			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 			throw e;
 		} catch (InvocationTargetException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getTargetException().getMessage());
-			}
+			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getTargetException().getMessage());
 			if (e.getTargetException() instanceof ConnectRefusedException
 					|| e.getTargetException() instanceof ConnectResetException
 						|| e.getTargetException() instanceof ConnectTimeoutException) {
 				if (invalidCount.incrementAndGet() >= invalidLimitNum) {					
 					connectStatus.set(false);
-					if (logger.isDebugEnabled()) {
-						logger.debug("invoke -> set connect status to false -> {}, invalidLimitNum:{}, invalidCount:{}", this, invalidLimitNum, invalidCount.get());
-					}
+					logger.debug("invoke -> set connect status to false -> {}, invalidLimitNum:{}, invalidCount:{}", this, invalidLimitNum, invalidCount.get());
 				}
 			} 
 			

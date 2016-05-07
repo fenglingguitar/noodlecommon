@@ -77,18 +77,14 @@ public class PerformanceReceiver {
 		
 		for (String recvStr : recvStrList) {
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("save -> save a recv -> {}", recvStr);
-			}
+			logger.debug("save -> save a recv -> {}", recvStr);
 			
 			NetVo netVo = null;
 			
 			try {
 				netVo = JsonTranslator.fromString(recvStr, NetVo.class);
 			} catch (Exception e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("save -> JsonTranslator.fromString -> {} -> Exception:{}", recvStr, e.getMessage());
-				}
+				logger.error("save -> JsonTranslator.fromString -> {} -> Exception:{}", recvStr, e.getMessage());
 			}
 			
 			if (netVo == null) {
@@ -101,9 +97,7 @@ public class PerformanceReceiver {
 			try {
 				performancePersistence.insert(keyVo.toKeyString(), ((InfoVo)infoVo).getTimestamp(), infoVo);
 			} catch (Exception e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("save -> performancePersistence.insert -> {} -> Exception:{}", keyVo, e.getMessage());
-				}
+				logger.error("save -> performancePersistence.insert -> {} -> Exception:{}", keyVo, e.getMessage());
 			}
 		}
 		recvStrList.clear();

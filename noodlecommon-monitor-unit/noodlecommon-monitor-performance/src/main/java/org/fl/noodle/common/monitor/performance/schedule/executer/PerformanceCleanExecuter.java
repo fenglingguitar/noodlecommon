@@ -24,9 +24,7 @@ public class PerformanceCleanExecuter extends AbstractExecuter {
 		try {
 			keysSet = performancePersistence.getKeys();
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("execute -> performancePersistence.getKeys -> timeSpan:{} -> Exception:{}", timeSpan, e.getMessage());
-			}
+			logger.error("execute -> performancePersistence.getKeys -> timeSpan:{} -> Exception:{}", timeSpan, e.getMessage());
 		}
 		
 		if (keysSet != null) {
@@ -36,9 +34,7 @@ public class PerformanceCleanExecuter extends AbstractExecuter {
 				try {
 					performancePersistence.deletes(key, 0, nowTime - timeSpan);
 				} catch (Exception e) {
-					if (logger.isErrorEnabled()) {
-						logger.error("execute -> performancePersistence.deletes -> key{}, timeSpan:{} -> Exception:{}", key, timeSpan, e.getMessage());
-					}
+					logger.error("execute -> performancePersistence.deletes -> key{}, timeSpan:{} -> Exception:{}", key, timeSpan, e.getMessage());
 				}
 			}
 		}

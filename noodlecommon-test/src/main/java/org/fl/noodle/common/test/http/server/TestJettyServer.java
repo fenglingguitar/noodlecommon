@@ -28,18 +28,14 @@ private final static Logger logger = LoggerFactory.getLogger(TestJettyServer.cla
         server.setHandler(servletContextHandler);  
         
         server.start();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Start a JettyNetConnectServer -> Port: " + port);
-		}
+		logger.debug("Start a JettyNetConnectServer -> Port: " + port);
 	}
 
 	public void destroy() throws Exception {
 		
 		server.stop();
 		//server.join();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Close a JettyNetConnectServer -> Port: " + port);
-		}
+		logger.debug("Close a JettyNetConnectServer -> Port: " + port);
 	}
 
 	public void setPort(int port) {

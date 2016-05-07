@@ -35,9 +35,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 		
 		String input = request.getParameter(requestParam.name());
 		if (input != null && !input.isEmpty()) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("resolveArgument -> request.getParameter -> input:{}", input);
-			}	
+			logger.debug("resolveArgument -> request.getParameter -> input:{}", input);	
 			if (requestParam.type().equals("json")) {				
 				return JSON.parseObject(input, parameter.getParameterType());
 			} else if (requestParam.type().equals("date")) {
@@ -47,9 +45,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 				return date;
 			}
 		} else {
-			if (logger.isDebugEnabled()) {
-				logger.debug("resolveArgument -> request.getParameter -> input is null");
-			}
+			logger.debug("resolveArgument -> request.getParameter -> input is null");
 			Class<?> parameterType = parameter.getParameterType();
 			if (parameterType.getConstructors().length > 0) {
 				return parameterType.newInstance();

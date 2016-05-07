@@ -161,9 +161,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 							aliveSourcesList.remove(dataSourceModel);
 							failureCount.set(0);
 							deadSourcesList.add(dataSourceModel);
-							if (logger.isErrorEnabled()) {
-								logger.error("HeartBeatAliveTasksScan -> run -> DataSource dead and remove aliveSourcesList, DataSource:{}", dataSourceModel.getDataSourceType());								
-							}
+							logger.error("HeartBeatAliveTasksScan -> run -> DataSource dead and remove aliveSourcesList, DataSource:{}", dataSourceModel.getDataSourceType());
 						} 
 					} else {
 						failureCount.set(0);
@@ -173,9 +171,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 				try {
 					Thread.sleep(interTime);
 				} catch (InterruptedException e) {
-					if (logger.isErrorEnabled()) {						
-						logger.error("HeartBeatAliveTasksScan -> run -> HeartBeatAliveTasksScan InterruptedException, Exception:{}", e);
-					}
+					logger.error("HeartBeatAliveTasksScan -> run -> HeartBeatAliveTasksScan InterruptedException, Exception:{}", e);
 				}
 			}
 		}
@@ -196,9 +192,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 							riseCount.set(0);
 							aliveSourcesList.add(dataSourceModel);
 							addDataSourcesSelectList(dataSourceModel);
-							if (logger.isInfoEnabled()) {
-								logger.info("HeartBeatAliveTasksScan -> run -> DataSource alive and remove deadSourcesList, DataSource:{}", dataSourceModel.getDataSourceType());								
-							}
+							logger.info("HeartBeatAliveTasksScan -> run -> DataSource alive and remove deadSourcesList, DataSource:{}", dataSourceModel.getDataSourceType());
 						}
 					} else {
 						riseCount.set(0);
@@ -208,9 +202,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 				try {
 					Thread.sleep(interTime);
 				} catch (InterruptedException e) {
-					if (logger.isErrorEnabled()) {						
-						logger.error("HeartBeatAliveTasksScan -> run -> HeartBeatDeadTasksScan InterruptedException, Exception:{}", e);
-					}
+					logger.error("HeartBeatAliveTasksScan -> run -> HeartBeatDeadTasksScan InterruptedException, Exception:{}", e);
 				}
 			}
 		}
@@ -261,17 +253,13 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 				}
 				result = true;
 			} catch (SQLException e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("CheckAliveDataSource -> Database connection error, SQLState:{}, Exception:{}", e.getSQLState(), e);
-				}
+				logger.error("CheckAliveDataSource -> Database connection error, SQLState:{}, Exception:{}", e.getSQLState(), e);
 			} finally {
 				if (rs != null) {
 					try {
 						rs.close();
 					} catch (SQLException e) {
-						if (logger.isErrorEnabled()) {
-							logger.error("CheckAliveDataSource -> Database rs close error, SQLState:{}, Exception:{}", e.getSQLState(), e);
-						}
+						logger.error("CheckAliveDataSource -> Database rs close error, SQLState:{}, Exception:{}", e.getSQLState(), e);
 					}
 				}
 
@@ -279,9 +267,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 					try {
 						pstmt.close();
 					} catch (SQLException e) {
-						if (logger.isErrorEnabled()) {
-							logger.error("CheckAliveDataSource -> preparedStatement close error, SQLState:{}, Exception:{}", e.getSQLState(), e);
-						}
+						logger.error("CheckAliveDataSource -> preparedStatement close error, SQLState:{}, Exception:{}", e.getSQLState(), e);
 					}
 				}
 
@@ -289,9 +275,7 @@ public class LoadBalancerManagerImpl implements LoadBalancerManager {
 					try {
 						conn.close();
 					} catch (SQLException e) {
-						if (logger.isErrorEnabled()) {
-							logger.error("CheckAliveDataSource -> connection close error, SQLState:{}, Exception:{}", e.getSQLState(), e);
-						}
+						logger.error("CheckAliveDataSource -> connection close error, SQLState:{}, Exception:{}", e.getSQLState(), e);
 					}
 				}
 			}

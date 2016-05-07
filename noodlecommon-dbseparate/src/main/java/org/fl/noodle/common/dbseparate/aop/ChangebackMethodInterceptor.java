@@ -22,9 +22,7 @@ public class ChangebackMethodInterceptor implements MethodInterceptor {
 				DataSourceSwitch.setDataSourceType(DataSourceType.MASTER);
 				return invocation.proceed();
 			} catch (Throwable e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> master invoke -> Exception:{}", e);
-				}
+				logger.error("invoke -> master invoke -> Exception:{}", e);
 				throw e;
 			}
 		} else {
@@ -32,9 +30,7 @@ public class ChangebackMethodInterceptor implements MethodInterceptor {
 				DataSourceSwitch.setDataSourceType(DataSourceType.SALVE_1);
 				return invocation.proceed();
 			} catch (Throwable e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> salve invoke -> Exception:{}", e);
-				}
+				logger.error("invoke -> salve invoke -> Exception:{}", e);
 				throw e;
 			}
 		}

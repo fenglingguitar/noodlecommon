@@ -40,9 +40,7 @@ public class ConnectNodeImpl implements ConnectNode {
 		for (ConnectAgent connectAgent : connectAgentList) {
 			if (!connectAgentListNew.contains(connectAgent)) {
 				connectAgentList.remove(connectAgent);
-				if (logger.isDebugEnabled()) {
-					logger.debug("updateConnectAgentList -> remove connect -> {}, {}", this, connectAgent);
-				}
+				logger.debug("updateConnectAgentList -> remove connect -> {}, {}", this, connectAgent);
 			}
 		}
 	}

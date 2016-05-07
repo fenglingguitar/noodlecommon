@@ -39,9 +39,7 @@ public class UdpClient {
 		try {
 			datagramSocket.send(new DatagramPacket(sendBuf, sendBuf.length, InetAddress.getByName(ip), port));
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("send -> datagramSocket.send -> ip:{}, port:{}, Exception:{}", ip, port, e.getMessage());
-			}
+			logger.error("send -> datagramSocket.send -> ip:{}, port:{}, Exception:{}", ip, port, e.getMessage());
 		}
 	}
 	

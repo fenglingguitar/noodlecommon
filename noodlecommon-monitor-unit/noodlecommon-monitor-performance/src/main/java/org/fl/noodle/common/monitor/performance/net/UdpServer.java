@@ -58,9 +58,7 @@ public class UdpServer {
 							String recvStr = new String(recvPacket.getData(), 0, recvPacket.getLength());
 							recvList.put(recvStr);
 						} catch (Exception e) {
-							if (logger.isErrorEnabled()) {
-								logger.error("run -> datagramSocket.receive -> port:{}, Exception:{}", port, e.getMessage());
-							}
+							logger.error("run -> datagramSocket.receive -> port:{}, Exception:{}", port, e.getMessage());
 						}
 					}
 					datagramSocket.close();
@@ -79,9 +77,7 @@ public class UdpServer {
 		try {
 			recvStr = recvList.poll(getInterval, TimeUnit.MILLISECONDS);
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("get -> recvList.poll -> port:{}, Exception:{}", port, e.getMessage());
-			}
+			logger.error("get -> recvList.poll -> port:{}, Exception:{}", port, e.getMessage());
 		}
 		return recvStr;
 	}

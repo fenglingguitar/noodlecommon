@@ -52,16 +52,12 @@ public class ExecuterSchedule {
 						try {
 							executer.execute();
 						} catch (Exception e) {
-							if (logger.isErrorEnabled()) {
-								logger.error("initialization -> run -> executer.execute -> executer:{}, Exception:{}", executer.getClass(), e.getMessage());
-							}
+							logger.error("initialization -> run -> executer.execute -> executer:{}, Exception:{}", executer.getClass(), e.getMessage());
 						}
 					}
 				}, initialDelay, delay, TimeUnit.SECONDS);
 				
-				if (logger.isInfoEnabled()) {
-					logger.info("initialization -> executer:{}, initialDelay:{}, delay:{} -> Executer scheduled", executer.getClass(), initialDelay, delay);
-				}
+				logger.info("initialization -> executer:{}, initialDelay:{}, delay:{} -> Executer scheduled", executer.getClass(), initialDelay, delay);
 			}
 		}
 	}

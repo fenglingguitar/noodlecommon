@@ -18,16 +18,12 @@ public class FailoverMethodInterceptor implements MethodInterceptor {
 			DataSourceSwitch.setDataSourceType(DataSourceType.MASTER);
 			return invocation.proceed();
 		} catch (Throwable me) {
-			if (logger.isErrorEnabled()) {
-				logger.error("invoke -> master invoke -> DataAccessException:{}", me);
-			}
+			logger.error("invoke -> master invoke -> DataAccessException:{}", me);
 			try {
 				DataSourceSwitch.setDataSourceType(DataSourceType.SALVE_1);
 				return invocation.proceed();
 			} catch (Throwable se) {
-				if (logger.isErrorEnabled()) {
-					logger.error("invoke -> salve invoke -> DataAccessException:{}", se);
-				}
+				logger.error("invoke -> salve invoke -> DataAccessException:{}", se);
 				throw se;
 			}
 		}

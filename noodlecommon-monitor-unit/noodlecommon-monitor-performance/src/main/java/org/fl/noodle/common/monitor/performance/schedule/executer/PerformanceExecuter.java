@@ -36,9 +36,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 		try {
 			threadPerformanceInfo = ThreadLocalStorage.get(themeName, monitorType, moduleType, moduleId, ThreadPerformanceInfo.class);
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("before -> ThreadLocalStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{}", themeName, monitorType, moduleType, moduleId);
-			}
+			logger.error("before -> ThreadLocalStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{}", themeName, monitorType, moduleType, moduleId);
 		}
 		
 		if (threadPerformanceInfo != null) {
@@ -56,9 +54,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 		try {
 			threadPerformanceInfo = ThreadLocalStorage.get(themeName, monitorType, moduleType, moduleId, ThreadPerformanceInfo.class);
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("after -> ThreadLocalStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", themeName, monitorType, moduleType, moduleId, e.getMessage());
-			}
+			logger.error("after -> ThreadLocalStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", themeName, monitorType, moduleType, moduleId, e.getMessage());
 		}
 		
 		if (threadPerformanceInfo != null) {
@@ -70,9 +66,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 		try {
 			note = MemoryStorage.get(themeName, monitorType, moduleType, moduleId, Note.class);
 		} catch (Exception e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("after -> MemoryStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", themeName, monitorType, moduleType, moduleId, e.getMessage());
-			}
+			logger.error("after -> MemoryStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", themeName, monitorType, moduleType, moduleId, e.getMessage());
 		}
 		
 		if (note != null) {
@@ -104,9 +98,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 			try {
 				note = MemoryStorage.get(keyVo.getThemeName(), keyVo.getMonitorType(), keyVo.getModuleType(), keyVo.getModuleId(), Note.class);
 			} catch (Exception e) {
-				if (logger.isErrorEnabled()) {
-					logger.error("execute -> MemoryStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", keyVo.getThemeName(), keyVo.getMonitorType(), keyVo.getModuleType(), keyVo.getModuleId(), e.getMessage());
-				}
+				logger.error("execute -> MemoryStorage.get -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", keyVo.getThemeName(), keyVo.getMonitorType(), keyVo.getModuleType(), keyVo.getModuleId(), e.getMessage());
 			}
 			
 			if (note != null && (new Date()).getTime() - note.getTimestamp() < noteTimeout) {
@@ -144,9 +136,7 @@ public class PerformanceExecuter extends AbstractExecuter implements Performance
 				try {
 					udpClient.send(JsonTranslator.toString(netVo));
 				} catch (Exception e) {
-					if (logger.isErrorEnabled()) {
-						logger.error("execute -> udpClient.send -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", keyVo.getThemeName(), keyVo.getMonitorType(), keyVo.getModuleType(), keyVo.getModuleId(), e.getMessage());
-					}
+					logger.error("execute -> udpClient.send -> themeName:{}, monitorType:{}, moduleType:{}, moduleId{} -> Exception:{}", keyVo.getThemeName(), keyVo.getMonitorType(), keyVo.getModuleType(), keyVo.getModuleId(), e.getMessage());
 				}
 			}
 		}
