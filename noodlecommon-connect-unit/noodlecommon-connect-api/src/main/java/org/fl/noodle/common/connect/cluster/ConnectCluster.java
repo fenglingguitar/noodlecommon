@@ -1,6 +1,6 @@
 package org.fl.noodle.common.connect.cluster;
 
-public interface ConnectCluster {
-	
-	public Object getProxy();
+import org.springframework.aop.framework.AopProxy;
+
+public interface ConnectCluster extends AopProxy {
 }

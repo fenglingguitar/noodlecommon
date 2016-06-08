@@ -20,12 +20,6 @@
   </properties>
   
   <dependencies>
-  
-  	<dependency>
-      <groupId>org.fl.noodle.common.connect.expand</groupId>
-  	  <artifactId>noodlecommon-connect-expand-api</artifactId>
-	  <version>${noodle.common.connect.expand.version}</version>
-    </dependency>
     
     <dependency>
   		<groupId>org.fl.noodle.common.util</groupId>
@@ -50,6 +44,12 @@
 		<groupId>org.logback-extensions</groupId>
 		<artifactId>logback-ext-spring</artifactId>
 	</dependency>
+    
+    <!-- spring framework -->
+	<dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-aop</artifactId>
+    </dependency>
     
   </dependencies>
   

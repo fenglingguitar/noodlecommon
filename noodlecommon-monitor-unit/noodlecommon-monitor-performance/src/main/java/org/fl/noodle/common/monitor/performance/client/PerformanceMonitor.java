@@ -1,4 +1,4 @@
-package org.fl.noodle.common.connect.expand.monitor;
+package org.fl.noodle.common.monitor.performance.client;
 
 public interface PerformanceMonitor {
 	

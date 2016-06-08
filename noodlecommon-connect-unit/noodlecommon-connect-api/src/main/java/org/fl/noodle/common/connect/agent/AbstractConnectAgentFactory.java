@@ -1,8 +1,8 @@
 package org.fl.noodle.common.connect.agent;
 
-import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
+import java.util.List;
 
-import org.fl.noodle.common.connect.expand.monitor.PerformanceMonitor;
+import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
 
 public abstract class AbstractConnectAgentFactory implements ConnectAgentFactory {
 
@@ -13,7 +13,7 @@ public abstract class AbstractConnectAgentFactory implements ConnectAgentFactory
 	
 	protected ConnectDistinguish connectDistinguish;
 	
-	protected PerformanceMonitor performanceMonitor;
+	protected List<Object> methodInterceptorList;
 
 	@Override
 	public ConnectAgent createConnectAgent(long connectId, String ip, int port, String url) {
@@ -39,8 +39,8 @@ public abstract class AbstractConnectAgentFactory implements ConnectAgentFactory
 	public void setConnectDistinguish(ConnectDistinguish connectDistinguish) {
 		this.connectDistinguish = connectDistinguish;
 	}
-	
-	public void setPerformanceMonitor(PerformanceMonitor performanceMonitor) {
-		this.performanceMonitor = performanceMonitor;
+
+	public void setMethodInterceptorList(List<Object> methodInterceptorList) {
+		this.methodInterceptorList = methodInterceptorList;
 	}
 }

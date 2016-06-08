@@ -1,15 +1,18 @@
 package org.fl.noodle.common.connect.agent;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.fl.noodle.common.connect.aop.ConnectThreadLocalStorage;
+import org.fl.noodle.common.connect.aop.NoodleReflectiveMethodInvocation;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
 import org.fl.noodle.common.connect.exception.ConnectDowngradeException;
 import org.fl.noodle.common.connect.exception.ConnectInvokeException;
@@ -22,10 +25,7 @@ import org.fl.noodle.common.connect.performance.ConnectPerformanceInfo;
 import org.fl.noodle.common.connect.performance.ConnectPerformanceNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.fl.noodle.common.connect.expand.monitor.PerformanceMonitor;
-import org.fl.noodle.common.connect.expand.monitor.constent.ModuleType;
-import org.fl.noodle.common.connect.expand.monitor.constent.MonitorType;
+import org.springframework.aop.support.AopUtils;
 
 public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHandler {
 	
@@ -57,9 +57,9 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 	
 	private ConcurrentMap<String, ConnectPerformanceNode> connectPerformanceNodeMap = new ConcurrentHashMap<String, ConnectPerformanceNode>();
 	
-	private PerformanceMonitor performanceMonitor;
-
-	public AbstractConnectAgent(long connectId, String ip, int port, String url, String type, int connectTimeout, int readTimeout, String encoding, int invalidLimitNum, ConnectDistinguish connectDistinguish, PerformanceMonitor performanceMonitor) {
+	private List<Object> methodInterceptorList = new ArrayList<Object>();
+	
+	public AbstractConnectAgent(long connectId, String ip, int port, String url, String type, int connectTimeout, int readTimeout, String encoding, int invalidLimitNum, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
 		this.connectId = connectId;
 		this.ip = ip;
 		this.port = port;
@@ -70,7 +70,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		this.encoding = encoding;
 		this.invalidLimitNum = invalidLimitNum;
 		this.connectDistinguish = connectDistinguish;
-		this.performanceMonitor = performanceMonitor;
+		this.methodInterceptorList = methodInterceptorList;
 		
 		Class<?>[] serviceInterfaces = new Class<?>[1];
 		serviceInterfaces[0] = getServiceInterfaces();
@@ -164,18 +164,11 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		
 		ConnectPerformanceNode connectPerformanceNode = getConnectPerformanceNode(connectDistinguish.getMethodKay(method, args));
 		
-		long threshold = 200;
-		
-		if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.before(connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId));
-
 		if (connectPerformanceInfo != null) {
-			
-			threshold = connectPerformanceInfo.getOvertimeLimitThreshold();
 			
 			if (connectPerformanceInfo.getIsDowngrade() == ConnectPerformanceInfo.IsDowngrade.YES) {
 				if (connectPerformanceInfo.getDowngradeType() == ConnectPerformanceInfo.DowngradeType.AVGTIME) {
 					if (connectPerformanceNode.getAvgTime() > connectPerformanceInfo.getAvgTimeLimitThreshold()) {
-						if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 						if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.T_EXCEPTION) {
 							throw new ConnectDowngradeException("connect downgrade for the net http connect agent"); 
 						} else if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.R_NULL) {
@@ -184,7 +177,6 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 					}						
 				} else if (connectPerformanceInfo.getDowngradeType() == ConnectPerformanceInfo.DowngradeType.OVERTIME) {
 					if (connectPerformanceNode.getOvertimeCount() > connectPerformanceInfo.getOvertimeLimitThreshold()) {
-						if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
 						if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.T_EXCEPTION) {
 							throw new ConnectDowngradeException("connect downgrade for the net http connect agent"); 
 						} else if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.R_NULL) {
@@ -196,10 +188,19 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		}
 				
 		try {
+			
+			ConnectThreadLocalStorage.put(ConnectThreadLocalStorage.StorageType.AGENT, this);
+			
 			long start = System.currentTimeMillis();
 			
-			Object Object = method.invoke(this, args);
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, true);
+			Object retVal = null;
+			
+			if (methodInterceptorList.isEmpty()) {
+				retVal = AopUtils.invokeJoinpointUsingReflection(this, method, args);
+			}
+			else {
+				retVal = new NoodleReflectiveMethodInvocation(proxy, this, method, args, this.getClass(), methodInterceptorList).proceed();
+			}
 
 			long costTime = System.currentTimeMillis() - start;			
 			connectPerformanceNode.addTotalTime(costTime);
@@ -210,28 +211,21 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 				}
 			}
 			
-			return Object;
-		} catch (IllegalAccessException e) {
+			return retVal;
+		} catch (Throwable e) {
 			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
-			throw e;
-		} catch (IllegalArgumentException e) {
-			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
-			throw e;
-		} catch (InvocationTargetException e) {
-			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getTargetException().getMessage());
-			if (e.getTargetException() instanceof ConnectRefusedException
-					|| e.getTargetException() instanceof ConnectResetException
-						|| e.getTargetException() instanceof ConnectTimeoutException) {
+			if (e instanceof ConnectRefusedException
+					|| e instanceof ConnectResetException
+						|| e instanceof ConnectTimeoutException) {
 				if (invalidCount.incrementAndGet() >= invalidLimitNum) {					
 					connectStatus.set(false);
 					logger.debug("invoke -> set connect status to false -> {}, invalidLimitNum:{}, invalidCount:{}", this, invalidLimitNum, invalidCount.get());
 				}
 			} 
 			
-			if (performanceMonitor != null && connectPerformanceInfo != null && connectPerformanceInfo.getIsMonitor()) performanceMonitor.after(connectDistinguish.getModuleName(args), connectDistinguish.getMethodKay(method, args), MonitorType.CONNECT.getCode(), ModuleType.SERVER.getCode(), String.valueOf(connectId), threshold, false);
-			throw e.getTargetException();
+			throw e;
+		} finally {
+			ConnectThreadLocalStorage.remove(ConnectThreadLocalStorage.StorageType.AGENT);
 		}
 	}
 	
@@ -283,9 +277,5 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		}
 		
 		return connectPerformanceNode;
-	}
-	
-	public void setPerformanceMonitor(PerformanceMonitor performanceMonitor) {
-		this.performanceMonitor = performanceMonitor;
 	}
 }

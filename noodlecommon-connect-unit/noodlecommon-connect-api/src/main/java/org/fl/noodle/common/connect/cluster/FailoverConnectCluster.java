@@ -1,6 +1,5 @@
 package org.fl.noodle.common.connect.cluster;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,15 +16,14 @@ import org.fl.noodle.common.connect.node.ConnectNode;
 import org.fl.noodle.common.connect.route.ConnectRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.fl.noodle.common.connect.expand.monitor.PerformanceMonitor;
+import org.springframework.aop.support.AopUtils;
 
 public class FailoverConnectCluster extends AbstractConnectCluster {
 	
 	private final static Logger logger = LoggerFactory.getLogger(FailoverConnectCluster.class);
 	
-	public FailoverConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, PerformanceMonitor performanceMonitor) {
-		super(serviceInterface, connectDistinguish, performanceMonitor);
+	public FailoverConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish) {
+		super(serviceInterface, connectDistinguish);
 	}
 
 	@Override
@@ -54,21 +52,15 @@ public class FailoverConnectCluster extends AbstractConnectCluster {
 			if (connectAgent != null) {
 				connectAgentListSelected.add(connectAgent);
 				try {
-					return method.invoke(connectAgent.getProxy(), args);
-				} catch (IllegalAccessException e) {
+					return AopUtils.invokeJoinpointUsingReflection(connectAgent.getProxy(), method, args);
+				} catch (Throwable e) {
 					logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
-					throw e;
-				} catch (IllegalArgumentException e) {
-					logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
-					throw e;
-				} catch (InvocationTargetException e) {
-					logger.error("doInvoke -> method.invoke -> Exception:{}", e.getTargetException().getMessage());
-					if (e.getTargetException() instanceof ConnectUnableException
-							|| e.getTargetException() instanceof ConnectResetException
-								|| e.getTargetException() instanceof ConnectTimeoutException) {
+					if (e instanceof ConnectUnableException
+							|| e instanceof ConnectResetException
+								|| e instanceof ConnectTimeoutException) {
 						continue;
 					} else {
-						throw e.getTargetException();
+						throw e;
 					}
 				}
 			} else {

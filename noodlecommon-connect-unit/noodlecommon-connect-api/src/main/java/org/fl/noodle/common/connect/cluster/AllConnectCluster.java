@@ -1,6 +1,5 @@
 package org.fl.noodle.common.connect.cluster;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.fl.noodle.common.connect.agent.ConnectAgent;
@@ -10,15 +9,14 @@ import org.fl.noodle.common.connect.manager.ConnectManager;
 import org.fl.noodle.common.connect.node.ConnectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.fl.noodle.common.connect.expand.monitor.PerformanceMonitor;
+import org.springframework.aop.support.AopUtils;
 
 public class AllConnectCluster extends AbstractConnectCluster {
 	
 	private final static Logger logger = LoggerFactory.getLogger(AllConnectCluster.class);
 	
-	public AllConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, PerformanceMonitor performanceMonitor) {
-		super(serviceInterface, connectDistinguish, performanceMonitor);
+	public AllConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish) {
+		super(serviceInterface, connectDistinguish);
 	}
 
 	@Override
@@ -39,16 +37,10 @@ public class AllConnectCluster extends AbstractConnectCluster {
 
 		for (ConnectAgent connectAgent : connectNode.getConnectAgentList()) {
 			try {
-				result = method.invoke(connectAgent.getProxy(), args);
-			} catch (IllegalAccessException e) {
+				result = AopUtils.invokeJoinpointUsingReflection(connectAgent.getProxy(), method, args);
+			} catch (Throwable e) {
 				logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
 				resultThrowable = e;
-			} catch (IllegalArgumentException e) {
-				logger.error("doInvoke -> method.invoke -> Exception:{}", e.getMessage());
-				resultThrowable = e;
-			} catch (InvocationTargetException e) {
-				logger.error("doInvoke -> method.invoke -> Exception:{}", e.getTargetException().getMessage());
-				resultThrowable = e.getTargetException();
 			}
 		}
 		
