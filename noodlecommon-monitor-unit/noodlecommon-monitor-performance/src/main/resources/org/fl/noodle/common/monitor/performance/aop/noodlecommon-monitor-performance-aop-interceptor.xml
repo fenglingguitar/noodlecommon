@@ -13,6 +13,6 @@
 	default-autowire="byName">
 	
 	<bean id="clusterPerformanceMethodInterceptor" class="org.fl.noodle.common.monitor.performance.aop.ClusterPerformanceMethodInterceptor" />
-	<bean id="performanceMethodInterceptor" class="org.fl.noodle.common.monitor.performance.aop.PerformanceMethodInterceptor" />
+	<bean id="agentPerformanceMethodInterceptor" class="org.fl.noodle.common.monitor.performance.aop.AgentPerformanceMethodInterceptor" />
 	
 </beans>

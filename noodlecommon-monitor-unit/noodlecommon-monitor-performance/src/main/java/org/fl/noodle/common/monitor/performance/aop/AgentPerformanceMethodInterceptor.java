@@ -14,13 +14,13 @@ import org.fl.noodle.common.monitor.performance.constent.MonitorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PerformanceMethodInterceptor implements MethodInterceptor {
+public class AgentPerformanceMethodInterceptor implements MethodInterceptor {
 
 	private PerformanceMonitor performanceMonitor;
 	
 	private ConnectDistinguish connectDistinguish;
 	
-	private final static Logger logger = LoggerFactory.getLogger(PerformanceMethodInterceptor.class);
+	private final static Logger logger = LoggerFactory.getLogger(AgentPerformanceMethodInterceptor.class);
 	
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
