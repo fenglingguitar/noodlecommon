@@ -2,6 +2,7 @@ package org.fl.noodle.common.connect.filter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,53 +10,49 @@ import org.fl.noodle.common.connect.aop.NoodleReflectiveMethodInvocation;
 import org.fl.noodle.common.connect.exception.ConnectInvokeException;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.factory.InitializingBean;
 
-public class ConnectFilter implements AopProxy, InvocationHandler, InitializingBean {
+public class ConnectFilter implements AopProxy, InvocationHandler {
 	
 	private List<Object> methodInterceptorList = new ArrayList<Object>();
 	
-	private AopProxy aopProxy;
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		
+	private Object target;
+	
+	private Object proxy;
+	
+	public ConnectFilter(Class<?> serviceInterface, Object target, List<Object> methodInterceptorList) {
+		Class<?>[] serviceInterfaces = new Class<?>[1];
+		serviceInterfaces[0] = serviceInterface;
+		proxy = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), serviceInterfaces, this);
+		this.target = target;
+		this.methodInterceptorList = methodInterceptorList;
 	}
 	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
-		if (aopProxy == null || aopProxy.getProxy() == null) {
+		if (target == null) {
 			throw new ConnectInvokeException("aopProxy is null");
 		}
 		
 		Object retVal = null;
 		
 		if (methodInterceptorList.isEmpty()) {
-			retVal = AopUtils.invokeJoinpointUsingReflection(aopProxy.getProxy(), method, args);
+			retVal = AopUtils.invokeJoinpointUsingReflection(target, method, args);
 		}
 		else {
-			retVal = new NoodleReflectiveMethodInvocation(proxy, aopProxy.getProxy(), method, args, aopProxy.getProxy().getClass(), methodInterceptorList).proceed();
+			retVal = new NoodleReflectiveMethodInvocation(proxy, target, method, args, target.getClass(), methodInterceptorList).proceed();
 		}
 		
 		return retVal;
 	}
 
-	public void setMethodInterceptorList(List<Object> methodInterceptorList) {
-		this.methodInterceptorList = methodInterceptorList;
-	}
-	
-	public void setAopProxy(AopProxy aopProxy) {
-		this.aopProxy = aopProxy;
-	}
-
 	@Override
 	public Object getProxy() {
-		return null;
+		return proxy;
 	}
 
 	@Override
 	public Object getProxy(ClassLoader classLoader) {
-		return null;
+		return proxy;
 	}
 }

@@ -4,6 +4,6 @@ public class AllConnectClusterFactory extends AbstractConnectClusterFactory {
 
 	@Override
 	public ConnectCluster createConnectCluster(Class<?> serviceInterface) {
-		return new AllConnectCluster(serviceInterface, connectDistinguish);
+		return new AllConnectCluster(serviceInterface, connectDistinguish, methodInterceptorList);
 	}
 }

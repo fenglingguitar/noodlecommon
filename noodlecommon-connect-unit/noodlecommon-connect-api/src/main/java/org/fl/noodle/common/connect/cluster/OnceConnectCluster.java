@@ -2,6 +2,7 @@ package org.fl.noodle.common.connect.cluster;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.fl.noodle.common.connect.agent.ConnectAgent;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
@@ -18,8 +19,8 @@ public class OnceConnectCluster extends AbstractConnectCluster {
 	
 	private final static Logger logger = LoggerFactory.getLogger(OnceConnectCluster.class);
 	
-	public OnceConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish) {
-		super(serviceInterface, connectDistinguish);
+	public OnceConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
+		super(serviceInterface, connectDistinguish, methodInterceptorList);
 	}
 
 	@Override

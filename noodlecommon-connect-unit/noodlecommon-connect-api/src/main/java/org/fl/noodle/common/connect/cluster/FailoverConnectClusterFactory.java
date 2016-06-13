@@ -4,6 +4,6 @@ public class FailoverConnectClusterFactory extends AbstractConnectClusterFactory
 
 	@Override
 	public ConnectCluster createConnectCluster(Class<?> serviceInterface) {
-		return new FailoverConnectCluster(serviceInterface, connectDistinguish);
+		return new FailoverConnectCluster(serviceInterface, connectDistinguish, methodInterceptorList);
 	}
 }
