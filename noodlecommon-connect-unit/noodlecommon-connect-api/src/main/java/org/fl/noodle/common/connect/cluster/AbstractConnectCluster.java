@@ -19,8 +19,6 @@ public abstract class AbstractConnectCluster implements ConnectCluster, Invocati
 	
 	protected ConnectDistinguish connectDistinguish;
 	
-	protected List<Object> methodInterceptorList;
-	
 	public AbstractConnectCluster (Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
 		Class<?>[] serviceInterfaces = new Class<?>[1];
 		serviceInterfaces[0] = serviceInterface;

@@ -3,7 +3,6 @@ package org.fl.noodle.common.connect.agent;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.fl.noodle.common.connect.aop.ConnectThreadLocalStorage;
-import org.fl.noodle.common.connect.aop.NoodleReflectiveMethodInvocation;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
 import org.fl.noodle.common.connect.exception.ConnectDowngradeException;
 import org.fl.noodle.common.connect.exception.ConnectInvokeException;
@@ -20,11 +18,13 @@ import org.fl.noodle.common.connect.exception.ConnectRefusedException;
 import org.fl.noodle.common.connect.exception.ConnectResetException;
 import org.fl.noodle.common.connect.exception.ConnectTimeoutException;
 import org.fl.noodle.common.connect.exception.ConnectUnableException;
+import org.fl.noodle.common.connect.filter.ConnectFilter;
 import org.fl.noodle.common.connect.manager.ConnectManager;
 import org.fl.noodle.common.connect.performance.ConnectPerformanceInfo;
 import org.fl.noodle.common.connect.performance.ConnectPerformanceNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
 
 public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHandler {
@@ -51,13 +51,13 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 	
 	private Object serviceProxy;
 	
+	private Object target;
+	
 	private AtomicInteger invalidCount = new AtomicInteger(0);
 	
 	private ConnectDistinguish connectDistinguish;
 	
 	private ConcurrentMap<String, ConnectPerformanceNode> connectPerformanceNodeMap = new ConcurrentHashMap<String, ConnectPerformanceNode>();
-	
-	private List<Object> methodInterceptorList = new ArrayList<Object>();
 	
 	public AbstractConnectAgent(long connectId, String ip, int port, String url, String type, int connectTimeout, int readTimeout, String encoding, int invalidLimitNum, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
 		this.connectId = connectId;
@@ -70,7 +70,13 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		this.encoding = encoding;
 		this.invalidLimitNum = invalidLimitNum;
 		this.connectDistinguish = connectDistinguish;
-		this.methodInterceptorList = methodInterceptorList;
+		
+		this.target = this;
+		
+		if (methodInterceptorList != null) {
+			AopProxy aopProxy = new ConnectFilter(getServiceInterfaces(), this, methodInterceptorList);
+			this.target = aopProxy.getProxy();
+		}
 		
 		Class<?>[] serviceInterfaces = new Class<?>[1];
 		serviceInterfaces[0] = getServiceInterfaces();
@@ -194,13 +200,8 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 			long start = System.currentTimeMillis();
 			
 			Object retVal = null;
-			
-			if (methodInterceptorList.isEmpty()) {
-				retVal = AopUtils.invokeJoinpointUsingReflection(this, method, args);
-			}
-			else {
-				retVal = new NoodleReflectiveMethodInvocation(proxy, this, method, args, this.getClass(), methodInterceptorList).proceed();
-			}
+
+			retVal = AopUtils.invokeJoinpointUsingReflection(target, method, args);
 
 			long costTime = System.currentTimeMillis() - start;			
 			connectPerformanceNode.addTotalTime(costTime);
