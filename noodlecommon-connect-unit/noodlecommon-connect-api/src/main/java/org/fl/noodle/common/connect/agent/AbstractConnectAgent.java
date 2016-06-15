@@ -3,6 +3,7 @@ package org.fl.noodle.common.connect.agent;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,17 +11,11 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.fl.noodle.common.connect.agent.aop.ConnectStatusMethodInterceptor;
+import org.fl.noodle.common.connect.agent.aop.FlowLimitMethodInterceptor;
 import org.fl.noodle.common.connect.aop.ConnectThreadLocalStorage;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
-import org.fl.noodle.common.connect.exception.ConnectDowngradeException;
-import org.fl.noodle.common.connect.exception.ConnectInvokeException;
-import org.fl.noodle.common.connect.exception.ConnectRefusedException;
-import org.fl.noodle.common.connect.exception.ConnectResetException;
-import org.fl.noodle.common.connect.exception.ConnectTimeoutException;
-import org.fl.noodle.common.connect.exception.ConnectUnableException;
 import org.fl.noodle.common.connect.filter.ConnectFilter;
-import org.fl.noodle.common.connect.manager.ConnectManager;
-import org.fl.noodle.common.connect.performance.ConnectPerformanceInfo;
 import org.fl.noodle.common.connect.performance.ConnectPerformanceNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,10 +68,19 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		
 		this.target = this;
 		
-		if (methodInterceptorList != null) {
-			AopProxy aopProxy = new ConnectFilter(getServiceInterfaces(), this, methodInterceptorList);
-			this.target = aopProxy.getProxy();
+		List<Object> methodInterceptorListAll = new ArrayList<Object>();
+		
+		if (methodInterceptorList != null && methodInterceptorList.size() > 0) {
+			for (Object object : methodInterceptorList) {
+				methodInterceptorListAll.add(object);
+			}
 		}
+		
+		methodInterceptorListAll.add(new ConnectStatusMethodInterceptor(this.connectDistinguish));
+		methodInterceptorListAll.add(new FlowLimitMethodInterceptor(this.connectDistinguish));
+		
+		AopProxy aopProxy = new ConnectFilter(getServiceInterfaces(), this, methodInterceptorListAll);
+		this.target = aopProxy.getProxy();
 		
 		Class<?>[] serviceInterfaces = new Class<?>[1];
 		serviceInterfaces[0] = getServiceInterfaces();
@@ -153,95 +157,18 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 	}
 
 	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		
-		if (connectStatus.get() == false) {
-			logger.error("invoke -> connect status is false -> {}", this);
-			throw new ConnectUnableException("connect disable for the net http connect agent");
-		}
-		
-		ConnectManager connectManager = connectDistinguish.getConnectManager();
-		if (connectManager == null) {
-			logger.error("invoke -> connectDistinguish.getConnectManager return null -> {}", this);
-			throw new ConnectInvokeException("no this connect manager");
-		}
-		
-		ConnectPerformanceInfo connectPerformanceInfo = connectManager.getConnectPerformanceInfo(connectDistinguish.getMethodKay(method, args));
-		
-		ConnectPerformanceNode connectPerformanceNode = getConnectPerformanceNode(connectDistinguish.getMethodKay(method, args));
-		
-		if (connectPerformanceInfo != null) {
-			
-			if (connectPerformanceInfo.getIsDowngrade() == ConnectPerformanceInfo.IsDowngrade.YES) {
-				if (connectPerformanceInfo.getDowngradeType() == ConnectPerformanceInfo.DowngradeType.AVGTIME) {
-					if (connectPerformanceNode.getAvgTime() > connectPerformanceInfo.getAvgTimeLimitThreshold()) {
-						if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.T_EXCEPTION) {
-							throw new ConnectDowngradeException("connect downgrade for the net http connect agent"); 
-						} else if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.R_NULL) {
-							return null;
-						}
-					}						
-				} else if (connectPerformanceInfo.getDowngradeType() == ConnectPerformanceInfo.DowngradeType.OVERTIME) {
-					if (connectPerformanceNode.getOvertimeCount() > connectPerformanceInfo.getOvertimeLimitThreshold()) {
-						if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.T_EXCEPTION) {
-							throw new ConnectDowngradeException("connect downgrade for the net http connect agent"); 
-						} else if (connectPerformanceInfo.getReturnType() == ConnectPerformanceInfo.ReturnType.R_NULL) {
-							return null;
-						}
-					}
-				}
-			}
-		}
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {		
 				
+		ConnectThreadLocalStorage.put(ConnectThreadLocalStorage.StorageType.AGENT, this);
+		
 		try {
-			
-			ConnectThreadLocalStorage.put(ConnectThreadLocalStorage.StorageType.AGENT, this);
-			
-			long start = System.currentTimeMillis();
-			
-			Object retVal = null;
-
-			retVal = AopUtils.invokeJoinpointUsingReflection(target, method, args);
-
-			long costTime = System.currentTimeMillis() - start;			
-			connectPerformanceNode.addTotalTime(costTime);
-			connectPerformanceNode.addTotalCount();
-			if (connectPerformanceInfo != null) {				
-				if (costTime > connectPerformanceInfo.getOvertimeThreshold()) {
-					connectPerformanceNode.addOvertimeCount();
-				}
-			}
-			
-			return retVal;
+			return AopUtils.invokeJoinpointUsingReflection(target, method, args);
 		} catch (Throwable e) {
 			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
-			if (e instanceof ConnectRefusedException
-					|| e instanceof ConnectResetException
-						|| e instanceof ConnectTimeoutException) {
-				if (invalidCount.incrementAndGet() >= invalidLimitNum) {					
-					connectStatus.set(false);
-					logger.debug("invoke -> set connect status to false -> {}, invalidLimitNum:{}, invalidCount:{}", this, invalidLimitNum, invalidCount.get());
-				}
-			} 
-			
 			throw e;
 		} finally {
 			ConnectThreadLocalStorage.remove(ConnectThreadLocalStorage.StorageType.AGENT);
 		}
-	}
-	
-	@Override
-	public String toString() {
-		return new StringBuilder()
-					.append("connectId:").append(connectId).append(", ")
-					.append("ip:").append(ip).append(", ")
-					.append("port:").append(port).append(", ")
-					.append("url:").append(url).append(", ")
-					.append("type:").append(type).append(", ")
-					.append("connectTimeout:").append(connectTimeout).append(", ")
-					.append("readTimeout:").append(readTimeout).append(", ")
-					.append("encoding:").append(encoding)
-					.toString();
 	}
 	
 	@Override
@@ -266,7 +193,18 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		return getConnectPerformanceNode(methodKey).getAvgTime();
 	}
 	
-	private ConnectPerformanceNode getConnectPerformanceNode(String methodKay) {
+	@Override
+	public AtomicInteger getInvalidCount() {
+		return invalidCount;
+	}
+	
+	@Override
+	public int getInvalidLimitNum() {
+		return invalidLimitNum;
+	}
+	
+	@Override
+	public ConnectPerformanceNode getConnectPerformanceNode(String methodKay) {
 		
 		ConnectPerformanceNode connectPerformanceNode = connectPerformanceNodeMap.get(methodKay);
 		if (connectPerformanceNode == null) {
@@ -278,5 +216,24 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		}
 		
 		return connectPerformanceNode;
+	}
+	
+	@Override
+	public AtomicBoolean getConnectStatus() {
+		return connectStatus;
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder()
+					.append("connectId:").append(connectId).append(", ")
+					.append("ip:").append(ip).append(", ")
+					.append("port:").append(port).append(", ")
+					.append("url:").append(url).append(", ")
+					.append("type:").append(type).append(", ")
+					.append("connectTimeout:").append(connectTimeout).append(", ")
+					.append("readTimeout:").append(readTimeout).append(", ")
+					.append("encoding:").append(encoding)
+					.toString();
 	}
 }
