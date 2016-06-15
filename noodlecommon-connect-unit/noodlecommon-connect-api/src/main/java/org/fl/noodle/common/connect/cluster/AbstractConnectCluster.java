@@ -38,11 +38,6 @@ public abstract class AbstractConnectCluster implements ConnectCluster, Invocati
 	}
 	
 	@Override
-	public Object getProxy(ClassLoader classLoader) {
-		return serviceProxy;
-	}
-	
-	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		return doInvoke(method, args);
 	}
