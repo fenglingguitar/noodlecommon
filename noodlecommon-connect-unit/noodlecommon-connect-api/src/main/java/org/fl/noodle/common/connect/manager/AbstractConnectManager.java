@@ -73,7 +73,7 @@ public abstract class AbstractConnectManager implements ConnectManager {
 					entry.getValue().calculate();
 				}
 			}
-		}, calculateAvgTimeInterval);
+		}, calculateAvgTimeInterval, calculateAvgTimeInterval);
 	}
 	
 	public void destroy() {
