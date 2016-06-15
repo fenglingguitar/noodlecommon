@@ -2,6 +2,7 @@ package org.fl.noodle.common.connect.agent;
 
 import java.util.List;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
 
 public abstract class AbstractConnectAgentFactory implements ConnectAgentFactory {
@@ -13,7 +14,7 @@ public abstract class AbstractConnectAgentFactory implements ConnectAgentFactory
 	
 	protected ConnectDistinguish connectDistinguish;
 	
-	protected List<Object> methodInterceptorList;
+	protected List<MethodInterceptor> methodInterceptorList;
 
 	@Override
 	public ConnectAgent createConnectAgent(long connectId, String ip, int port, String url) {
@@ -40,7 +41,7 @@ public abstract class AbstractConnectAgentFactory implements ConnectAgentFactory
 		this.connectDistinguish = connectDistinguish;
 	}
 
-	public void setMethodInterceptorList(List<Object> methodInterceptorList) {
+	public void setMethodInterceptorList(List<MethodInterceptor> methodInterceptorList) {
 		this.methodInterceptorList = methodInterceptorList;
 	}
 }

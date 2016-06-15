@@ -1,45 +1,49 @@
 package org.fl.noodle.common.connect.cluster;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.List;
 
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
-import org.fl.noodle.common.connect.filter.ConnectFilter;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.AopProxy;
 
-public abstract class AbstractConnectCluster implements ConnectCluster, InvocationHandler {
+import org.springframework.aop.framework.ProxyFactory;
+
+public abstract class AbstractConnectCluster implements ConnectCluster, MethodInterceptor {
 
 	//private final static Logger logger = LoggerFactory.getLogger(AbstractConnectCluster.class);
 	
-	private Object serviceProxy;
+	private Object proxy;
 	
 	protected ConnectDistinguish connectDistinguish;
 	
-	public AbstractConnectCluster (Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
-		Class<?>[] serviceInterfaces = new Class<?>[1];
-		serviceInterfaces[0] = serviceInterface;
-		serviceProxy = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), serviceInterfaces, this);
+	public AbstractConnectCluster (Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList) {
 		
-		if (methodInterceptorList != null) {
-			AopProxy aopProxy = new ConnectFilter(serviceInterface, serviceProxy, methodInterceptorList);
-			serviceProxy = aopProxy.getProxy();
+		ProxyFactory proxyFactory = new ProxyFactory();
+		proxyFactory.addInterface(serviceInterface);
+		if (methodInterceptorList != null && methodInterceptorList.size() > 0) {
+			for (Object object : methodInterceptorList) {
+				proxyFactory.addAdvice((Advice)object);
+			}
+			
 		}
-		
+		proxyFactory.addAdvice(this);
+		this.proxy = proxyFactory.getProxy();
+
 		this.connectDistinguish = connectDistinguish;
 	}
 	
 	@Override
 	public Object getProxy() {
-		return serviceProxy;
+		return proxy;
 	}
 	
 	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		return doInvoke(method, args);
+	public Object invoke(MethodInvocation invocation) throws Throwable {
+		return doInvoke(invocation.getMethod(), invocation.getArguments());
 	}
 	
 	protected abstract Object doInvoke(Method method, Object[] args) throws Throwable;

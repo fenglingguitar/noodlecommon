@@ -1,9 +1,5 @@
 package org.fl.noodle.common.connect.agent;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,18 +7,19 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 import org.fl.noodle.common.connect.agent.aop.ConnectStatusMethodInterceptor;
 import org.fl.noodle.common.connect.agent.aop.FlowLimitMethodInterceptor;
 import org.fl.noodle.common.connect.aop.ConnectThreadLocalStorage;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
-import org.fl.noodle.common.connect.filter.ConnectFilter;
 import org.fl.noodle.common.connect.performance.ConnectPerformanceNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.AopProxy;
-import org.springframework.aop.support.AopUtils;
+import org.springframework.aop.framework.ProxyFactory;
 
-public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHandler {
+public abstract class AbstractConnectAgent implements ConnectAgent, MethodInterceptor {
 	
 	private final static Logger logger = LoggerFactory.getLogger(AbstractConnectAgent.class);
 	
@@ -44,9 +41,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 
 	private AtomicBoolean connectStatus = new AtomicBoolean(false);
 	
-	private Object serviceProxy;
-	
-	private Object target;
+	private Object proxy;
 	
 	private AtomicInteger invalidCount = new AtomicInteger(0);
 	
@@ -54,7 +49,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 	
 	private ConcurrentMap<String, ConnectPerformanceNode> connectPerformanceNodeMap = new ConcurrentHashMap<String, ConnectPerformanceNode>();
 	
-	public AbstractConnectAgent(long connectId, String ip, int port, String url, String type, int connectTimeout, int readTimeout, String encoding, int invalidLimitNum, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
+	public AbstractConnectAgent(long connectId, String ip, int port, String url, String type, int connectTimeout, int readTimeout, String encoding, int invalidLimitNum, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList) {
 		this.connectId = connectId;
 		this.ip = ip;
 		this.port = port;
@@ -66,25 +61,18 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 		this.invalidLimitNum = invalidLimitNum;
 		this.connectDistinguish = connectDistinguish;
 		
-		this.target = this;
-		
-		List<Object> methodInterceptorListAll = new ArrayList<Object>();
-		
+		ProxyFactory proxyFactory = new ProxyFactory();
+		proxyFactory.addInterface(getServiceInterfaces());
+		proxyFactory.addAdvice(this);
 		if (methodInterceptorList != null && methodInterceptorList.size() > 0) {
 			for (Object object : methodInterceptorList) {
-				methodInterceptorListAll.add(object);
+				proxyFactory.addAdvice((Advice)object);
 			}
 		}
-		
-		methodInterceptorListAll.add(new ConnectStatusMethodInterceptor(this.connectDistinguish));
-		methodInterceptorListAll.add(new FlowLimitMethodInterceptor(this.connectDistinguish));
-		
-		AopProxy aopProxy = new ConnectFilter(getServiceInterfaces(), this, methodInterceptorListAll);
-		this.target = aopProxy.getProxy();
-		
-		Class<?>[] serviceInterfaces = new Class<?>[1];
-		serviceInterfaces[0] = getServiceInterfaces();
-		this.serviceProxy = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), serviceInterfaces, this);
+		proxyFactory.addAdvice(new ConnectStatusMethodInterceptor(this.connectDistinguish));
+		proxyFactory.addAdvice(new FlowLimitMethodInterceptor(this.connectDistinguish));
+		proxyFactory.setTarget(this);
+		this.proxy = proxyFactory.getProxy();
 	}
 	
 	@Override
@@ -153,16 +141,16 @@ public abstract class AbstractConnectAgent implements ConnectAgent, InvocationHa
 	
 	@Override
 	public Object getProxy() {
-		return serviceProxy;
+		return proxy;
 	}
-
+	
 	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {		
-				
+	public Object invoke(MethodInvocation invocation) throws Throwable {
+		
 		ConnectThreadLocalStorage.put(ConnectThreadLocalStorage.StorageType.AGENT, this);
 		
 		try {
-			return AopUtils.invokeJoinpointUsingReflection(target, method, args);
+			return invocation.proceed();
 		} catch (Throwable e) {
 			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
 			throw e;

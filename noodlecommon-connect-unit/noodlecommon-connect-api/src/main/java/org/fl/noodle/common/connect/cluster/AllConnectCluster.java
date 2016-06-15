@@ -3,6 +3,7 @@ package org.fl.noodle.common.connect.cluster;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.fl.noodle.common.connect.agent.ConnectAgent;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
 import org.fl.noodle.common.connect.exception.ConnectInvokeException;
@@ -16,7 +17,7 @@ public class AllConnectCluster extends AbstractConnectCluster {
 	
 	private final static Logger logger = LoggerFactory.getLogger(AllConnectCluster.class);
 	
-	public AllConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<Object> methodInterceptorList) {
+	public AllConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList) {
 		super(serviceInterface, connectDistinguish, methodInterceptorList);
 	}
 
