@@ -21,6 +21,5 @@
   
   <modules>
     <module>noodlecommon-connect-api</module>
-    <module>noodlecommon-connect-expand-api</module>
   </modules>
 </project>
