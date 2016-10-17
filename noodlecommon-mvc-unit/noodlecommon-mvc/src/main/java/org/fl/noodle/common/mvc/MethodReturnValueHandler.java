@@ -71,6 +71,8 @@ public class MethodReturnValueHandler extends AbstractMessageSendProcessor imple
 			serializeString = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss");
 		} else if (type.equals("json-java")) {			
 			serializeString = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss", SerializerFeature.WriteClassName);
+		} else if (type.equals("json-millisecond")) {			
+			serializeString = JSON.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss.SSS");
 		} else {
 			if (logger.isErrorEnabled()) {
 				logger.debug("handleReturnValue -> serialize string -> exception:No this serialize type");
