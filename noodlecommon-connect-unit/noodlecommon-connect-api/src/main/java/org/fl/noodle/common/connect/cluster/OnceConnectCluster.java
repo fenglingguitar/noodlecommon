@@ -7,9 +7,7 @@ import java.util.List;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.fl.noodle.common.connect.agent.ConnectAgent;
 import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
-import org.fl.noodle.common.connect.exception.ConnectInvokeException;
 import org.fl.noodle.common.connect.exception.ConnectNoAliveException;
-import org.fl.noodle.common.connect.manager.ConnectManager;
 import org.fl.noodle.common.connect.node.ConnectNode;
 import org.fl.noodle.common.connect.route.ConnectRoute;
 import org.slf4j.Logger;
@@ -27,20 +25,8 @@ public class OnceConnectCluster extends AbstractConnectCluster {
 	@Override
 	public Object doInvoke(Method method, Object[] args) throws Throwable {
 		
-		ConnectManager connectManager = connectDistinguish.getConnectManager();
-		if (connectManager == null) {
-			throw new ConnectInvokeException("no this connect manager");
-		}
-		
-		ConnectNode connectNode = connectManager.getConnectNode(connectDistinguish.getNodeName(args));
-		if (connectNode == null) {
-			throw new ConnectInvokeException("no this connect node");
-		}
-				
-		ConnectRoute connectRoute = connectManager.getConnectRoute(connectDistinguish.getRouteName(args));
-		if (connectRoute == null) {
-			throw new ConnectInvokeException("no this connect route");
-		}
+		ConnectNode connectNode = getConnectNode(args);
+		ConnectRoute connectRoute = getConnectRoute(args);
 				
 		ConnectAgent connectAgent = null;		
 
@@ -53,7 +39,7 @@ public class OnceConnectCluster extends AbstractConnectCluster {
 				throw e;
 			}
 		} else {
-			connectManager.runUpdate();
+			getConnectManager().runUpdate();
 			throw new ConnectNoAliveException("all connect agent is no alive");
 		}
 	}

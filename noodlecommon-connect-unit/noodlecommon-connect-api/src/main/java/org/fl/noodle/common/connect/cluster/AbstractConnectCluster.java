@@ -10,6 +10,10 @@ import org.fl.noodle.common.connect.distinguish.ConnectDistinguish;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
+import org.fl.noodle.common.connect.exception.ConnectInvokeException;
+import org.fl.noodle.common.connect.manager.ConnectManager;
+import org.fl.noodle.common.connect.node.ConnectNode;
+import org.fl.noodle.common.connect.route.ConnectRoute;
 import org.springframework.aop.framework.ProxyFactory;
 
 public abstract class AbstractConnectCluster implements ConnectCluster, MethodInterceptor {
@@ -47,4 +51,28 @@ public abstract class AbstractConnectCluster implements ConnectCluster, MethodIn
 	}
 	
 	protected abstract Object doInvoke(Method method, Object[] args) throws Throwable;
+	
+	protected ConnectManager getConnectManager() throws ConnectInvokeException {
+		ConnectManager connectManager = connectDistinguish.getConnectManager();
+		if (connectManager == null) {
+			throw new ConnectInvokeException("no this connect manager");
+		}
+		return connectManager;
+	}
+	
+	protected ConnectNode getConnectNode(Object[] args) throws ConnectInvokeException {
+		ConnectNode connectNode = getConnectManager().getConnectNode(connectDistinguish.getNodeName(args));
+		if (connectNode == null) {
+			throw new ConnectInvokeException("no this connect node");
+		}
+		return connectNode;
+	}
+	
+	protected ConnectRoute getConnectRoute(Object[] args) throws ConnectInvokeException {
+		ConnectRoute connectRoute = getConnectManager().getConnectRoute(connectDistinguish.getRouteName(args));
+		if (connectRoute == null) {
+			throw new ConnectInvokeException("no this connect route");
+		}
+		return connectRoute;
+	}
 }

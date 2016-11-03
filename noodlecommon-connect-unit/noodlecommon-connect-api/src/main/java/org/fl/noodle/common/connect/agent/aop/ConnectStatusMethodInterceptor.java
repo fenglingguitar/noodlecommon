@@ -42,7 +42,7 @@ public class ConnectStatusMethodInterceptor implements MethodInterceptor {
 			throw new ConnectInvokeException("no this connect manager");
 		}
 		
-		ConnectAgent connectAgent = (ConnectAgent)ConnectThreadLocalStorage.get(ConnectThreadLocalStorage.StorageType.AGENT);
+		ConnectAgent connectAgent = (ConnectAgent)ConnectThreadLocalStorage.get(ConnectThreadLocalStorage.StorageType.AGENT.getCode());
 		if (connectAgent == null) {
 			logger.error("invoke -> ConnectThreadLocalStorage.get agent return null");
 			throw new ConnectInvokeException("no this connect agent");

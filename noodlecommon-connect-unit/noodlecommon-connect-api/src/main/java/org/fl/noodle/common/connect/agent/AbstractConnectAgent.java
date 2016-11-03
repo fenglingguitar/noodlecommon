@@ -147,7 +147,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, MethodInterc
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		
-		ConnectThreadLocalStorage.put(ConnectThreadLocalStorage.StorageType.AGENT, this);
+		ConnectThreadLocalStorage.put(ConnectThreadLocalStorage.StorageType.AGENT.getCode(), this);
 		
 		try {
 			return invocation.proceed();
@@ -155,7 +155,7 @@ public abstract class AbstractConnectAgent implements ConnectAgent, MethodInterc
 			logger.error("invoke -> method.invoke -> {} -> Exception:{}", this, e.getMessage());
 			throw e;
 		} finally {
-			ConnectThreadLocalStorage.remove(ConnectThreadLocalStorage.StorageType.AGENT);
+			ConnectThreadLocalStorage.remove(ConnectThreadLocalStorage.StorageType.AGENT.getCode());
 		}
 	}
 	
