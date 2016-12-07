@@ -189,11 +189,15 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 	}
 	
 	private void doStart() {
-		lockChangeHandler.onMessageStart();
+		if (lockChangeHandler != null) {			
+			lockChangeHandler.onMessageStart();
+		}
 	}
 
 	private void doStop() {
-		lockChangeHandler.onMessageStop();
+		if (lockChangeHandler != null) {			
+			lockChangeHandler.onMessageStop();
+		}
 		stopDo();
 	}
 	
