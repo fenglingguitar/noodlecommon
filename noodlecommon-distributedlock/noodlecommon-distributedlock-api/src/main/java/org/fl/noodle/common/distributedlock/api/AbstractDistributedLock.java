@@ -46,7 +46,6 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 				doStart();
 				while (true) {
 					if (!doKeepAlive()) {
-						status.set(false);
 						while(!doGetAlive()) {
 							startSleep(sleepTimeGetAlive);
 							if (stopSign) {
@@ -59,7 +58,6 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 							return;
 						}
 					} 
-					status.set(true);
 					notifyAllForLocker();
 					startSleep(sleepTimeKeepAlive);
 					if (stopSign) {
@@ -160,6 +158,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 	private boolean doGetAlive() {
 		timeSync(true);
 		if (getAlive()) {
+			status.set(true);
 			if (lockChangeHandler != null) {
 				lockChangeHandler.onMessageGetLock();				
 			}
@@ -169,10 +168,14 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 	}
 	
 	private boolean doKeepAlive() {
+		if (status.get() == false) {
+			return false;
+		}
 		timeSync(true);
 		if (keepAlive()) {
 			return true;
 		}
+		status.set(false);
 		if (lockChangeHandler != null) {
 			lockChangeHandler.onMessageLossLock();			
 		}
