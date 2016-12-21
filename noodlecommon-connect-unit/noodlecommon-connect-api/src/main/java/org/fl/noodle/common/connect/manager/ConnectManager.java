@@ -16,4 +16,10 @@ public interface ConnectManager {
 	public ConnectCluster getConnectCluster(String clusterName);
 	public ConnectRoute getConnectRoute(String routeName);
 	public ConnectPerformanceInfo getConnectPerformanceInfo(String methodKey);
+	
+	public void start();
+	public void destroy();
+	public long getBootPriority();
+	
+	public String getManagerName();
 }

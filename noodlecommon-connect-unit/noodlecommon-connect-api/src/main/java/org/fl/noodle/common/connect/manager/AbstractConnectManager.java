@@ -49,9 +49,14 @@ public abstract class AbstractConnectManager implements ConnectManager {
 	protected volatile boolean stopSign = false;
 	private Stopping stopping = new Stopping();
 	
+	private long bootPriority;
+	
+	@Override
 	public void start() {
 		
 		stopping.stopInit(1);
+		
+		runUpdateNow();
 		
 		executorService.execute(new Runnable() {
 			@Override
@@ -63,9 +68,7 @@ public abstract class AbstractConnectManager implements ConnectManager {
 				destroyConnectAgent();
 				stopping.stopDo();
 			}
-		});		
-		
-		ConnectManagerPool.addConnectManager(getManagerName(), this);
+		});
 		
 		(new Timer(true)).schedule(new TimerTask() {
 			public void run() {
@@ -76,6 +79,7 @@ public abstract class AbstractConnectManager implements ConnectManager {
 		}, calculateAvgTimeInterval, calculateAvgTimeInterval);
 	}
 	
+	@Override
 	public void destroy() {
 		stopSign = true;
 		do {				
@@ -129,7 +133,6 @@ public abstract class AbstractConnectManager implements ConnectManager {
 	
 	protected abstract void updateConnectAgent();
 	protected abstract void destroyConnectAgent();
-	protected abstract String getManagerName();
 
 	public void setSuspendTime(long suspendTime) {
 		this.suspendTime = suspendTime;
@@ -154,5 +157,14 @@ public abstract class AbstractConnectManager implements ConnectManager {
 
 	public void setConnectSerializeFactoryMap(Map<String, ConnectSerializeFactory> connectSerializeFactoryMap) {
 		this.connectSerializeFactoryMap = connectSerializeFactoryMap;
+	}
+
+	@Override
+	public long getBootPriority() {
+		return bootPriority;
+	}
+
+	public void setBootPriority(long bootPriority) {
+		this.bootPriority = bootPriority;
 	}
 }
