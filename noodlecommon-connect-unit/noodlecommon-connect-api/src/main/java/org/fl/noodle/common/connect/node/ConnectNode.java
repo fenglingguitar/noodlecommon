@@ -10,6 +10,9 @@ public interface ConnectNode {
 	public List<ConnectAgent> getConnectAgentList();
 	public void updateConnectAgentList(List<ConnectAgent> connectAgentList);
 	public boolean isContainsConnectAgent(ConnectAgent connectAgent);
+	
+	public void addConnectAgent(ConnectAgent connectAgent);
+	public void removeConnectAgent(ConnectAgent connectAgent);
 
 	public void addChildConnectNode(long key, ConnectNode connectNode);
 	public ConnectNode getChildConnectNode(long key);

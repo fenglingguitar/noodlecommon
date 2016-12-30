@@ -50,6 +50,21 @@ public class ConnectNodeImpl implements ConnectNode {
 		return connectAgentList.contains(connectAgent);
 	}
 	
+
+	@Override
+	public void addConnectAgent(ConnectAgent connectAgent) {
+		connectAgentList.add(connectAgent);
+	}
+
+	@Override
+	public void removeConnectAgent(ConnectAgent connectAgent) {
+		for (ConnectAgent connectAgentIt : connectAgentList) {
+			if (connectAgentIt.getConnectId() == connectAgent.getConnectId()) {
+				connectAgentList.remove(connectAgentIt);
+			}
+		}
+	}
+	
 	@Override
 	public void addChildConnectNode(long key, ConnectNode connectNode) {
 		childConnectNodeMap.put(key, connectNode);
