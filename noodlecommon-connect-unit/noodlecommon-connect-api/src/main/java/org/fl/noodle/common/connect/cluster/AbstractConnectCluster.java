@@ -20,11 +20,13 @@ public abstract class AbstractConnectCluster implements ConnectCluster, MethodIn
 
 	//private final static Logger logger = LoggerFactory.getLogger(AbstractConnectCluster.class);
 	
+	protected String type;
+	
 	private Object proxy;
 	
 	protected ConnectDistinguish connectDistinguish;
 	
-	public AbstractConnectCluster (Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList) {
+	public AbstractConnectCluster (Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList, String type) {
 		
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.addInterface(serviceInterface);
@@ -38,6 +40,8 @@ public abstract class AbstractConnectCluster implements ConnectCluster, MethodIn
 		this.proxy = proxyFactory.getProxy();
 
 		this.connectDistinguish = connectDistinguish;
+		
+		this.type = type;
 	}
 	
 	@Override
@@ -74,5 +78,10 @@ public abstract class AbstractConnectCluster implements ConnectCluster, MethodIn
 			throw new ConnectInvokeException("no this connect route");
 		}
 		return connectRoute;
+	}
+
+	@Override
+	public String getType() {
+		return type;
 	}
 }

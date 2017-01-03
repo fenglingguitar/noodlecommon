@@ -8,6 +8,12 @@ import org.fl.noodle.common.connect.agent.ConnectAgent;
 
 public abstract class AbstractConnectRoute implements ConnectRoute {
 	
+	protected String type;
+	
+	public AbstractConnectRoute(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public ConnectAgent selectConnect(List<ConnectAgent> connectAgentList, List<ConnectAgent> connectAgentListSelected, String methodKey) {
 		
@@ -55,5 +61,10 @@ public abstract class AbstractConnectRoute implements ConnectRoute {
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public String getType() {
+		return type;
 	}
 }

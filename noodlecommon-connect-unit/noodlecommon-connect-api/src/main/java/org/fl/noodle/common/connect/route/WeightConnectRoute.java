@@ -2,9 +2,14 @@ package org.fl.noodle.common.connect.route;
 
 import java.util.List;
 import java.util.Random;
+
 import org.fl.noodle.common.connect.agent.ConnectAgent;
 
 public class WeightConnectRoute extends AbstractConnectRoute {
+
+	public WeightConnectRoute(String type) {
+		super(type);
+	}
 
 	@Override
 	protected ConnectAgent doSelectConnect(List<ConnectAgent> connectAgentList, String methodKey) {

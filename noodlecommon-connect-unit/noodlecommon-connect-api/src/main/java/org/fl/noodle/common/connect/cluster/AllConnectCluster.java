@@ -16,8 +16,8 @@ public class AllConnectCluster extends AbstractConnectCluster {
 	
 	private final static Logger logger = LoggerFactory.getLogger(AllConnectCluster.class);
 	
-	public AllConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList) {
-		super(serviceInterface, connectDistinguish, methodInterceptorList);
+	public AllConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList, String type) {
+		super(serviceInterface, connectDistinguish, methodInterceptorList, type);
 	}
 
 	@Override

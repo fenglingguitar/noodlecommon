@@ -21,8 +21,8 @@ public class FailoverConnectCluster extends AbstractConnectCluster {
 	
 	private final static Logger logger = LoggerFactory.getLogger(FailoverConnectCluster.class);
 	
-	public FailoverConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList) {
-		super(serviceInterface, connectDistinguish, methodInterceptorList);
+	public FailoverConnectCluster(Class<?> serviceInterface, ConnectDistinguish connectDistinguish, List<MethodInterceptor> methodInterceptorList, String type) {
+		super(serviceInterface, connectDistinguish, methodInterceptorList, type);
 	}
 
 	@Override
