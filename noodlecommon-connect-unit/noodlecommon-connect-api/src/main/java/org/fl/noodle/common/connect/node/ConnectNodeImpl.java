@@ -6,12 +6,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.fl.noodle.common.connect.agent.ConnectAgent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConnectNodeImpl implements ConnectNode {
 	
-	private final static Logger logger = LoggerFactory.getLogger(ConnectNodeImpl.class);
+	//private final static Logger logger = LoggerFactory.getLogger(ConnectNodeImpl.class);
 	
 	protected String nodeName; 
 	
@@ -24,25 +22,13 @@ public class ConnectNodeImpl implements ConnectNode {
 	}
 	
 	@Override
-	public List<ConnectAgent> getConnectAgentList() {
+	public List<ConnectAgent> getHealthyConnectAgentList() {
 		for (ConnectAgent connectAgent : connectAgentList) {
 			if (!connectAgent.isHealthyConnect()) {
 				connectAgentList.remove(connectAgent);
 			}
 		}
 		return connectAgentList;
-	}
-	
-	@Override
-	public void updateConnectAgentList(List<ConnectAgent> connectAgentListNew) {
-		
-		connectAgentList.addAllAbsent(connectAgentListNew);
-		for (ConnectAgent connectAgent : connectAgentList) {
-			if (!connectAgentListNew.contains(connectAgent)) {
-				connectAgentList.remove(connectAgent);
-				logger.debug("updateConnectAgentList -> remove connect -> {}, {}", this, connectAgent);
-			}
-		}
 	}
 	
 	@Override
@@ -58,11 +44,12 @@ public class ConnectNodeImpl implements ConnectNode {
 
 	@Override
 	public void removeConnectAgent(ConnectAgent connectAgent) {
-		for (ConnectAgent connectAgentIt : connectAgentList) {
-			if (connectAgentIt.getConnectId() == connectAgent.getConnectId()) {
-				connectAgentList.remove(connectAgentIt);
-			}
-		}
+		connectAgentList.remove(connectAgent);
+	}
+	
+	@Override
+	public List<ConnectAgent> getAllConnectAgentList() {
+		return connectAgentList;
 	}
 	
 	@Override

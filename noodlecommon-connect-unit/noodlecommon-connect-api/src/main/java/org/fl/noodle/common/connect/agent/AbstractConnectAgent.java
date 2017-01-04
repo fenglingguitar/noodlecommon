@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 
 public abstract class AbstractConnectAgent implements ConnectAgent, MethodInterceptor {
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(AbstractConnectAgent.class);
 	
 	protected long connectId;
@@ -212,16 +212,41 @@ public abstract class AbstractConnectAgent implements ConnectAgent, MethodInterc
 	}
 	
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (connectId ^ (connectId >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractConnectAgent other = (AbstractConnectAgent) obj;
+		if (connectId != other.connectId)
+			return false;
+		return true;
+	}
+	
+	@Override
 	public String toString() {
-		return new StringBuilder()
-					.append("connectId:").append(connectId).append(", ")
-					.append("ip:").append(ip).append(", ")
-					.append("port:").append(port).append(", ")
-					.append("url:").append(url).append(", ")
-					.append("type:").append(type).append(", ")
-					.append("connectTimeout:").append(connectTimeout).append(", ")
-					.append("readTimeout:").append(readTimeout).append(", ")
-					.append("encoding:").append(encoding)
+		return new StringBuilder("AbstractConnectAgent [")
+					.append("connectId:").append(connectId).append(",")
+					.append("ip:").append(ip).append(",")
+					.append("port:").append(port).append(",")
+					.append("url:").append(url).append(",")
+					.append("type:").append(type).append(",")
+					.append("connectTimeout:").append(connectTimeout).append(",")
+					.append("readTimeout:").append(readTimeout).append(",")
+					.append("encoding:").append(encoding).append(",")
+					.append("invalidLimitNum:").append(invalidLimitNum).append(",")
+					.append("weight:").append(weight).append(",")
+					.append("connectStatus:").append(connectStatus).append("]")
 					.toString();
 	}
 }

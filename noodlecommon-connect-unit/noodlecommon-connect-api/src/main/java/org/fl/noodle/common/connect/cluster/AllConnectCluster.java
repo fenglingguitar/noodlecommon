@@ -25,7 +25,7 @@ public class AllConnectCluster extends AbstractConnectCluster {
 		
 		ConnectNode connectNode = getConnectNode(args);
 		
-		if (connectNode.getConnectAgentList().isEmpty()) {
+		if (connectNode.getHealthyConnectAgentList().isEmpty()) {
 			getConnectManager().runUpdate();
 			throw new ConnectNoAliveException("all connect agent is no alive");
 		}
@@ -33,7 +33,7 @@ public class AllConnectCluster extends AbstractConnectCluster {
 		Object result = null;
 		Throwable resultThrowable = null;
 		
-		for (ConnectAgent connectAgent : connectNode.getConnectAgentList()) {
+		for (ConnectAgent connectAgent : connectNode.getHealthyConnectAgentList()) {
 			try {
 				result = AopUtils.invokeJoinpointUsingReflection(connectAgent.getProxy(), method, args);
 			} catch (Throwable e) {

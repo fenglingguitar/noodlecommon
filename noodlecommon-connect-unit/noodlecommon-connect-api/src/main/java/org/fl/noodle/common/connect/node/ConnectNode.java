@@ -7,12 +7,11 @@ import org.fl.noodle.common.connect.agent.ConnectAgent;
 
 public interface ConnectNode {
 
-	public List<ConnectAgent> getConnectAgentList();
-	public void updateConnectAgentList(List<ConnectAgent> connectAgentList);
+	public List<ConnectAgent> getHealthyConnectAgentList();
 	public boolean isContainsConnectAgent(ConnectAgent connectAgent);
-	
 	public void addConnectAgent(ConnectAgent connectAgent);
 	public void removeConnectAgent(ConnectAgent connectAgent);
+	public List<ConnectAgent> getAllConnectAgentList();
 
 	public void addChildConnectNode(long key, ConnectNode connectNode);
 	public ConnectNode getChildConnectNode(long key);

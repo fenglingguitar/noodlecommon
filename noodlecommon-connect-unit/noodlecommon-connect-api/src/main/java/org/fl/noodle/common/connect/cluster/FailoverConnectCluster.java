@@ -35,7 +35,7 @@ public class FailoverConnectCluster extends AbstractConnectCluster {
 				
 		ConnectAgent connectAgent = null;		
 		do {
-			connectAgent = connectRoute.selectConnect(connectNode.getConnectAgentList(), connectAgentListSelected, connectDistinguish.getMethodKay(method, args));
+			connectAgent = connectRoute.selectConnect(connectNode.getHealthyConnectAgentList(), connectAgentListSelected, connectDistinguish.getMethodKay(method, args));
 			if (connectAgent != null) {
 				connectAgentListSelected.add(connectAgent);
 				try {

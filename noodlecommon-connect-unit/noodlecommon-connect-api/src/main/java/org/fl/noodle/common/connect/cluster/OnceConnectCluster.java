@@ -30,7 +30,7 @@ public class OnceConnectCluster extends AbstractConnectCluster {
 				
 		ConnectAgent connectAgent = null;		
 
-		connectAgent = connectRoute.selectConnect(connectNode.getConnectAgentList(), new LinkedList<ConnectAgent>(), connectDistinguish.getMethodKay(method, args));
+		connectAgent = connectRoute.selectConnect(connectNode.getHealthyConnectAgentList(), new LinkedList<ConnectAgent>(), connectDistinguish.getMethodKay(method, args));
 		if (connectAgent != null) {
 			try {
 				return AopUtils.invokeJoinpointUsingReflection(connectAgent.getProxy(), method, args);
