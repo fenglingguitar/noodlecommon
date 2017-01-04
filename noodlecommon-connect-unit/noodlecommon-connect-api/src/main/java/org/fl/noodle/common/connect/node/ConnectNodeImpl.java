@@ -76,6 +76,16 @@ public class ConnectNodeImpl implements ConnectNode {
 	}
 	
 	@Override
+	public boolean isContainsChildConnectNode(long key) {
+		return childConnectNodeMap.containsKey(key);
+	}
+	
+	@Override
+	public void removeChildConnectNode(long key) {
+		childConnectNodeMap.remove(key);
+	}
+	
+	@Override
 	public ConcurrentMap<Long, ConnectNode> getChildConnectNodeMap() {
 		return childConnectNodeMap;
 	}

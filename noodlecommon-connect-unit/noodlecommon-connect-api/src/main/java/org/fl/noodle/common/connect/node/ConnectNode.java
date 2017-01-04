@@ -16,6 +16,8 @@ public interface ConnectNode {
 
 	public void addChildConnectNode(long key, ConnectNode connectNode);
 	public ConnectNode getChildConnectNode(long key);
+	public boolean isContainsChildConnectNode(long key);
+	public void removeChildConnectNode(long key);
 	public ConcurrentMap<Long, ConnectNode> getChildConnectNodeMap();
 
 	public String getNodeName();
