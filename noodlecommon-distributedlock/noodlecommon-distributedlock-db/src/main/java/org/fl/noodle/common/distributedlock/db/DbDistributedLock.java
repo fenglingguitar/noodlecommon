@@ -115,6 +115,7 @@ public class DbDistributedLock extends AbstractDistributedLock {
 			if (jdbcTemplate.update(sqlReleaseAlive, new Object[] {
 					0,
 					0,
+					"",
 					lockId,
 					rowId
 			}) == 1) {
