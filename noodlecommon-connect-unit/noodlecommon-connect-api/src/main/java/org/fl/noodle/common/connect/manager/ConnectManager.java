@@ -10,6 +10,8 @@ public interface ConnectManager {
 	
 	public void runUpdate();
 	public void runUpdateNow();
+	public void runUpdateAddComponent();
+	public void runUpdateReduceComponent();
 	
 	public ConnectNode getConnectNode(String nodeName);
 	public ConnectAgent getConnectAgent(long connectId);
@@ -19,7 +21,9 @@ public interface ConnectManager {
 	
 	public void start();
 	public void destroy();
-	public long getBootPriority();
+	public long getUpdateLevel();
 	
 	public String getManagerName();
+	
+	public void setConnectManagerPool(ConnectManagerPool connectManagerPool);
 }

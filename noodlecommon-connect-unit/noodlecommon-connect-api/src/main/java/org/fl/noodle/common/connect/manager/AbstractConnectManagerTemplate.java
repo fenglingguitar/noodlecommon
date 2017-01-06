@@ -32,55 +32,95 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 	
 	@Override
 	protected synchronized void updateConnectAgent() {
-		
-		connectAndNodeInfoMap = null;
-		clusterInfoMap = null;
-		routeInfoMap = null;
-		
+		cleanComponent();
 		queryInfo();
-		
-		if (connectAndNodeInfoMap != null && !connectAndNodeInfoMap.isEmpty()) {
-			getAddConnect();
-			addConnect();
-			getAddNode();
-			addNode();
-			getAddConnectMapping();
-			addConnectMapping();
-			
-			getReduceConnectMapping();
-			reduceConnectMapping();
-			getReduceConnect();
-			reduceConnect();
-			getReduceNode();
-			reduceNode();
-		}
-		
-		if (clusterInfoMap != null && !clusterInfoMap.isEmpty()) {
-			getAddCluster();
-			addCluster();
-			getReduceCluster();
-			reduceCluster();
-		}
-		
-		if (routeInfoMap != null && !routeInfoMap.isEmpty()) {
-			getAddRoute();
-			addRoute();
-			getReduceRoute();
-			reduceRoute(); 
-		}
+		addComponent();
+		reduceComponent();
 	}
 	
 	@Override
 	protected void destroyConnectAgent() {
-		
 		connectNodeMap.clear();
-		
 		Set<Long> connectAgentKeySet = connectAgentMap.keySet();
 		for (long key : connectAgentKeySet) {
 			ConnectAgent connectAgent = connectAgentMap.get(key);
 			connectAgent.close();
 		}
 		connectAgentMap.clear();
+	}
+	
+	@Override
+	public synchronized void runUpdateAddComponent() {	
+		cleanComponent();
+		queryInfo();
+		addComponent();
+	}
+	
+	@Override
+	public synchronized void runUpdateReduceComponent() {
+		cleanComponent();
+		queryInfo();
+		reduceComponent();
+	}
+	
+	protected void cleanComponent() {
+		connectAndNodeInfoMap = null;
+		clusterInfoMap = null;
+		routeInfoMap = null;
+	}
+	
+	protected void addComponent() {
+		if (connectAndNodeInfoMap != null && !connectAndNodeInfoMap.isEmpty()) {
+			getAddNode();
+			addNode();
+			getAddConnect();
+			addConnect();
+			getAddConnectMapping();
+			addConnectMapping();
+		}
+		
+		if (clusterInfoMap != null && !clusterInfoMap.isEmpty()) {
+			getAddCluster();
+			addCluster();
+		}
+		
+		if (routeInfoMap != null && !routeInfoMap.isEmpty()) {
+			getAddRoute();
+			addRoute();
+		}
+	}
+	
+	protected void reduceComponent() {
+		if (connectAndNodeInfoMap != null && !connectAndNodeInfoMap.isEmpty()) {
+			getReduceConnectMapping();
+			getReduceConnect();
+			getReduceNode();
+			reduceConnectMapping();
+			reduceConnect();
+			reduceNode();
+		}
+		
+		if (clusterInfoMap != null && !clusterInfoMap.isEmpty()) {
+			getReduceCluster();
+			reduceCluster();
+		}
+		
+		if (routeInfoMap != null && !routeInfoMap.isEmpty()) {
+			getReduceRoute();
+			reduceRoute(); 
+		}
+	}
+	
+	protected void runUpdateLowLevel() {
+		if (!addNodeList.isEmpty()) {			
+			connectManagerPool.runUpdateLowLevel(this);
+		}
+	}
+	
+	protected void runUpdateHighLevel() {
+		if (!reduceNodeList.isEmpty()) {			
+			connectManagerPool.runUpdateHighLevel(this);
+		}
 	}
 	
 	protected void getAddNode() {

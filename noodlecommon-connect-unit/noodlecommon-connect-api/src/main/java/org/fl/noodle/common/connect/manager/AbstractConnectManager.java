@@ -49,7 +49,9 @@ public abstract class AbstractConnectManager implements ConnectManager {
 	protected volatile boolean stopSign = false;
 	private Stopping stopping = new Stopping();
 	
-	private long bootPriority;
+	private long updateLevel;
+	
+	protected ConnectManagerPool connectManagerPool;
 	
 	@Override
 	public void start() {
@@ -160,11 +162,15 @@ public abstract class AbstractConnectManager implements ConnectManager {
 	}
 
 	@Override
-	public long getBootPriority() {
-		return bootPriority;
+	public long getUpdateLevel() {
+		return updateLevel;
 	}
 
-	public void setBootPriority(long bootPriority) {
-		this.bootPriority = bootPriority;
+	public void setUpdateLevel(long updateLevel) {
+		this.updateLevel = updateLevel;
+	}
+	
+	public void setConnectManagerPool(ConnectManagerPool connectManagerPool) {
+		this.connectManagerPool = connectManagerPool;
 	}
 }
