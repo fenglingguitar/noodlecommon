@@ -31,14 +31,6 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 	protected List<String> reduceRouteList = null;
 	
 	@Override
-	protected synchronized void updateConnectAgent() {
-		cleanComponent();
-		queryInfo();
-		addComponent();
-		reduceComponent();
-	}
-	
-	@Override
 	protected void destroyConnectAgent() {
 		connectNodeMap.clear();
 		Set<Long> connectAgentKeySet = connectAgentMap.keySet();
@@ -50,14 +42,14 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 	}
 	
 	@Override
-	public synchronized void runUpdateAddComponent() {	
+	public void runUpdateAddComponent() {	
 		cleanComponent();
 		queryInfo();
 		addComponent();
 	}
 	
 	@Override
-	public synchronized void runUpdateReduceComponent() {
+	public void runUpdateReduceComponent() {
 		cleanComponent();
 		queryInfo();
 		reduceComponent();
@@ -70,7 +62,7 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 	}
 	
 	protected void addComponent() {
-		if (connectAndNodeInfoMap != null && !connectAndNodeInfoMap.isEmpty()) {
+		if (connectAndNodeInfoMap != null) {
 			getAddNode();
 			addNode();
 			getAddConnect();
@@ -79,47 +71,35 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 			addConnectMapping();
 		}
 		
-		if (clusterInfoMap != null && !clusterInfoMap.isEmpty()) {
+		if (clusterInfoMap != null) {
 			getAddCluster();
 			addCluster();
 		}
 		
-		if (routeInfoMap != null && !routeInfoMap.isEmpty()) {
+		if (routeInfoMap != null) {
 			getAddRoute();
 			addRoute();
 		}
 	}
 	
 	protected void reduceComponent() {
-		if (connectAndNodeInfoMap != null && !connectAndNodeInfoMap.isEmpty()) {
+		if (connectAndNodeInfoMap != null) {
 			getReduceConnectMapping();
-			getReduceConnect();
-			getReduceNode();
 			reduceConnectMapping();
+			getReduceConnect();
 			reduceConnect();
+			getReduceNode();
 			reduceNode();
 		}
 		
-		if (clusterInfoMap != null && !clusterInfoMap.isEmpty()) {
+		if (clusterInfoMap != null) {
 			getReduceCluster();
 			reduceCluster();
 		}
 		
-		if (routeInfoMap != null && !routeInfoMap.isEmpty()) {
+		if (routeInfoMap != null) {
 			getReduceRoute();
 			reduceRoute(); 
-		}
-	}
-	
-	protected void runUpdateLowLevel() {
-		if (!addNodeList.isEmpty()) {			
-			connectManagerPool.runUpdateLowLevel(this);
-		}
-	}
-	
-	protected void runUpdateHighLevel() {
-		if (!reduceNodeList.isEmpty()) {			
-			connectManagerPool.runUpdateHighLevel(this);
 		}
 	}
 	
@@ -260,10 +240,12 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 		for (String name : connectNodeMap.keySet()) {
 			for (ConnectAgent connectAgentIt : connectNodeMap.get(name).getAllConnectAgentList()) {
 				boolean isHave = false;
-				for (Object objectIt : connectAndNodeInfoMap.get(name)) {
-					if (connectAgentIt.getConnectId() == getId(objectIt)) {
-						isHave = true;
-						break;
+				if (connectAndNodeInfoMap.containsKey(name)) {
+					for (Object objectIt : connectAndNodeInfoMap.get(name)) {
+						if (connectAgentIt.getConnectId() == getId(objectIt)) {
+							isHave = true;
+							break;
+						}
 					}
 				}
 				if (!isHave) {

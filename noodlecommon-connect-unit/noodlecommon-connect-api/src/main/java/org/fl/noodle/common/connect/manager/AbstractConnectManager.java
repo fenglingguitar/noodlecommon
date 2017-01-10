@@ -18,17 +18,11 @@ import org.fl.noodle.common.connect.performance.ConnectPerformanceInfo;
 import org.fl.noodle.common.connect.route.ConnectRoute;
 import org.fl.noodle.common.connect.route.ConnectRouteFactory;
 import org.fl.noodle.common.connect.serialize.ConnectSerializeFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.fl.noodle.common.util.thread.ExecutorThreadFactory;
-import org.fl.noodle.common.util.thread.Stopping;
 
 public abstract class AbstractConnectManager implements ConnectManager {
 	
-	private final static Logger logger = LoggerFactory.getLogger(AbstractConnectManager.class);
-	
-	private long suspendTime = 60000;
+	//private final static Logger logger = LoggerFactory.getLogger(AbstractConnectManager.class);
 	
 	private long calculateAvgTimeInterval = 5000;
 	
@@ -46,32 +40,12 @@ public abstract class AbstractConnectManager implements ConnectManager {
 
 	protected ExecutorService executorService = Executors.newSingleThreadExecutor(new ExecutorThreadFactory(this.getClass().getName()));
 	
-	protected volatile boolean stopSign = false;
-	private Stopping stopping = new Stopping();
-	
 	private long updateLevel;
 	
 	protected ConnectManagerPool connectManagerPool;
 	
 	@Override
 	public void start() {
-		
-		stopping.stopInit(1);
-		
-		runUpdateNow();
-		
-		executorService.execute(new Runnable() {
-			@Override
-			public void run() {
-				while (!stopSign) {
-					suspendUpdate();
-					updateConnectAgent();
-				}
-				destroyConnectAgent();
-				stopping.stopDo();
-			}
-		});
-		
 		(new Timer(true)).schedule(new TimerTask() {
 			public void run() {
 				for (Entry<Long, ConnectAgent> entry : connectAgentMap.entrySet()) {
@@ -83,29 +57,17 @@ public abstract class AbstractConnectManager implements ConnectManager {
 	
 	@Override
 	public void destroy() {
-		stopSign = true;
-		do {				
-			runUpdate();
-		} while (!stopping.stopWait(1000));
-		executorService.shutdown();
-	}
-	
-	protected synchronized void suspendUpdate() {
-		try {
-			wait(suspendTime);
-		} catch (InterruptedException e) {
-			logger.error("suspendUpdateConnectAgent -> wait -> Exception:{}", e.getMessage());
-		}
+		destroyConnectAgent();	
 	}
 	
 	@Override
-	public synchronized void runUpdate() {
-		notifyAll();
+	public void runUpdate() {
+		connectManagerPool.runUpdate();
 	}
 	
 	@Override
-	public synchronized void runUpdateNow() {
-		updateConnectAgent();
+	public void runUpdateNow() {
+		connectManagerPool.runUpdateNow();
 	}
 	
 	@Override
@@ -133,12 +95,7 @@ public abstract class AbstractConnectManager implements ConnectManager {
 		return connectPerformanceInfoMap.get(methodKey);
 	}
 	
-	protected abstract void updateConnectAgent();
 	protected abstract void destroyConnectAgent();
-
-	public void setSuspendTime(long suspendTime) {
-		this.suspendTime = suspendTime;
-	}
 	
 	public void setCalculateAvgTimeInterval(long calculateAvgTimeInterval) {
 		this.calculateAvgTimeInterval = calculateAvgTimeInterval;

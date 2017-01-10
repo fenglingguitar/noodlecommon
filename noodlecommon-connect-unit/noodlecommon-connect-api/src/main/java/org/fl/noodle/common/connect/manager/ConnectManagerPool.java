@@ -7,17 +7,38 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.fl.noodle.common.util.thread.ExecutorThreadFactory;
 
 public class ConnectManagerPool {
 	
 	private ConcurrentMap<String, ConnectManager> connectManagerMap = new ConcurrentHashMap<String, ConnectManager>();
 	private List<ConnectManager> connectManagerList = new ArrayList<ConnectManager>();
 	
+	protected ExecutorService executorService = Executors.newSingleThreadExecutor(new ExecutorThreadFactory(this.getClass().getName()));
+	
+	protected volatile boolean stopSign = false;
+	
+	private long suspendTime = 60000;
+	
 	public ConnectManager getConnectManager(String managerName) {
 		return connectManagerMap.get(managerName);
 	}
 	
-	public void startConnectManager() {
+	public void start() {
+		initManager();
+		startUpdate();
+	}
+	
+	public void destroy() {
+		stopUpdate();
+		destroyManager();
+	}
+	
+	private void initManager() {
 		Collections.sort(connectManagerList, new PriorityComparator());
 		for (ConnectManager connectManager : connectManagerList) {
 			connectManager.setConnectManagerPool(this);
@@ -26,7 +47,7 @@ public class ConnectManagerPool {
 		}
 	}
 	
-	public void destroyConnectManager() {
+	private void destroyManager() {
 		ListIterator<ConnectManager> listIterator = connectManagerList.listIterator(connectManagerList.size());
 		while (listIterator.hasPrevious()) {
 			listIterator.previous().destroy();
@@ -35,24 +56,53 @@ public class ConnectManagerPool {
 		connectManagerMap.clear();
 	}
 	
-	public void runUpdateLowLevel(ConnectManager connectManager) {
-		for (ConnectManager connectManagerIt : connectManagerList) {
-			if (connectManagerIt.getManagerName().equals(connectManager.getManagerName())) {
-				break;
-			} else {
-				connectManagerIt.runUpdateNow();
+	private void startUpdate() {
+		runUpdateNow();
+		executorService.execute(new Runnable() {
+			@Override
+			public void run() {
+				while (!stopSign) {
+					suspendUpdate();
+					updateConnectAgent();
+				}
 			}
+		});
+	}
+	
+	private void stopUpdate() {
+		stopSign = true;
+		executorService.shutdown();
+		try {
+			if(!executorService.awaitTermination(60000, TimeUnit.MILLISECONDS)) {
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public void runUpdateHighLevel(ConnectManager connectManager) {
+	protected synchronized void suspendUpdate() {
+		try {
+			wait(suspendTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public synchronized void runUpdate() {
+		notifyAll();
+	}
+	
+	public synchronized void runUpdateNow() {
+		updateConnectAgent();
+	}
+	
+	protected synchronized void updateConnectAgent() {
+		for (ConnectManager connectManager : connectManagerList) {
+			connectManager.runUpdateAddComponent();
+		}
 		ListIterator<ConnectManager> listIterator = connectManagerList.listIterator(connectManagerList.size());
 		while (listIterator.hasPrevious()) {
-			if (listIterator.previous().getManagerName().equals(connectManager.getManagerName())) {
-				break;
-			} else {
-				listIterator.previous().runUpdateNow();
-			}
+			listIterator.previous().runUpdateReduceComponent();
 		}
 	}
 	
@@ -72,5 +122,9 @@ public class ConnectManagerPool {
 
 	public void setConnectManagerList(List<ConnectManager> connectManagerList) {
 		this.connectManagerList = connectManagerList;
+	}
+
+	public void setSuspendTime(long suspendTime) {
+		this.suspendTime = suspendTime;
 	}
 }
