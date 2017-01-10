@@ -62,7 +62,12 @@ public class ConnectManagerPool {
 			@Override
 			public void run() {
 				while (!stopSign) {
-					suspendUpdate();
+					try {
+						suspendUpdate();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						break;
+					}
 					updateConnectAgent();
 				}
 			}
@@ -71,7 +76,7 @@ public class ConnectManagerPool {
 	
 	private void stopUpdate() {
 		stopSign = true;
-		executorService.shutdown();
+		executorService.shutdownNow();
 		try {
 			if(!executorService.awaitTermination(60000, TimeUnit.MILLISECONDS)) {
 			}
@@ -80,12 +85,8 @@ public class ConnectManagerPool {
 		}
 	}
 	
-	protected synchronized void suspendUpdate() {
-		try {
-			wait(suspendTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	protected synchronized void suspendUpdate() throws InterruptedException {
+		wait(suspendTime);
 	}
 	
 	public synchronized void runUpdate() {

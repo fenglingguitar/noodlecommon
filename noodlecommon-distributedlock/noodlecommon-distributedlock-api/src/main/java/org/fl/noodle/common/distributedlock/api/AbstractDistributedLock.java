@@ -73,7 +73,7 @@ public abstract class AbstractDistributedLock implements DistributedLock {
 		stopSign = true;		
 		notifySleep();
 		stopWait();
-		executorService.shutdown();
+		executorService.shutdownNow();
 		releaseLocker();
 		notifyAllForLocker();
 	}
