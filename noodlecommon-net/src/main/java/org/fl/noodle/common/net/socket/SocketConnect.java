@@ -63,9 +63,11 @@ public class SocketConnect {
                 && !socket.isOutputShutdown();
     }
 	
-	public String send(String name, String data) throws Exception {
+	public String send(String name, String data, int readTimeout) throws Exception {
 		
 		connect();
+		
+		socket.setSoTimeout(readTimeout);
 		
 		byte[] bName = name.getBytes(encoding);
 		byte[] bData = data.getBytes(encoding);
