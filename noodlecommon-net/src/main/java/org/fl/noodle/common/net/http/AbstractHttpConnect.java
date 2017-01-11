@@ -22,7 +22,7 @@ public abstract class AbstractHttpConnect implements HttpConnect {
 	
 	protected abstract <T> T requestTo(Method requestMethod, String requestParamName, Object requestParamObject, Class<T> responseClazz) throws Exception;
 	protected abstract <T> T requestTo(Method requestMethod, String[] requestParamNames, Object[] requestParamObjects, Class<T> responseClazz) throws Exception;
-	protected abstract String requestTo(Method requestMethod, String requestParamName, String requestParamString) throws Exception;
+	protected abstract String requestTo(Method requestMethod, String requestParamName, String requestParamString, int readTimeout) throws Exception;
 	
 	@Override
 	public <T> T get(String requestParamName, Object requestParamObject, Class<T> responseClazz) throws Exception {
@@ -41,12 +41,22 @@ public abstract class AbstractHttpConnect implements HttpConnect {
 	
 	@Override
 	public String getString(String requestParamName, String requestParamString) throws Exception {
-		return requestTo(Method.GET, requestParamName, requestParamString);
+		return requestTo(Method.GET, requestParamName, requestParamString, readTimeout);
 	}
 	
 	@Override
 	public String postString(String requestParamName, String requestParamString) throws Exception {
-		return requestTo(Method.POST, requestParamName, requestParamString);
+		return requestTo(Method.POST, requestParamName, requestParamString, readTimeout);
+	}
+	
+	@Override
+	public String getString(String requestParamName, String requestParamString, int readTimeout) throws Exception {
+		return requestTo(Method.GET, requestParamName, requestParamString, readTimeout);
+	}
+
+	@Override
+	public String postString(String requestParamName, String requestParamString, int readTimeout) throws Exception {
+		return requestTo(Method.GET, requestParamName, requestParamString, readTimeout);
 	}
 	
 	protected enum Method {

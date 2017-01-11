@@ -11,4 +11,7 @@ public interface HttpConnect {
 	
 	public String getString(String requestParamName, String requestParamString) throws Exception;
 	public String postString(String requestParamName, String requestParamString) throws Exception;
+	
+	public String getString(String requestParamName, String requestParamString, int readTimeout) throws Exception;
+	public String postString(String requestParamName, String requestParamString, int readTimeout) throws Exception;
 }

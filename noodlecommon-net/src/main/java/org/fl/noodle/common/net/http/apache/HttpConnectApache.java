@@ -95,7 +95,7 @@ public class HttpConnectApache extends AbstractHttpConnect {
 		return JsonTranslator.fromString(requestExecute(httpUriRequest), responseClazz);
 	}
 	
-	public String requestTo(Method requestMethod, String requestParamName, String requestParamString) throws Exception {
+	public String requestTo(Method requestMethod, String requestParamName, String requestParamString, int readTimeout) throws Exception {
 		
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(readTimeout).build();
 

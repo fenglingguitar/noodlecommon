@@ -44,7 +44,7 @@ public class HttpConnectJdk extends AbstractHttpConnect {
 		
 		StringBuilder stringBuilder = new StringBuilder().append(requestParamName).append("=").append(URLEncoder.encode(JsonTranslator.toString(requestParamObject), encoding));
 
-		return JsonTranslator.fromString(requestExecute(requestMethod, stringBuilder.toString()), responseClazz);
+		return JsonTranslator.fromString(requestExecute(requestMethod, stringBuilder.toString(), readTimeout), responseClazz);
 	}
 	
 	public <T> T requestTo(Method requestMethod, String[] requestParamNames, Object[] requestParamObjects, Class<T> responseClazz) throws Exception {
@@ -56,17 +56,17 @@ public class HttpConnectJdk extends AbstractHttpConnect {
 			if(i != requestParamNames.length - 1) stringBuilder.append("&");
 		}
 
-		return JsonTranslator.fromString(requestExecute(requestMethod, stringBuilder.toString()), responseClazz);
+		return JsonTranslator.fromString(requestExecute(requestMethod, stringBuilder.toString(), readTimeout), responseClazz);
 	}
 	
-	public String requestTo(Method requestMethod, String requestParamName, String requestParamString) throws Exception {
+	public String requestTo(Method requestMethod, String requestParamName, String requestParamString, int readTimeout) throws Exception {
 		
 		StringBuilder stringBuilder = new StringBuilder().append(requestParamName).append("=").append(requestParamString);
 		
-		return requestExecute(requestMethod, stringBuilder.toString());
+		return requestExecute(requestMethod, stringBuilder.toString(), readTimeout);
 	}
 	
-	private String requestExecute(Method requestMethod, String request) throws Exception {
+	private String requestExecute(Method requestMethod, String request, int readTimeout) throws Exception {
 		
 		URL httpUrl = new URL(url);
 		HttpURLConnection httpURLConnection = (HttpURLConnection) httpUrl.openConnection();
