@@ -190,7 +190,7 @@ public abstract class AbstractConnectManagerTemplate extends AbstractConnectMana
 		for (String name : addConnectMappingMap.keySet()) {
 			for (Object objectIt : addConnectMappingMap.get(name)) {
 				ConnectAgent connectAgent = connectAgentMap.get(getId(objectIt));
-				if (connectAgent.isHealthyConnect()) {
+				if (connectAgent != null && connectAgent.isHealthyConnect()) {
 					connectNodeMap.get(name).addConnectAgent(connectAgent);
 				}
 			}
