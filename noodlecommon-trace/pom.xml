@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.fl.noodle.common</groupId>
+    <artifactId>noodlecommon</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>org.fl.noodle.common.trace</groupId>
+  <artifactId>noodlecommon-trace</artifactId>
+  <version>${noodle.common.trace.version}</version>
+  <name>noodlecommon-trace</name>
+  <url>http://maven.apache.org</url>
+  
+  <dependencies>
+  
+  	<dependency>
+		<groupId>org.fl.noodle.common.net</groupId>
+		<artifactId>noodlecommon-net</artifactId>
+		<version>${noodle.common.mvc.vo.version}</version>
+	</dependency>
+  
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    
+    <!-- log -->
+    <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>ch.qos.logback</groupId>
+		<artifactId>logback-classic</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+	</dependency>
+    
+    <!-- spring framework -->
+    <dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+	</dependency>
+    
+  </dependencies>
+  
+</project>

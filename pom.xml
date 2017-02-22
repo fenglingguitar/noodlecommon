@@ -25,6 +25,9 @@
   	<noodle.common.monitor.performance.version>2.0.1-SNAPSHOT</noodle.common.monitor.performance.version>
 	<noodle.common.test.version>2.0.1-SNAPSHOT</noodle.common.test.version>
   	<noodle.common.util.version>2.0.1-SNAPSHOT</noodle.common.util.version>
+	<noodle.common.trace.version>2.0.1-SNAPSHOT</noodle.common.trace.version>
+	
+	<springframework.version>4.1.6.RELEASE</springframework.version>
   	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -39,6 +42,7 @@
     <module>noodlecommon-monitor-unit</module>
     <module>noodlecommon-connect-unit</module>
     <module>noodlecommon-test</module>
+    <module>noodlecommon-trace</module>
   </modules>
   
   <dependencyManagement>
@@ -47,7 +51,7 @@
 	    <dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>
-	      <version>4.8.1</version>
+	      <version>4.12</version>
 	      <scope>test</scope>
 	    </dependency>	
 		
@@ -77,27 +81,27 @@
 	    <dependency>
 	    	<groupId>org.springframework</groupId>
 	    	<artifactId>spring-context</artifactId>
-	    	<version>3.1.0.RELEASE</version>
+	    	<version>${springframework.version}</version>
 	    </dependency>
 		<dependency>
 	    	<groupId>org.springframework</groupId>
 	    	<artifactId>spring-aop</artifactId>
-	    	<version>3.1.0.RELEASE</version>
+	    	<version>${springframework.version}</version>
 	    </dependency>
 	    <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${springframework.version}</version>
 		</dependency>
 	    <dependency>
 	    	<groupId>org.springframework</groupId>
 	    	<artifactId>spring-orm</artifactId>
-	    	<version>3.1.0.RELEASE</version>
+	    	<version>${springframework.version}</version>
 	    </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${springframework.version}</version>
 			<scope>test</scope>
 		</dependency>
 			
@@ -132,7 +136,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
 	    	<groupId>javassist</groupId>
@@ -175,12 +179,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>3.1.0.RELEASE</version>
+			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
