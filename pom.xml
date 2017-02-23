@@ -26,6 +26,7 @@
 	<noodle.common.test.version>2.0.1-SNAPSHOT</noodle.common.test.version>
   	<noodle.common.util.version>2.0.1-SNAPSHOT</noodle.common.util.version>
 	<noodle.common.trace.version>2.0.1-SNAPSHOT</noodle.common.trace.version>
+	<noodle.common.log.version>2.0.1-SNAPSHOT</noodle.common.log.version>
 	
 	<springframework.version>4.1.6.RELEASE</springframework.version>
   	
@@ -43,6 +44,7 @@
     <module>noodlecommon-connect-unit</module>
     <module>noodlecommon-test</module>
     <module>noodlecommon-trace</module>
+    <module>noodlecommon-log</module>
   </modules>
   
   <dependencyManagement>

@@ -9,18 +9,24 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   
-  <groupId>org.fl.noodle.common.trace</groupId>
-  <artifactId>noodlecommon-trace</artifactId>
-  <version>${noodle.common.trace.version}</version>
-  <name>noodlecommon-trace</name>
+  <groupId>org.fl.noodle.common.log</groupId>
+  <artifactId>noodlecommon-log</artifactId>
+  <version>${noodle.common.log.version}</version>
+  <name>noodlecommon-log</name>
   <url>http://maven.apache.org</url>
   
   <dependencies>
   
   	<dependency>
-		<groupId>org.fl.noodle.common.net</groupId>
-		<artifactId>noodlecommon-net</artifactId>
-		<version>${noodle.common.net.version}</version>
+		<groupId>org.fl.noodle.common.util</groupId>
+		<artifactId>noodlecommon-util</artifactId>
+		<version>${noodle.common.util.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.fl.noodle.common.trace</groupId>
+		<artifactId>noodlecommon-trace</artifactId>
+		<version>${noodle.common.trace.version}</version>
 	</dependency>
   
     <dependency>
@@ -40,17 +46,6 @@
 	<dependency>
 		<groupId>org.slf4j</groupId>
 		<artifactId>jcl-over-slf4j</artifactId>
-	</dependency>
-    
-    <!-- spring framework -->
-    <dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-test</artifactId>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context</artifactId>
 	</dependency>
     
   </dependencies>
