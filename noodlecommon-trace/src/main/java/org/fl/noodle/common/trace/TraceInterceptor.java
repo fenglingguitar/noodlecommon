@@ -116,6 +116,10 @@ public class TraceInterceptor implements MethodInterceptor {
 		
 		Object object = invocation.getThis();
 		
+		if (object == null) {
+			return invocation.getMethod().getDeclaringClass();
+		}
+		
 		if (AopUtils.isAopProxy(object) && !AopUtils.isJdkDynamicProxy(object)) {
 			return AopUtils.getTargetClass(object);
 		}
