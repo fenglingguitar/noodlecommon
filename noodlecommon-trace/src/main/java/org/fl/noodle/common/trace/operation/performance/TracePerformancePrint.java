@@ -79,7 +79,7 @@ public class TracePerformancePrint implements TraceOperation {
 				TraceInterceptor.getStackKey());
 	}
 	
-	private static void printTraceLog(String invoke, String parentInvoke, long startTime, long endTime, boolean isError, String stackKey, String parentStackKey) {
+	public static void printTraceLog(String invoke, String parentInvoke, long startTime, long endTime, boolean isError, String stackKey, String parentStackKey) {
 		logger.info("Performance -> TraceKey:{}, Invoke:{}, ParentInvoke:{}, StartTime:{}, EndTime:{}, ElapsedTime:{}, IsError:{}, Key:{}, ParentKey:{}", 
 				TraceInterceptor.getTraceKey(), 
 				invoke, 
@@ -92,7 +92,7 @@ public class TracePerformancePrint implements TraceOperation {
 				parentStackKey);
 	}
 	
-	private static void printTraceLog(String invoke, String parentInvoke, long startTime, long endTime, boolean isError, String stackKey, String parentStackKey, TraceMethodAuthor traceMethodAuthor) {
+	public static void printTraceLog(String invoke, String parentInvoke, long startTime, long endTime, boolean isError, String stackKey, String parentStackKey, TraceMethodAuthor traceMethodAuthor) {
 		logger.info("Performance -> TraceKey:{}, Invoke:{}, ParentInvoke:{}, StartTime:{}, EndTime:{}, ElapsedTime:{}, IsError:{}, Key:{}, ParentKey:{}, AuthorID:{}", 
 				TraceInterceptor.getTraceKey(), 
 				invoke, 
