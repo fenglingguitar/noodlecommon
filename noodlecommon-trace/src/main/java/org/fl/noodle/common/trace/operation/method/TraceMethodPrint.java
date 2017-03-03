@@ -40,7 +40,7 @@ public class TraceMethodPrint implements TraceOperation {
 					} else {
 						logger.info("MethodEnter -> Method:{}, Param:{}, ParentMethod:{}, TraceKey:{}",
 								TraceInterceptor.getInvoke(),
-								getParam(invocation),
+								getParam(invocation.getArguments()),
 								TraceInterceptor.getParentInvoke(),
 								TraceInterceptor.getTraceKey()
 								);
@@ -60,7 +60,7 @@ public class TraceMethodPrint implements TraceOperation {
 					} else {
 						logger.info("MethodEnter -> Method:{}, Param:{}, ParentMethod:{}, TraceKey:{}, AuthorID:{}, AuthorName:{}, LastEditTime:{}",
 								TraceInterceptor.getInvoke(),
-								getParam(invocation),
+								getParam(invocation.getArguments()),
 								TraceInterceptor.getParentInvoke(),
 								TraceInterceptor.getTraceKey(),
 								targetClassMethod.getAnnotation(TraceMethodAuthor.class).authorID(),
@@ -122,7 +122,7 @@ public class TraceMethodPrint implements TraceOperation {
 								getMessage(e), 
 								getStackTrace(e), 
 								TraceInterceptor.getTraceStackToString(), 
-								getParam(invocation), 
+								getParam(invocation.getArguments()), 
 								TraceInterceptor.getTraceKey()
 								);
 					} else {
@@ -132,7 +132,7 @@ public class TraceMethodPrint implements TraceOperation {
 								getMessage(e), 
 								getStackTrace(e), 
 								TraceInterceptor.getTraceStackToString(), 
-								getParam(invocation), 
+								getParam(invocation.getArguments()), 
 								TraceInterceptor.getTraceKey(),
 								targetClassMethod.getAnnotation(TraceMethodAuthor.class).authorID(),
 								targetClassMethod.getAnnotation(TraceMethodAuthor.class).authorName(),
@@ -147,7 +147,7 @@ public class TraceMethodPrint implements TraceOperation {
 								getMessage(e), 
 								getStackTrace(e), 
 								TraceInterceptor.getTraceStackToString(), 
-								getParam(invocation), 
+								getParam(invocation.getArguments()), 
 								TraceInterceptor.getTraceKey()
 								);
 					} else {
@@ -157,7 +157,7 @@ public class TraceMethodPrint implements TraceOperation {
 								getMessage(e), 
 								getStackTrace(e), 
 								TraceInterceptor.getTraceStackToString(), 
-								getParam(invocation), 
+								getParam(invocation.getArguments()), 
 								TraceInterceptor.getTraceKey(),
 								targetClassMethod.getAnnotation(TraceMethodAuthor.class).authorID(),
 								targetClassMethod.getAnnotation(TraceMethodAuthor.class).authorName(),
@@ -223,19 +223,14 @@ public class TraceMethodPrint implements TraceOperation {
         return throwable;
 	}
 	
-	public static String getParam(MethodInvocation invocation) {
-		return getParam(invocation.getArguments());
-	}
-	
-	private static ParamPropertyFilter paramPropertyFilter = new ParamPropertyFilter();
-	
-	public static String getParam(Object[] params) {
-		if (params == null || params.length == 0) {
+	public static String getParam(Object[] arguments) {
+		
+		if (arguments == null || arguments.length == 0) {
 			return "[]";
 		}
 		
-		List<Object> objectList = new ArrayList<Object>(params.length);
-		for (Object object : params) {
+		List<Object> objectList = new ArrayList<Object>(arguments.length);
+		for (Object object : arguments) {
 		    if (object != null) {
 		        if (object instanceof Serializable) {
 		            objectList.add(object);
@@ -246,22 +241,19 @@ public class TraceMethodPrint implements TraceOperation {
 		}
 
 		try {
-			return JSON.toJSONString(objectList, paramPropertyFilter);
+			return JSON.toJSONString(objectList, new PropertyFilter() {
+				@Override
+				public boolean apply(Object source, String name, Object value) {
+					if (value == null || !(value instanceof Serializable)) {
+						return false;
+					}
+					return true;
+				}
+			});
 		} catch (Exception e) {
 			logger.warn("CatchError -> doInvoke -> getParam -> JsonTranslator.toString -> Method:{}, Exception:{}", TraceInterceptor.getInvoke(), e.getMessage());
 		}
 		
 		return "[]";
-	}
-}
-
-class ParamPropertyFilter implements PropertyFilter {
-
-	@Override
-	public boolean apply(Object source, String name, Object value) {
-		if (value == null || !(value instanceof Serializable)) {
-			return true;
-		}
-		return false;
 	}
 }
