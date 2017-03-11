@@ -85,7 +85,7 @@ public class TraceMethodPrint implements TraceOperation {
 				if (targetClassMethod.getAnnotation(TraceMethodAuthor.class) == null) {
 					logger.info("MethodReturn -> Method:{}, Return:{}, ParentMethod:{}, TraceKey:{}",
 							TraceInterceptor.getInvoke(),
-							returnValue != null ? JsonTranslator.toString(returnValue) : "",
+							getReturn(returnValue),
 							TraceInterceptor.getParentInvoke(),
 							TraceInterceptor.getTraceKey()
 							);
@@ -93,7 +93,7 @@ public class TraceMethodPrint implements TraceOperation {
 					setTraceAuthor(null);
 					logger.info("MethodReturn -> Method:{}, Return:{}, ParentMethod:{}, TraceKey:{}, AuthorID:{}, AuthorName:{}, LastEditTime:{}",
 							TraceInterceptor.getInvoke(),
-							returnValue != null ? JsonTranslator.toString(returnValue) : "",
+							getReturn(returnValue),
 							TraceInterceptor.getParentInvoke(),
 							TraceInterceptor.getTraceKey(),
 							targetClassMethod.getAnnotation(TraceMethodAuthor.class).authorID(),
@@ -233,7 +233,11 @@ public class TraceMethodPrint implements TraceOperation {
 		for (Object object : arguments) {
 		    if (object != null) {
 		        if (object instanceof Serializable) {
-		            objectList.add(object);
+		        	if (object instanceof TraceParamToString) {
+		        		objectList.add(object.toString());
+		        	} else {
+		        		objectList.add(object);
+		        	}
 		        } else {
 		            objectList.add(object.getClass().getSimpleName());
 		        }
@@ -255,5 +259,19 @@ public class TraceMethodPrint implements TraceOperation {
 		}
 		
 		return "[]";
+	}
+	
+	public static String getReturn(Object returnValue) {
+		if (returnValue == null) {
+			return "";
+		}
+		
+		try {
+			return returnValue instanceof TraceParamToString ? returnValue.toString() : JsonTranslator.toString(returnValue);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 }
