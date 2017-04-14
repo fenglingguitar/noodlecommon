@@ -33,7 +33,7 @@ public class TraceInterceptor implements MethodInterceptor {
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 		
-		if (getTraceStack().isEmpty()) {
+		if (getTraceKey().isEmpty()) {
 			Postman.putParam(TRACE_KAY, UUID.randomUUID().toString().replaceAll("-", ""));
 		}
 		
