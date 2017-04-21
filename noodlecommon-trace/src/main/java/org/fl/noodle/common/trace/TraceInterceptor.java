@@ -32,19 +32,15 @@ public class TraceInterceptor implements MethodInterceptor {
 	
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
-		
-		if (getTraceKey().isEmpty()) {
-			Postman.putParam(TRACE_KAY, UUID.randomUUID().toString().replaceAll("-", ""));
-		}
-		
-		return doInvoke(invocation);
-	}
-	
-	private Object doInvoke(MethodInvocation invocation) throws Throwable {
 		boolean isError = false;
 		Object returnValue = null;
+		boolean isNewTraceKey = false;
 		try {
 			if (isTrace(invocation)) {
+				if (getTraceKey().isEmpty()) {
+					setTraceKey(UUID.randomUUID().toString().replaceAll("-", ""));
+					isNewTraceKey = true;
+				}
 				getTraceStack().push(getInvokeName(invocation));
 				getTraceKeyStack().push(UUID.randomUUID().toString().replaceAll("-", ""));
 				executeOparetionBefore(invocation);
@@ -61,8 +57,9 @@ public class TraceInterceptor implements MethodInterceptor {
 		} finally {
 			if (isTrace(invocation)) {
 				executeOparetionAfter(invocation, isError, returnValue);
-				if(getTraceStack() != null && !getTraceStack().isEmpty()) getTraceStack().pop();
-				if(getTraceKeyStack() != null && !getTraceKeyStack().isEmpty())getTraceKeyStack().pop();
+				if(!getTraceStack().isEmpty()) getTraceStack().pop();
+				if(!getTraceKeyStack().isEmpty())getTraceKeyStack().pop();
+				if(getTraceStack().isEmpty() && isNewTraceKey) setTraceKey(null);
 			}
 		}
 	}

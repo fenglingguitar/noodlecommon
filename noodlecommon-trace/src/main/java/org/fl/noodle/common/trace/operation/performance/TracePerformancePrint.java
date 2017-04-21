@@ -18,16 +18,16 @@ public class TracePerformancePrint implements TraceOperation {
 
 	private static final Logger logger = LoggerFactory.getLogger("trace.performance");
 	
-	public static final String PERFORMANCE_START_TIME = "performance_start_time";
+	//public static final String PERFORMANCE_START_TIME = "performance_start_time";
 	
 	@Override
 	public void before(MethodInvocation invocation) {
-		Postman.putParam(PERFORMANCE_START_TIME, TimeSynchron.currentTimeMillis());
+		Postman.putParam(invocation.getMethod().getName(), TimeSynchron.currentTimeMillis());
 	}
 
 	@Override
 	public void after(MethodInvocation invocation, boolean isError, Object returnValue) {
-		long startTime = (long) Postman.getParam(PERFORMANCE_START_TIME);
+		long startTime = (long) Postman.getParam(invocation.getMethod().getName());
 		long endTime = TimeSynchron.currentTimeMillis();
 		try {
 			if (TraceInterceptor.getInvokeName(invocation).equals(TraceInterceptor.getInvoke())) {
