@@ -27,7 +27,7 @@ public class TracePerformancePrint implements TraceOperation {
 
 	@Override
 	public void after(MethodInvocation invocation, boolean isError, Object returnValue) {
-		long startTime = (long) Postman.getParam(PERFORMANCE_START_TIME);
+		long startTime = (Long) Postman.getParam(PERFORMANCE_START_TIME);
 		long endTime = TimeSynchron.currentTimeMillis();
 		try {
 			if (TraceInterceptor.getInvokeName(invocation).equals(TraceInterceptor.getInvoke())) {
