@@ -34,12 +34,6 @@
     </dependency>
     
     <dependency>
-      <groupId>org.fl.noodle.common.connect.expand</groupId>
-  	  <artifactId>noodlecommon-connect-expand-api</artifactId>
-	  <version>${noodle.common.connect.expand.version}</version>
-    </dependency>
-    
-    <dependency>
   		<groupId>org.fl.noodle.common.util</groupId>
 	  	<artifactId>noodlecommon-util</artifactId>
 	  	<version>${noodle.common.util.version}</version>
